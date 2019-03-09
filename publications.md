@@ -1,4 +1,10 @@
 
+---
+layout: page
+title: Publications
+---
+
+
 # Journal Papers
 
 **Effects of augmented reality on the performance of teleoperated industrial assembly tasks in a robotic embodiment**\
