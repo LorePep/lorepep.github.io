@@ -5,7 +5,7 @@
     <link>/tags/</link>
     <description>Recent content in Tags on Lorenzo Peppoloni</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sun, 02 Feb 2020 02:13:50 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 04 Feb 2020 20:13:50 +0000</lastBuildDate>
     
 	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -13,9 +13,27 @@
     <item>
       <title>development</title>
       <link>/tags/development/</link>
-      <pubDate>Sun, 02 Feb 2020 02:13:50 +0000</pubDate>
+      <pubDate>Tue, 04 Feb 2020 20:13:50 +0000</pubDate>
       
       <guid>/tags/development/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>proto</title>
+      <link>/tags/proto/</link>
+      <pubDate>Tue, 04 Feb 2020 20:13:50 +0000</pubDate>
+      
+      <guid>/tags/proto/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>python</title>
+      <link>/tags/python/</link>
+      <pubDate>Tue, 04 Feb 2020 20:13:50 +0000</pubDate>
+      
+      <guid>/tags/python/</guid>
       <description></description>
     </item>
     
@@ -34,15 +52,6 @@
       <pubDate>Sun, 02 Feb 2020 02:13:50 +0000</pubDate>
       
       <guid>/tags/golang/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>python</title>
-      <link>/tags/python/</link>
-      <pubDate>Sun, 02 Feb 2020 02:13:50 +0000</pubDate>
-      
-      <guid>/tags/python/</guid>
       <description></description>
     </item>
     
