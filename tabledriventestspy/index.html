@@ -96,9 +96,9 @@
         <div class="post-content clearfix" itemprop="articleBody">
     
 
-    <p><a href="https://dave.cheney.net/2013/06/09/writing-table-driven-tests-in-go">Table-driven tests</a> are an elegant and functional way to unittest your functions in GO. Let&rsquo;s see some ideas on how to introduct this same testing pattern in Python.</p>
+    <p><a href="https://dave.cheney.net/2013/06/09/writing-table-driven-tests-in-go">Table-driven tests</a> are an elegant and functional way to unittest your functions in Go. Let&rsquo;s see some ideas on how to introduce this same testing pattern in Python.</p>
 <h2 id="what-are-table-driven-tests">What are table-driven tests</h2>
-<p>One thing I really love about GO is table-driven tests. If you are not familiar with them, table-driven tests are a very elegant way to write unittests for your code. The basic idea is that you write a list of named test cases, defining the input and the expected output for each test case, then you loop over the cases, run your function and check that the actual output is equal to the expected one.</p>
+<p>One thing I really love about Go is table-driven tests. If you are not familiar with them, table-driven tests are a very elegant way to write unittests for your code. The basic idea is that you write a list of named test cases, defining the input and the expected output for each test case, then you loop over the cases, run your function and check that the actual output is equal to the expected one.</p>
 <p>An example in Go looks like this, let&rsquo;s imagine we want to test a sorting function we wrote:</p>
 <pre><code>func TestMySort(t *testing.T) {
 	testcases := []struct {
@@ -161,10 +161,10 @@
             )
 
 </code></pre></div><p>The main advantage of this approach is that it&rsquo;s simple, understandable and it is compatible with every Python version.</p>
-<p>The main problem I see is that there is not much protection around the <code>testcase</code> datastructure. You could make a mistake and the dictionaries could have different unexpected keys or different types. Typing could be enforced, but still the best you can do is defining the testcases <code>List[Dict[str, Any]]</code> which is not very strict.</p>
+<p>The main problem I see is that there is not much protection around the <code>testcase</code> datastructure. You could make a mistake and the dictionaries could have different unexpected keys or different types. Typing could be enforced, but still the best you can do is defining the test cases type as <code>List[Dict[str, Any]]</code>, which is not very strict.</p>
 <h2 id="data-class">Data Class</h2>
 <p>If you are using Python <code>3.7</code> you can use <a href="https://docs.python.org/3/library/dataclasses.html">data classes</a>. A data class is a class containing mainly data, the advantage is that it comes with already pre-defined methods, such as <strong>init</strong>() and <strong>repr</strong>() making you save time when coding.</p>
-<p>Let&rsquo;s see how can we use them for table-drivent tests.</p>
+<p>Let&rsquo;s see how can we use them for table-driven tests.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> unittest
 <span style="color:#f92672">from</span> dataclasses <span style="color:#f92672">import</span> dataclass
 <span style="color:#f92672">from</span> typing <span style="color:#f92672">import</span> List
@@ -195,7 +195,7 @@
             )
 </code></pre></div><p>Overall using data classes gives you a cleaner solution compared to dicts, since you can easily enforce typing.</p>
 <hr>
-<p>In this article we quickly had a look at what are table-driven tests in GO and why they are a nice feature. We then explored possible solutions to impolement table-driven tests in Python.</p>
+<p>In this article we quickly had a look at what are table-driven tests in GO and why they are a nice feature. We then explored possible solutions to implement table-driven tests in Python.</p>
 
 </div>
 

@@ -111,7 +111,7 @@ message Trajectory2d {
   }
 </code></pre><p>Let&rsquo;s save our <code>test.proto</code> and generate the Python code.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">protoc --proto_path<span style="color:#f92672">=</span>. --python_out<span style="color:#f92672">=</span>. test.proto
-</code></pre></div><p>Now if we want to create an element of <code>Trajectory2d</code> type add points to it, we can just use the <code>add()</code> function, which creates a new message object, appends it to the list of repeated objects, and returns it for the caller to fill, plus it forwards keyword arguments to the class.</p>
+</code></pre></div><p>Now if we want to create an element of <code>Trajectory2d</code> type and add points to it, we can just use the <code>add()</code> function. The function will create a new message object, append it to the list of repeated objects, and return it for the caller to fill. In addition it will forward keyword arguments to the class.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> test_pb2 <span style="color:#f92672">import</span> Trajectory2d
 
 trajectory <span style="color:#f92672">=</span> Trajectory2d()
