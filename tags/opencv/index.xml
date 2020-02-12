@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>openCV on Lorenzo Peppoloni</title>
+    <link>/tags/opencv/</link>
+    <description>Recent content in openCV on Lorenzo Peppoloni</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Tue, 11 Feb 2020 07:13:50 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/opencv/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Everything you need to know about the Lucas-Kanade tracker</title>
+      <link>/lkttracker/</link>
+      <pubDate>Tue, 11 Feb 2020 07:13:50 +0000</pubDate>
+      
+      <guid>/lkttracker/</guid>
+      <description>The Lucas-Kanade-Tomasi (LKT) tracker is one of the most used trackers in computer vision. It&#39;s easy to implement and understand, it&#39;s fast to compute and it works fairly well.
+The tracker is based on the Lucas-Kanade (LK) optical flow estimation algorithm. The problem of optical flow estimation is the problem of estimating the motion of the pixels in an image across a sequence of consecutive pictures (e.g., a video).
+The idea of the LK estimation is pretty straightforward.</description>
+    </item>
+    
+  </channel>
+</rss>

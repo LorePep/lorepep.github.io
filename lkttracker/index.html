@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Everything you need to know about the Lucas-Kanade tracker &middot; </title>
+        <meta name="description" content="An in-depth analysis of the Lucas-Kanade tracker to estimate optical flow">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.63.2" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="Everything you need to know about the Lucas-Kanade tracker">
+<meta property="og:description" content="An in-depth analysis of the Lucas-Kanade tracker to estimate optical flow">
+<meta property="og:type" content="article">
+<meta property="og:url" content="/lkttracker/">
+        <link rel="stylesheet" href="/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+        
+    </head>
+    <body>
+        
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="Lorenzo Peppoloni" href="/">Lorenzo Peppoloni</a>
+                            </h1>
+                        
+                        <a class="button-square" href="/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                            <a class="button-square button-social hint--top" data-hint="Twitter" title="Twitter" href="https://twitter.com/lorepep" rel="me">
+                                <i class="fa fa-twitter"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/lorepep" rel="me">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="LinkedIn" title="LinkedIn" href="https://twitter.com/lpeppoloni" rel="me">
+                                <i class="fa fa-linkedin"></i>
+                            </a>
+                        
+                        
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="About" href="/page/about/">About</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="CV" href="">CV</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Everything you need to know about the Lucas-Kanade tracker</h1>
+    
+        <p class="post-description" itemprop="description">An in-depth analysis of the Lucas-Kanade tracker to estimate optical flow</p>
+    
+    <p class="post-date post-line">
+        <span>Published <time datetime="2020-02-11" itemprop="datePublished">Tue, Feb 11, 2020</time></span>
+        <span>by</span>
+        <span itemscope="" itemprop="author" itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <a href="#" itemprop="url" rel="author">Lorenzo Peppoloni</a>
+            </span>
+        </span>
+    </p>
+    
+</header>
+
+        <div class="post-content clearfix" itemprop="articleBody">
+    
+
+    <p>The Lucas-Kanade-Tomasi (LKT) tracker is one of the most used trackers in computer vision. It's easy to implement and understand, it's fast to compute and it works fairly well.</p>
+
+<p>The tracker is based on the Lucas-Kanade (LK) optical flow estimation algorithm. The problem of optical flow estimation is the problem of estimating the motion of the pixels in an image across a sequence of consecutive pictures (e.g., a video).</p>
+
+<p>The idea of the LK estimation is pretty straightforward.</p>
+
+<p>Now, let's imagine you are observing the image from a small hole of the size of a pixel. If you know the gradient of the brightness, if you move the image, you can infer something about the direction of the movement. This is true only if the brightness cannot change for any other reasons other then motion.</p>
+
+<p>We just introduced the first basic assumption of the LK tracker: the brightness of each pixel does not change in time, as each point moves in the image, it will keep it's brightness constant.</p>
+
+<p>Let's exemplify with a drawing.</p>
+
+<p><figure><img src="/lktracker/lk_pix.png" alt="Example"></figure></p>
+
+<p>Let's assume at time <code>t</code> you are observing a pixel of an image (left image), and you know that the brightness is increasing towards left and down (the arrows show the gradient of the brightness). At the next time instant, after the camera moved (right image), you notive that the brightness observed through the pixel increased, given that the brightness does not change for any other reason, you can safely assume that the underlying object observed by the camera, has moved up and right (black arrows), or conversely, the camera moved with a certain velocity <code>v</code> down and left.</p>
+
+<p>You can immediately notice one possible problem: what if the brightness doesn't change for the point we are observing? Or what if the brightness doesn't change in a certain direction?
+This is called the <strong>aperture problem</strong>. You can only perceive motion in the directions that are not orthogonal to the direction of the gradient. For example, if you observe a pixel in a monochrome patch you won't be able to perceive any motion, or if you are observing a pixel on a straight edge, you cannot perceive any movement along the edge. Luckily, in natural images it's really hard to find this scenarios, usually zooming to different levels will usually give you some texture with a brightness gradient in both <code>x</code> and <code>y</code> directions.
+An alternative solution is to observe a window around a pixel, increasing the likelihood of a &quot;full&quot; brightness gradient. It is to be noted that if you use a window you are implicitly assuming that all the pixels in the window move in the same way, for this assumption to be safely made you need to have very small displacements and a properly sized window, otherwise for complex motions you will easily break it.</p>
+
+<p>Let's now have a look at the math. If you assume that the brightness (<strong>I</strong>) remains constant for each pixel (<strong>x</strong>) in time, you can write:</p>
+
+<p><span  class="math">\[I(x(t), t) = \text{const} \Rightarrow \frac{dI}{dt} = 0\]</span></p>
+
+<p>Applying the chainrule to compute the derivatives we get</p>
+
+<p><span  class="math">\[\nabla I^{T}\frac{dx}{dt}+\frac{\partial I}{\partial t} = 0\]</span></p>
+
+<p>If you observe the equation, you can see that it exactly describes the intuition we had about brightness changes and motion, and it becomes particularly clear if you rewrite it as:</p>
+
+<p><span  class="math">\[\nabla I^{T}v = -\frac{\partial I}{\partial t}\]</span></p>
+
+<p>where we called <strong>v</strong> the velocity of the camera motion. The equation basically says that the delta in brightness given by the velocity of the camera motion accounts for to the total change of brightness in time. The velocity vector <strong>v</strong> is the unknown.</p>
+
+<p>The aperture problem is clearly visible now. On the left you have the scalar product of the gradient of the brightness and the velocity of motion. Any velocity orthogonal to the gradient will result in a null change in brightness, thus every velocity will satisfy the equation.</p>
+
+<p>In the LK paper the authors proposed to solve the equation in the least square terms, that is finding the <strong>v</strong> that minimizes the equation. If we consider the case of a window (<strong>W</strong>) around the pixel <strong>x</strong>:</p>
+
+<p><span  class="math">\[E(v) = \int_{W(x)} |\nabla I^{T}v + \frac{\partial I}{\partial t}|^{2}dx' \]</span></p>
+
+<p>This function is quadratic in <strong>v</strong>, thus it's optimum is where the derivative is equal to zero:</p>
+
+<p><span  class="math">\[\frac{dE}{dv} = 0 \Rightarrow v = -M^{-1}q\]</span></p>
+
+<p>where</p>
+
+<p><span  class="math">\[M = \int_{W(x)}\nabla I\nabla I ^{T}dx'\]</span></p>
+
+<p>and</p>
+
+<p><span  class="math">\[q = \int_{W(x)}\frac{\partial I(x')}{\partial t}dx'\]</span></p>
+
+<p>As you can clearly see from the derivative expression, the matrix <strong>M</strong> which is called the <strong>structure tensor</strong>, is a 2x2 matrix. If <span  class="math">\(det(M) = 0\)</span>, we have a patch with constant brightness, thus we are not able to solve in <strong>v</strong>, since <strong>M</strong> is not invertible. If <span  class="math">\(det(M) = 2\)</span> we can find <strong>v</strong> and the solution is unique. If <span  class="math">\(det(M) = 1\)</span> we can only find the component of <strong>v</strong> in one direction.</p>
+
+<p>In the case presented, we are estimating motion given only by translation, the math can be simply modified to estimate an affine transformation (rotation plus translation) in the following way</p>
+
+<p><span  class="math">\[E(v) = \int_{W(x)} |\nabla I^{T}S(x')p + \frac{\partial I}{\partial t}|^{2}dx' \]</span></p>
+
+<p>where the affine transformation is modeled with a parametric model:</p>
+
+<p><span  class="math">\[S(x)p = \begin{pmatrix}
+x & y& 1&0&0&0\\
+0 &0&0&x&y&1
+\end{pmatrix}\begin{pmatrix}
+p1&p2&p3&p4&p5&p6\\
+\end{pmatrix}^{T}\]</span></p>
+
+<p>Now we can easily solve <span  class="math">\(dE/dp = 0\)</span>.</p>
+
+<p>Let's see an example using OpenCV and Python (you can find the full code <a href="https://github.com/LorePep/blogposts_code/tree/master/lkt-tracker">here</a>).</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">video <span style="color:#f92672">=</span> cv2<span style="color:#f92672">.</span>VideoCapture(input_video) 
+success, frame <span style="color:#f92672">=</span> video<span style="color:#f92672">.</span>read()
+previous_frame_gray <span style="color:#f92672">=</span> cv2<span style="color:#f92672">.</span>cvtColor(frame, cv2<span style="color:#f92672">.</span>COLOR_BGR2GRAY)
+previous_points <span style="color:#f92672">=</span> cv2<span style="color:#f92672">.</span>goodFeaturesToTrack(previous_frame_gray, <span style="color:#f92672">*</span><span style="color:#f92672">*</span>DEFAULT_FEATURES_PARAMS)</code></pre></div>
+<p>First we open the video stream, read the first frame and find pixels to track.
+OpenCV provides the function <a href="https://docs.opencv.org/2.4/modules/imgproc/doc/feature_detection.html">goodFeaturesToTrack</a>. Under the hood the function finds the most prominent corners of the image using the <a href="https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_feature2d/py_shi_tomasi/py_shi_tomasi.html">Shi-Tomasi corner detector</a>.</p>
+
+<p>If you had to do it in practice, a simple way to identify good points is to compute the matrix <strong>M</strong> for all the pixels in the image and choose a set of points for which <span  class="math">\(det(M)\)</span> is greater than a certain threshold.</p>
+
+<p>An alternative, is to use the Harris corner detector. The idea is to weight the matrix <strong>M</strong> with a Gaussian centered on the window <strong>W</strong> center</p>
+
+<p><span  class="math">\[M =  G_{\sigma}\nabla I \nabla I ^{T}\]</span></p>
+
+<p>and then choose pixels such that</p>
+
+<p><span  class="math">\[C(x) = det(M) + k*tr^{2}(M) > \vartheta \]</span></p>
+
+<p>Intuitively, the eigenvectors of <strong>M</strong> tell the direction of maximum and minimum variation of the brightness, while the eigenvalues tell the amount of variation. In particular, if the eigenvalues are both low we are in a flat region (there is not much change in gradient), if one of the eigenvalues is bigger then the other we are on an edge, and if both the eigenvalues are high, we are probably on a corner (brightness changes in both the directions).</p>
+
+<p>The Gaussian improves the results, weighting <strong>M</strong> based on the distance from the center.</p>
+
+<p>Now, if you remember from linear algebra</p>
+
+<p><span  class="math">\[C(x) = det(M) + k*tr^{2}(M) = \lambda_1 \lambda_2 + k(\lambda_1+\lambda_2)^{2}\]</span></p>
+
+<p>so the criteria that we are using to choose the points will yield a higher value if both the eigenvalues are high.</p>
+
+<p>In OpenCV you can specify to use the Harris detector (you can check in the code how).</p>
+
+<p>Once we found the first interesting points, we can just iteratively extract a new frame and use the LK tracker to compute the optical flow.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">success, frame <span style="color:#f92672">=</span> video<span style="color:#f92672">.</span>read()
+frame_gray <span style="color:#f92672">=</span> cv2<span style="color:#f92672">.</span>cvtColor(frame, cv2<span style="color:#f92672">.</span>COLOR_BGR2GRAY)
+new_points, st, _ <span style="color:#f92672">=</span> cv2<span style="color:#f92672">.</span>calcOpticalFlowPyrLK(previous_frame_gray,
+                                             frame_gray,
+                                             previous_points, 
+                                             None,
+                                             <span style="color:#f92672">*</span><span style="color:#f92672">*</span>DEFAULT_LK_PARAMS)</code></pre></div>
+<p>That's what the results look like:</p>
+
+<p><figure><img src="/lktracker/lkt.gif" alt="Results"></figure></p>
+
+<p>If you check the full code you will notice that the LK tracker has some termination criteria argument. This is interesting, because we didn't talk about LK being an iterative algorithm (you iterate on the frames but you do not iterate on each frame). The parameter is used because OpenCV uses a more robust version of LK, which uses &quot;pyramids&quot;. One of the main assumption of the LK algorithm is that we are dealing with very small motions (~1 pixel) and this is never the case, especially with high-res cameras. A solution is to use a coarse to fine approach (a sort of resolution pyramid). We start making the image more coarse (bigger pixels will result in smaller motions) and compute the tracking, after we estimated the flow at a coarser scale, we then make the image finer and go on iteratively at higher and higher levels of resolution.</p>
+
+<hr>
+
+<p><em>Conclusions: We had an in-depth the Lucas-Kanade tracker to estimate the optical flow from a sequence of images. We introduced the Harris corner detector and we had a look at a real-life example using OpenCV.</em></p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/compute-vision/">compute-vision</a>, 
+            
+                <a href="/tags/opencv/">openCV</a>, 
+            
+                <a href="/tags/robotics/">robotics</a>
+            
+        </p>
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=Everything%20you%20need%20to%20know%20about%20the%20Lucas-Kanade%20tracker&url=%2flkttracker%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=%2flkttracker%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+            <a class="icon-google-plus" href="https://plus.google.com/share?url=%2flkttracker%2f"
+              onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+              <i class="fa fa-google-plus"></i>
+                <span class="hidden">Google+</span>
+            </a>
+        
+        
+            <a class="icon-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&title=Everything%20you%20need%20to%20know%20about%20the%20Lucas-Kanade%20tracker&url=%2flkttracker%2f&summary=An%20in-depth%20analysis%20of%20the%20Lucas-Kanade%20tracker%20to%20estimate%20optical%20flow"
+               onclick="window.open(this.href, 'linkedin-share', 'width=554,height=481');return false;">
+               <i class="fa fa-linkedin"></i>
+               <span class="hidden">LinkedIn</span>
+            </a>
+        
+    </div>
+</footer>
+
+        
+    </article>
+</div>
+
+</div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <div class="site-title-wrapper">
+            <h1 class="site-title">
+                <a title="Lorenzo Peppoloni" href="/">Lorenzo Peppoloni</a>
+            </h1>
+            <a class="button-square button-jump-top js-jump-top" href="#">
+                <i class="fa fa-angle-up"></i>
+            </a>
+        </div>
+
+        <p class="footer-copyright">
+            <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+        </p>
+        <p class="footer-copyright">
+            <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+            <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+        </p>
+    </div>
+</footer>
+
+<script src="/js/jquery-1.11.3.min.js"></script>
+<script src="/js/jquery.fitvids.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+<script src="/js/scripts.js"></script>
+</body>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</html>
+
