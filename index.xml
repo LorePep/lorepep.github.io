@@ -5,10 +5,23 @@
     <link>/</link>
     <description>Recent content on Lorenzo Peppoloni</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Tue, 11 Feb 2020 07:13:50 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 13 Feb 2020 07:13:50 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>All you need to know about Learning Tests</title>
+      <link>/learningtests/</link>
+      <pubDate>Thu, 13 Feb 2020 07:13:50 +0000</pubDate>
+      
+      <guid>/learningtests/</guid>
+      <description>Picture this scenario: You have to solve a new task, a new amazing coding problem, after some googling, you find a library that solve part of the problem for you. Great! You write your code using the library, you write a test&amp;hellip;and
+FAIL!
+You tweak the code a bit&amp;hellip;FAIL!
+I think we all went through this multiple times during our developer career.
+What is happening is that, you found a new library to implement a certain behaviour that you want, you think you understood the library (but you have this bugging feeling that maybe you did not), you think you know how to use it for your particular use case (but you have this bugging feeling that maybe you do not).</description>
+    </item>
     
     <item>
       <title>Everything you need to know about the Lucas-Kanade tracker</title>
