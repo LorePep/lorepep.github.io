@@ -5,10 +5,20 @@
     <link>/tags/robotics/</link>
     <description>Recent content in robotics on Lorenzo Peppoloni</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Tue, 11 Feb 2020 07:13:50 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 20 Feb 2020 07:13:50 +0000</lastBuildDate>
     
 	<atom:link href="/tags/robotics/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>The eight-points algorithm</title>
+      <link>/eightpoints/</link>
+      <pubDate>Thu, 20 Feb 2020 07:13:50 +0000</pubDate>
+      
+      <guid>/eightpoints/</guid>
+      <description>In this blog post we had a look at how to estimate the optical flow (e.g., track how pixels move in time) in a set of images. The estimation we obtained gave us pixel matches across the image set.
+Given the correspondaces between two images, we can estimate the motion and the 3D position of the points we are observing. Solving this problem is known as Structure from Motion (SfM).</description>
+    </item>
     
     <item>
       <title>Everything you need to know about the Lucas-Kanade tracker</title>
