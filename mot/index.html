@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Everything you need to know about multi-object tracker &middot; </title>
+        <meta name="description" content="An in-depth look at Multi-object tracking">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.63.2" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="Everything you need to know about multi-object tracker">
+<meta property="og:description" content="An in-depth look at Multi-object tracking">
+<meta property="og:type" content="article">
+<meta property="og:url" content="/mot/">
+        <link rel="stylesheet" href="/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+        
+    </head>
+    <body>
+        
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="Lorenzo Peppoloni" href="/">Lorenzo Peppoloni</a>
+                            </h1>
+                        
+                        <a class="button-square" href="/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                            <a class="button-square button-social hint--top" data-hint="Twitter" title="Twitter" href="https://twitter.com/lorepep" rel="me">
+                                <i class="fa fa-twitter"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/lorepep" rel="me">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="LinkedIn" title="LinkedIn" href="https://twitter.com/lpeppoloni" rel="me">
+                                <i class="fa fa-linkedin"></i>
+                            </a>
+                        
+                        
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="About" href="/page/about/">About</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="CV" href="">CV</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Everything you need to know about multi-object tracker</h1>
+    
+        <p class="post-description" itemprop="description">An in-depth look at Multi-object tracking</p>
+    
+    <p class="post-date post-line">
+        <span>Published <time datetime="2020-02-21" itemprop="datePublished">Fri, Feb 21, 2020</time></span>
+        <span>by</span>
+        <span itemscope="" itemprop="author" itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <a href="#" itemprop="url" rel="author">Lorenzo Peppoloni</a>
+            </span>
+        </span>
+    </p>
+    
+</header>
+
+        <div class="post-content clearfix" itemprop="articleBody">
+    
+
+    <p>I find Multiple object tracking (MOT) a very interesting problem. In the case called <em>tracking-by-detection</em>, you have a bunch of detections of objects (they can either be in 2D or in 3D) and you have to associate detections in time figuring out if they are observation of the same object.</p>
+
+<p>More formally, we can define the problem as a multi-variable estimation problem.</p>
+
+<p>Given a set of frames, we have a set of states of objects in each frame. Let's call <span  class="math">\(s_j^{i}\)</span> the state of the object <span  class="math">\(i\)</span> in frame <span  class="math">\(j\)</span>, all the <span  class="math">\(M_j\)</span> objects in the <span  class="math">\(j\)</span>-th frame are the set <span  class="math">\(S_j = \{s^{1}_j, s^{2}_j, ..., s_j^{M_j}\}\)</span>.
+The set of the states <span  class="math">\(S_{1:t} = \{S_1, S_2, S_3, ..., S_t\}\)</span>, defines all the states for all the objects in the frame sequence.</p>
+
+<p>Now we have a set of observations for each frame <span  class="math">\(O_{1:t} = \{O_1, O_2, ..., O_t\}\)</span>, where <span  class="math">\(O_j = \{o^{1}_{j}, o^{2}_{j}, ... o^{M_j}_{j} \}\)</span> are all the observations for frame <span  class="math">\(j\)</span>. Note that for the sake of the notation we are assuming that we have exactly one observation for every and each object, <span  class="math">\(M_j\)</span> states and <span  class="math">\(M_j\)</span> observation at frame <span  class="math">\(j\)</span>.</p>
+
+<p>Now the problem that we want to solve is to find the &quot;optimal&quot; sequence of states given the observations. This can be solved as a maximum a posteriori estimation (MAP) problem</p>
+
+<p><span  class="math">\[\hat{S}_{1:t} = \text{argmax}_{{S_{1:t}}} P(S_{1:t}| O_{1:t})\]</span></p>
+
+<p>Usually this can be solved either with a probabilistic approach or with an optimization approach. The former usually works online (more on this later) the latter is usually more suited for offline tracking, since you want to optimize and find the global optimum on the whole frame sequence. This approach is also known as non causal, since you are using the future and the past observations at the same time.</p>
+
+<h2 id="probabilistic-approach">Probabilistic approach</h2>
+
+<p>Usually to solve the problem with a probabilistic approach you can adopt a two-step iterative process:</p>
+
+<ol>
+<li>you predict the state at the nexst step without using the observations (<strong>predict</strong>)</li>
+<li>you correct your prediction with the observations (<strong>update</strong>).</li>
+</ol>
+
+<p>To perform the predict step you need some dynamic model that you can use to compute predictions. To perform the update step you need some measurement/observation model that ties the observations back to the state so that you can perform the correction.</p>
+
+<p>More formally:</p>
+
+<p><span  class="math">\[ \textit{Predict}: P(S_t|O_{1:t-1}) = \int P(S_t|S_{t-1})P(S_{t-1}|O_{1:t-1})dS_{t-1}\]</span></p>
+
+<p><span  class="math">\[ \textit{Update}: P(S_t|O_{1:t}) \propto P(O_t|S_t)P(S_t|O_{1:t-1})\]</span></p>
+
+<p>Where <span  class="math">\(P(S_t|S_{t-1})\)</span> is the dynamic model that tells us how the states are supposed to evolve in time, and <span  class="math">\(P(O_t|S_{t})\)</span> is the measurement model.</p>
+
+<p>Note that to be able to formulate this solution to the problem, we are assuming that the <a href="https://en.wikipedia.org/wiki/Markov_property">Markov assumption</a> holds (past and future are independent given the current state).</p>
+
+<p><strong>Pros</strong></p>
+
+<ul>
+<li>Works online.</li>
+<li>Can be less heavy computationally.</li>
+</ul>
+
+<p><strong>Cons</strong></p>
+
+<ul>
+<li>Might not provide a global optimum, since we are not using the whole sequence.</li>
+</ul>
+
+<h2 id="optimization-approach">Optimization approach</h2>
+
+<p>A second approach is to solve the estimation problem via optimization either of the Likelihood or minimizing an energy function.</p>
+
+<p>More formally</p>
+
+<p><span  class="math">\[ \hat{S}_{1:t} = \text{argmax}_{S_{1:t}} P(S_{1:t}| O_{1:t}) = \text{argmax}_{S_{1:t}} L(O_{1:t} | S_{1:t})\]</span></p>
+
+<p>or considering an Energy function</p>
+
+<p><span  class="math">\[ \hat{S}_{1:t} = \text{argmax}_{S_{1:t}} P(S_{1:t}| O_{1:t}) = \text{argmax}_{S_{1:t}} E(S_{1:t} | O_{1:t})\]</span></p>
+
+<p>Note that models and in general knowledge about the expected behaviour of the objects can be injected also in the optimization approach. One very used approach is to enforce motion constraints through the function E.</p>
+
+<p><strong>Pros</strong></p>
+
+<ul>
+<li>Converge to a global optimum.</li>
+</ul>
+
+<p><strong>Cons</strong></p>
+
+<ul>
+<li>&quot;Heavier&quot; computationally.</li>
+<li>Works offline (you are using the future).</li>
+</ul>
+
+<h2 id="the-models">The Models</h2>
+
+<p>Let's talk a bit about the models which I find to be a very interesting aspect of MOT.</p>
+
+<p>Basically you have two problems to solve</p>
+
+<ol>
+<li>how to measure similarity between objects across frames</li>
+<li>how to use that similarity information to recover identity across frames.</li>
+</ol>
+
+<p>Roughly speaking, the first problem involves
+usually modeling the appearance, or the motion of an object. While the second is the inference problem.
+Appearance here is used as a generic term, that could be the visual appearance if you are using a camera.</p>
+
+<p>Two widely used approaches for modeling in MOT are <strong>appearance models</strong> and <strong>motion models</strong>. The former uses the way in which an object appears to the sensor, the latter uses the expected motion of the object.</p>
+
+<p>Let's have a look at examples, one of the simplest motion model consists of assuming that from one frame to the other an object didn't move much. If I have an observation in the frame <span  class="math">\(j\)</span> and I have a &quot;close&quot; observation in frame <span  class="math">\(j+1\)</span> I will associate them to the same object. What does close mean? I can for esample measure the distance between the centroids, or I can use intersection over union, that is if the two boxes intersect more than a certain threshold they are matched in time.</p>
+
+<p>This is a pretty simple approach that works. The main problems come from occlusions and the assumption (which might not hold) that the rate at which frames are captured it's &quot;high&quot; enough to capture very small motions in the observations. In the case of occlusions you will likely experience id switches. This is given by the fact that boxes of different objects will overlap for some frames.</p>
+
+<p>Let's see how a centroid tracker behaves for example. This results are obtained using the <a href="http://www.robots.ox.ac.uk/~lav/Research/Projects/2009bbenfold_headpose/project.html">Oxford Towncentre Database</a> for pedestrian tracking.</p>
+
+<p>Detections are already available to be used for tracking.</p>
+
+<p><figure><img src="/mot/centroid.gif" alt="Centroid"></figure></p>
+
+<p>As you can see the tracker works, but there are cases where id switch does happen, especially when the scene gets more crowded.</p>
+
+<p>Now, if we want to make the tracker more robust we could either use an appearance model and use information about how the detected object looks or use a motion model and make assumptions about the motion of the detected objects (e.g., in the case of a pedestrian we can assume that the object will move with constant velocity).</p>
+
+<p><strong>Appereance models</strong></p>
+
+<p>Appearance models include two components:</p>
+
+<ol>
+<li>a representation of the object appearance</li>
+<li>a measurement of the distance between such two representations</li>
+</ol>
+
+<p>In the case of visual tracking lots of different representations can be used, such as local features (or deep features) of the image, color histogram, <a href="https://en.wikipedia.org/wiki/Histogram_of_oriented_gradients">HOG</a>, etc...</p>
+
+<p>In general gradient-based features, like HOG can describe the shape of an object and are robust to lightning changes, but they cannot handle occlusion and deformation well. <a href="http://www.bmva.org/bmvc/2014/papers/paper038/index.html">Region covariance matrix features</a> are more robust as they take more information in account, but they are more computationally expensive.</p>
+
+<p>The distance between two representations can be computed in several ways, mainly depending on the appearance model used.</p>
+
+<p>Let's see how our tracker improves using an appearance model.</p>
+
+<p><figure><img src="/mot/vis.gif" alt="Visual"></figure></p>
+
+<p>As you can see the tracker is more robust to occlusion. This is given by the fact that we are using information about the appearance of the tracked objects so we don't &quot;confuse&quot; it with a different occluding object.</p>
+
+<p><strong>Motion Models</strong></p>
+
+<p>As a final topic let's have a look at motion models.
+Motion models assume knowledge about how object moves and predict the expected position of the object. The predicted position is later corrected and updated with the measurement, which are now matched to the predictions.</p>
+
+<p>A very common way to use motion models in the probabilistic iterative approach is to use <a href="https://medium.com/@l.peppoloni/kalman-filters-for-software-engineers-3d2a05dee465">Kalman Filters</a>. A very common assumption is that the objects move with constant velocity or constant acceleration.</p>
+
+<p>Let's have a look again at how using motion models
+improves our tracker.</p>
+
+<p><figure><img src="/mot/motion.gif" alt="Motion"></figure></p>
+
+<p>Here we are using a Kalman Filter with a constant velocity model. The tracker is still robust to occlusion, since we are predicting the future position of each object using the motion model.</p>
+
+<p>The models solve the problem of how to measure similarity, the second problem of using the similarity to recover identity can be solved in several different ways. In the presented demo cases, it was solved by optimization of the intersection over union between the tracker tracks after update and the observations.</p>
+
+<p>The examples were created using modified versions of tracking code from <a href="https://github.com/ZidanMusk/experimenting-with-sort">this repository</a>.</p>
+
+<hr>
+
+<p><em>Conclusions: We had an in-depth look at the multi-object tracking problem, how it can be formalized formally and solved. We had a look at some classic ways of solving it and we also had a look at the real-life example of pedestrian tracking</em></p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/compute-vision/">compute-vision</a>, 
+            
+                <a href="/tags/opencv/">openCV</a>, 
+            
+                <a href="/tags/robotics/">robotics</a>
+            
+        </p>
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=Everything%20you%20need%20to%20know%20about%20multi-object%20tracker&url=%2fmot%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=%2fmot%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+            <a class="icon-google-plus" href="https://plus.google.com/share?url=%2fmot%2f"
+              onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+              <i class="fa fa-google-plus"></i>
+                <span class="hidden">Google+</span>
+            </a>
+        
+        
+            <a class="icon-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&title=Everything%20you%20need%20to%20know%20about%20multi-object%20tracker&url=%2fmot%2f&summary=An%20in-depth%20look%20at%20Multi-object%20tracking"
+               onclick="window.open(this.href, 'linkedin-share', 'width=554,height=481');return false;">
+               <i class="fa fa-linkedin"></i>
+               <span class="hidden">LinkedIn</span>
+            </a>
+        
+    </div>
+</footer>
+
+        
+    </article>
+</div>
+
+</div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <div class="site-title-wrapper">
+            <h1 class="site-title">
+                <a title="Lorenzo Peppoloni" href="/">Lorenzo Peppoloni</a>
+            </h1>
+            <a class="button-square button-jump-top js-jump-top" href="#">
+                <i class="fa fa-angle-up"></i>
+            </a>
+        </div>
+
+        <p class="footer-copyright">
+            <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+        </p>
+        <p class="footer-copyright">
+            <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+            <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+        </p>
+    </div>
+</footer>
+
+<script src="/js/jquery-1.11.3.min.js"></script>
+<script src="/js/jquery.fitvids.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+<script src="/js/scripts.js"></script>
+</body>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</html>
+

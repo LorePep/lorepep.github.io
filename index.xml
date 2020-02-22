@@ -5,10 +5,21 @@
     <link>/</link>
     <description>Recent content on Lorenzo Peppoloni</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Wed, 19 Feb 2020 07:13:50 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 21 Feb 2020 07:13:50 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Everything you need to know about multi-object tracker</title>
+      <link>/mot/</link>
+      <pubDate>Fri, 21 Feb 2020 07:13:50 +0000</pubDate>
+      
+      <guid>/mot/</guid>
+      <description>I find Multiple object tracking (MOT) a very interesting problem. In the case called tracking-by-detection, you have a bunch of detections of objects (they can either be in 2D or in 3D) and you have to associate detections in time figuring out if they are observation of the same object.
+More formally, we can define the problem as a multi-variable estimation problem.
+Given a set of frames, we have a set of states of objects in each frame.</description>
+    </item>
     
     <item>
       <title>The eight-points algorithm</title>
