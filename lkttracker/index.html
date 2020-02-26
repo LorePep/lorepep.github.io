@@ -110,17 +110,17 @@
 
 <p><figure><img src="/lktracker/lk_pix.png" alt="Example"></figure></p>
 
-<p>Let's assume at time <code>t</code> you are observing a pixel of an image (left image), and you know that the brightness is increasing towards left and down (the arrows show the gradient of the brightness). At the next time instant, after the camera moved (right image), you notive that the brightness observed through the pixel increased, given that the brightness does not change for any other reason, you can safely assume that the underlying object observed by the camera, has moved up and right (black arrows), or conversely, the camera moved with a certain velocity <code>v</code> down and left.</p>
+<p>Let's assume at time <code>t</code> you are observing a pixel of an image (left image), and you know that the brightness is increasing towards left and down (the arrows show the gradient of the brightness). At the next time instant, after the camera moved (right image), you notice that the brightness observed through the pixel increased, given that the brightness does not change for any other reason, you can safely assume that the underlying object observed by the camera, has moved up and right (black arrows), or conversely, the camera moved with a certain velocity <code>v</code> down and left.</p>
 
 <p>You can immediately notice one possible problem: what if the brightness doesn't change for the point we are observing? Or what if the brightness doesn't change in a certain direction?
-This is called the <strong>aperture problem</strong>. You can only perceive motion in the directions that are not orthogonal to the direction of the gradient. For example, if you observe a pixel in a monochrome patch you won't be able to perceive any motion, or if you are observing a pixel on a straight edge, you cannot perceive any movement along the edge. Luckily, in natural images it's really hard to find this scenarios, usually zooming to different levels will usually give you some texture with a brightness gradient in both <code>x</code> and <code>y</code> directions.
-An alternative solution is to observe a window around a pixel, increasing the likelihood of a &quot;full&quot; brightness gradient. It is to be noted that if you use a window you are implicitly assuming that all the pixels in the window move in the same way, for this assumption to be safely made you need to have very small displacements and a properly sized window, otherwise for complex motions you will easily break it.</p>
+This is called the <strong>aperture problem</strong>. You can only perceive motion in the directions that are not orthogonal to the direction of the gradient. For example, if you observe a pixel in a monochrome patch you won't be able to perceive any motion, or if you are observing a pixel on a straight edge, you cannot perceive any movement along the edge. Luckily, in natural images it's really hard to find this scenario, usually zooming to different levels will usually give you some texture with a brightness gradient in both <code>x</code> and <code>y</code> directions.
+An alternative solution is to observe a window around a pixel, increasing the likelihood of a &quot;full&quot; brightness gradient. It is to be noted that if you use a window you are implicitly assuming that all the pixels in the window move in the same way, for this assumption to be safely made you need to have very small displacements and a properly sized window, otherwise, for complex motions you will easily break it.</p>
 
 <p>Let's now have a look at the math. If you assume that the brightness (<strong>I</strong>) remains constant for each pixel (<strong>x</strong>) in time, you can write:</p>
 
 <p><span  class="math">\[I(x(t), t) = \text{const} \Rightarrow \frac{dI}{dt} = 0\]</span></p>
 
-<p>Applying the chainrule to compute the derivatives we get</p>
+<p>Applying the chain rule to compute the derivatives we get</p>
 
 <p><span  class="math">\[\nabla I^{T}\frac{dx}{dt}+\frac{\partial I}{\partial t} = 0\]</span></p>
 
@@ -128,9 +128,9 @@ An alternative solution is to observe a window around a pixel, increasing the li
 
 <p><span  class="math">\[\nabla I^{T}v = -\frac{\partial I}{\partial t}\]</span></p>
 
-<p>where we called <strong>v</strong> the velocity of the camera motion. The equation basically says that the delta in brightness given by the velocity of the camera motion accounts for to the total change of brightness in time. The velocity vector <strong>v</strong> is the unknown.</p>
+<p>where we called <strong>v</strong> the velocity of the camera motion. The equation basically says that the delta in brightness given by the velocity of the camera motion accounts for the total change of brightness in time. The velocity vector <strong>v</strong> is the unknown.</p>
 
-<p>The aperture problem is clearly visible now. On the left you have the scalar product of the gradient of the brightness and the velocity of motion. Any velocity orthogonal to the gradient will result in a null change in brightness, thus every velocity will satisfy the equation.</p>
+<p>The aperture problem is clearly visible now. On the left, you have the scalar product of the gradient of the brightness and the velocity of motion. Any velocity orthogonal to the gradient will result in a null change in brightness, thus every velocity will satisfy the equation.</p>
 
 <p>In the LK paper the authors proposed to solve the equation in the least square terms, that is finding the <strong>v</strong> that minimizes the equation. If we consider the case of a window (<strong>W</strong>) around the pixel <strong>x</strong>:</p>
 
@@ -171,11 +171,11 @@ success, frame <span style="color:#f92672">=</span> video<span style="color:#f92
 previous_frame_gray <span style="color:#f92672">=</span> cv2<span style="color:#f92672">.</span>cvtColor(frame, cv2<span style="color:#f92672">.</span>COLOR_BGR2GRAY)
 previous_points <span style="color:#f92672">=</span> cv2<span style="color:#f92672">.</span>goodFeaturesToTrack(previous_frame_gray, <span style="color:#f92672">*</span><span style="color:#f92672">*</span>DEFAULT_FEATURES_PARAMS)</code></pre></div>
 <p>First we open the video stream, read the first frame and find pixels to track.
-OpenCV provides the function <a href="https://docs.opencv.org/2.4/modules/imgproc/doc/feature_detection.html">goodFeaturesToTrack</a>. Under the hood the function finds the most prominent corners of the image using the <a href="https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_feature2d/py_shi_tomasi/py_shi_tomasi.html">Shi-Tomasi corner detector</a>.</p>
+OpenCV provides the function <a href="https://docs.opencv.org/2.4/modules/imgproc/doc/feature_detection.html">goodFeaturesToTrack</a>. Under the hood, the function finds the most prominent corners of the image using the <a href="https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_feature2d/py_shi_tomasi/py_shi_tomasi.html">Shi-Tomasi corner detector</a>.</p>
 
 <p>If you had to do it in practice, a simple way to identify good points is to compute the matrix <strong>M</strong> for all the pixels in the image and choose a set of points for which <span  class="math">\(det(M)\)</span> is greater than a certain threshold.</p>
 
-<p>An alternative, is to use the Harris corner detector. The idea is to weight the matrix <strong>M</strong> with a Gaussian centered on the window <strong>W</strong> center</p>
+<p>An alternative is to use the Harris corner detector. The idea is to weight the matrix <strong>M</strong> with a Gaussian centred on the window <strong>W</strong> centre</p>
 
 <p><span  class="math">\[M =  G_{\sigma}\nabla I \nabla I ^{T}\]</span></p>
 
@@ -185,7 +185,7 @@ OpenCV provides the function <a href="https://docs.opencv.org/2.4/modules/imgpro
 
 <p>Intuitively, the eigenvectors of <strong>M</strong> tell the direction of maximum and minimum variation of the brightness, while the eigenvalues tell the amount of variation. In particular, if the eigenvalues are both low we are in a flat region (there is not much change in gradient), if one of the eigenvalues is bigger then the other we are on an edge, and if both the eigenvalues are high, we are probably on a corner (brightness changes in both the directions).</p>
 
-<p>The Gaussian improves the results, weighting <strong>M</strong> based on the distance from the center.</p>
+<p>The Gaussian improves the results, weighting <strong>M</strong> based on the distance from the centre.</p>
 
 <p>Now, if you remember from linear algebra</p>
 
@@ -193,7 +193,7 @@ OpenCV provides the function <a href="https://docs.opencv.org/2.4/modules/imgpro
 
 <p>so the criteria that we are using to choose the points will yield a higher value if both the eigenvalues are high.</p>
 
-<p>In OpenCV you can specify to use the Harris detector (you can check in the code how).</p>
+<p>In OpenCV, you can specify to use the Harris detector (you can check in the code how).</p>
 
 <p>Once we found the first interesting points, we can just iteratively extract a new frame and use the LK tracker to compute the optical flow.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">success, frame <span style="color:#f92672">=</span> video<span style="color:#f92672">.</span>read()
@@ -207,7 +207,7 @@ new_points, st, _ <span style="color:#f92672">=</span> cv2<span style="color:#f9
 
 <p><figure><img src="/lktracker/lkt.gif" alt="Results"></figure></p>
 
-<p>If you check the full code you will notice that the LK tracker has some termination criteria argument. This is interesting, because we didn't talk about LK being an iterative algorithm (you iterate on the frames but you do not iterate on each frame). The parameter is used because OpenCV uses a more robust version of LK, which uses &quot;pyramids&quot;. One of the main assumption of the LK algorithm is that we are dealing with very small motions (~1 pixel) and this is never the case, especially with high-res cameras. A solution is to use a coarse to fine approach (a sort of resolution pyramid). We start making the image more coarse (bigger pixels will result in smaller motions) and compute the tracking, after we estimated the flow at a coarser scale, we then make the image finer and go on iteratively at higher and higher levels of resolution.</p>
+<p>If you check the full code you will notice that the LK tracker has some termination criteria argument. This is interesting because we didn't talk about LK being an iterative algorithm (you iterate on the frames but you do not iterate on each frame). The parameter is used because OpenCV uses a more robust version of LK, which uses &quot;pyramids&quot;. One of the main assumptions of the LK algorithm is that we are dealing with very small motions (~1 pixel) and this is never the case, especially with high-res cameras. A solution is to use a coarse to fine approach (a sort of resolution pyramid). We start making the image more coarse (bigger pixels will result in smaller motions) and compute the tracking after we estimated the flow at a coarser scale, we then make the image finer and go on iteratively at higher and higher levels of resolution.</p>
 
 <hr>
 
@@ -265,29 +265,6 @@ new_points, st, _ <span style="color:#f92672">=</span> cv2<span style="color:#f9
 </footer>
 
         
-    <div class="comments">
-        <div id="disqus_thread"></div>
-<script type="application/javascript">
-    var disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "lorenzopeppoloni-com" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-    </div>
-
     </article>
 </div>
 

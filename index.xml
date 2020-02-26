@@ -5,10 +5,20 @@
     <link>/</link>
     <description>Recent content on Lorenzo Peppoloni</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Fri, 21 Feb 2020 07:13:50 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 26 Feb 2020 07:13:50 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Re-identification with Triplet Loss</title>
+      <link>/reidentification/</link>
+      <pubDate>Wed, 26 Feb 2020 07:13:50 +0000</pubDate>
+      
+      <guid>/reidentification/</guid>
+      <description>One very interesting computer vision problem is re-identification. The idea is that you have images of some entity and you want to be able to re-identify that entity in new images. As a complementary problem, you might also want to be able to say if an identity is known or not.
+Classic use cases are people re-identification for surveillance, but there are also more fancy use cases such as whale re-identification for monitoring and conservation effort.</description>
+    </item>
     
     <item>
       <title>Everything you need to know about multi-object tracking</title>
@@ -16,7 +26,7 @@
       <pubDate>Fri, 21 Feb 2020 07:13:50 +0000</pubDate>
       
       <guid>/mot/</guid>
-      <description>I find Multiple object tracking (MOT) a very interesting problem. In the case called tracking-by-detection, you have a bunch of detections of objects (they can either be in 2D or in 3D) and you have to associate detections in time figuring out if they are observation of the same object.
+      <description>I find Multiple object tracking (MOT) a very interesting problem. In the case called tracking-by-detection, you have a bunch of detections of objects (they can either be in 2D or 3D) and you have to associate detections in time figuring out if they are observation of the same object.
 More formally, we can define the problem as a multi-variable estimation problem.
 Given a set of frames, we have a set of states of objects in each frame.</description>
     </item>
@@ -28,7 +38,7 @@ Given a set of frames, we have a set of states of objects in each frame.</descri
       
       <guid>/eightpoints/</guid>
       <description>In this blog post we had a look at how to estimate the optical flow (e.g., track how pixels move in time) in a set of images. The estimation we obtained gave us pixel matches across the image set.
-Given the correspondaces between two images, we can estimate the motion and the 3D position of the points we are observing. Solving this problem is known as Structure from Motion (SfM).</description>
+Given the correspondences between two images, we can estimate the motion and the 3D position of the points we are observing. Solving this problem is known as Structure from Motion (SfM).</description>
     </item>
     
     <item>

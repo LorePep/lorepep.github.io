@@ -96,7 +96,7 @@
         <div class="post-content clearfix" itemprop="articleBody">
     
 
-    <p>I find Multiple object tracking (MOT) a very interesting problem. In the case called <em>tracking-by-detection</em>, you have a bunch of detections of objects (they can either be in 2D or in 3D) and you have to associate detections in time figuring out if they are observation of the same object.</p>
+    <p>I find Multiple object tracking (MOT) a very interesting problem. In the case called <em>tracking-by-detection</em>, you have a bunch of detections of objects (they can either be in 2D or 3D) and you have to associate detections in time figuring out if they are observation of the same object.</p>
 
 <p>More formally, we can define the problem as a multi-variable estimation problem.</p>
 
@@ -109,14 +109,14 @@ The set of the states <span  class="math">\(S_{1:t} = \{S_1, S_2, S_3, ..., S_t\
 
 <p><span  class="math">\[\hat{S}_{1:t} = \text{argmax}_{{S_{1:t}}} P(S_{1:t}| O_{1:t})\]</span></p>
 
-<p>Usually this can be solved either with a probabilistic approach or with an optimization approach. The former usually works online (more on this later) the latter is usually more suited for offline tracking, since you want to optimize and find the global optimum on the whole frame sequence. This approach is also known as non causal, since you are using the future and the past observations at the same time.</p>
+<p>Usually, this can be solved either with a probabilistic approach or with an optimization approach. The former usually works online (more on this later) the latter is usually more suited for offline tracking since you want to optimize and find the global optimum on the whole frame sequence. This approach is also known as non-causal since you are using the future and past observations at the same time.</p>
 
 <h2 id="probabilistic-approach">Probabilistic approach</h2>
 
-<p>Usually to solve the problem with a probabilistic approach you can adopt a two-step iterative process:</p>
+<p>Usually, to solve the problem with a probabilistic approach you can adopt a two-step iterative process:</p>
 
 <ol>
-<li>you predict the state at the nexst step without using the observations (<strong>predict</strong>)</li>
+<li>you predict the state at the next step without using the observations (<strong>predict</strong>)</li>
 <li>you correct your prediction with the observations (<strong>update</strong>).</li>
 </ol>
 
@@ -176,24 +176,24 @@ The set of the states <span  class="math">\(S_{1:t} = \{S_1, S_2, S_3, ..., S_t\
 
 <p>Let's talk a bit about the models which I find to be a very interesting aspect of MOT.</p>
 
-<p>Basically you have two problems to solve</p>
+<p>You have two problems to solve</p>
 
 <ol>
-<li>how to measure similarity between objects across frames</li>
+<li>how to measure the similarity between objects across frames</li>
 <li>how to use that similarity information to recover identity across frames.</li>
 </ol>
 
 <p>Roughly speaking, the first problem involves
-usually modeling the appearance, or the motion of an object. While the second is the inference problem.
+usually modelling the appearance or the motion of an object. While the second is the inference problem.
 Appearance here is used as a generic term, that could be the visual appearance if you are using a camera.</p>
 
-<p>Two widely used approaches for modeling in MOT are <strong>appearance models</strong> and <strong>motion models</strong>. The former uses the way in which an object appears to the sensor, the latter uses the expected motion of the object.</p>
+<p>Two widely used approaches for modelling in MOT are <strong>appearance models</strong> and <strong>motion models</strong>. The former uses how an object appears to the sensor, the latter uses the expected motion of the object.</p>
 
-<p>Let's have a look at examples, one of the simplest motion model consists of assuming that from one frame to the other an object didn't move much. If I have an observation in the frame <span  class="math">\(j\)</span> and I have a &quot;close&quot; observation in frame <span  class="math">\(j+1\)</span> I will associate them to the same object. What does close mean? I can for esample measure the distance between the centroids, or I can use intersection over union, that is if the two boxes intersect more than a certain threshold they are matched in time.</p>
+<p>Let's have a look at examples, one of the simplest motion model consists of assuming that from one frame to the other an object didn't move much. If I have an observation in the frame <span  class="math">\(j\)</span> and I have a &quot;close&quot; observation in frame <span  class="math">\(j+1\)</span> I will associate them to the same object. What does close mean? I can for example measure the distance between the centroids, or I can use intersection over union, that is if the two boxes intersect more than a certain threshold they are matched in time.</p>
 
-<p>This is a pretty simple approach that works. The main problems come from occlusions and the assumption (which might not hold) that the rate at which frames are captured it's &quot;high&quot; enough to capture very small motions in the observations. In the case of occlusions you will likely experience id switches. This is given by the fact that boxes of different objects will overlap for some frames.</p>
+<p>This is a pretty simple approach that works. The main problems come from occlusions and the assumption (which might not hold) that the rate at which frames are captured it's &quot;high&quot; enough to capture very small motions in the observations. In the case of occlusions, you will likely experience id switches. This is given by the fact that boxes of different objects will overlap for some frames.</p>
 
-<p>Let's see how a centroid tracker behaves for example. This results are obtained using the <a href="http://www.robots.ox.ac.uk/~lav/Research/Projects/2009bbenfold_headpose/project.html">Oxford Towncentre Database</a> for pedestrian tracking.</p>
+<p>Let's see how a centroid tracker behaves for example. These results are obtained using the <a href="http://www.robots.ox.ac.uk/~lav/Research/Projects/2009bbenfold_headpose/project.html">Oxford Towncentre Database</a> for pedestrian tracking.</p>
 
 <p>Detections are already available to be used for tracking.</p>
 
@@ -203,7 +203,7 @@ Appearance here is used as a generic term, that could be the visual appearance i
 
 <p>Now, if we want to make the tracker more robust we could either use an appearance model and use information about how the detected object looks or use a motion model and make assumptions about the motion of the detected objects (e.g., in the case of a pedestrian we can assume that the object will move with constant velocity).</p>
 
-<p><strong>Appereance models</strong></p>
+<p><strong>Appearance models</strong></p>
 
 <p>Appearance models include two components:</p>
 
@@ -212,9 +212,9 @@ Appearance here is used as a generic term, that could be the visual appearance i
 <li>a measurement of the distance between such two representations</li>
 </ol>
 
-<p>In the case of visual tracking lots of different representations can be used, such as local features (or deep features) of the image, color histogram, <a href="https://en.wikipedia.org/wiki/Histogram_of_oriented_gradients">HOG</a>, etc...</p>
+<p>In the case of visual tracking, lots of different representations can be used, such as local features (or deep features) of the image, colour histogram, <a href="https://en.wikipedia.org/wiki/Histogram_of_oriented_gradients">HOG</a>, etc...</p>
 
-<p>In general gradient-based features, like HOG can describe the shape of an object and are robust to lightning changes, but they cannot handle occlusion and deformation well. <a href="http://www.bmva.org/bmvc/2014/papers/paper038/index.html">Region covariance matrix features</a> are more robust as they take more information in account, but they are more computationally expensive.</p>
+<p>In general gradient-based features, like HOG can describe the shape of an object and are robust to lightning changes, but they cannot handle occlusion and deformation well. <a href="http://www.bmva.org/bmvc/2014/papers/paper038/index.html">Region covariance matrix features</a> are more robust as they take more information into account, but they are more computationally expensive.</p>
 
 <p>The distance between two representations can be computed in several ways, mainly depending on the appearance model used.</p>
 
@@ -227,7 +227,7 @@ Appearance here is used as a generic term, that could be the visual appearance i
 <p><strong>Motion Models</strong></p>
 
 <p>As a final topic let's have a look at motion models.
-Motion models assume knowledge about how object moves and predict the expected position of the object. The predicted position is later corrected and updated with the measurement, which are now matched to the predictions.</p>
+Motion models assume knowledge about how an object moves and predict the expected position of the object. The predicted position is later corrected and updated with the measurement, which is now matched to the predictions.</p>
 
 <p>A very common way to use motion models in the probabilistic iterative approach is to use <a href="https://medium.com/@l.peppoloni/kalman-filters-for-software-engineers-3d2a05dee465">Kalman Filters</a>. A very common assumption is that the objects move with constant velocity or constant acceleration.</p>
 
@@ -236,9 +236,9 @@ improves our tracker.</p>
 
 <p><figure><img src="/mot/motion.gif" alt="Motion"></figure></p>
 
-<p>Here we are using a Kalman Filter with a constant velocity model. The tracker is still robust to occlusion, since we are predicting the future position of each object using the motion model.</p>
+<p>Here we are using a Kalman Filter with a constant velocity model. The tracker is still robust to occlusion since we are predicting the future position of each object using the motion model.</p>
 
-<p>The models solve the problem of how to measure similarity, the second problem of using the similarity to recover identity can be solved in several different ways. In the presented demo cases, it was solved by optimization of the intersection over union between the tracker tracks after update and the observations.</p>
+<p>The models solve the problem of how to measure similarity, the second problem of using the similarity to recover identity can be solved in several different ways. In the presented demo cases, it was solved by optimization of the intersection over union between the tracker tracks after the update and the observations.</p>
 
 <p>The examples were created using modified versions of tracking code from <a href="https://github.com/ZidanMusk/experimenting-with-sort">this repository</a>.</p>
 
@@ -298,29 +298,6 @@ improves our tracker.</p>
 </footer>
 
         
-    <div class="comments">
-        <div id="disqus_thread"></div>
-<script type="application/javascript">
-    var disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "lorenzopeppoloni-com" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-    </div>
-
     </article>
 </div>
 

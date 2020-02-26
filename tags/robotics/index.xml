@@ -16,7 +16,7 @@
       <pubDate>Fri, 21 Feb 2020 07:13:50 +0000</pubDate>
       
       <guid>/mot/</guid>
-      <description>I find Multiple object tracking (MOT) a very interesting problem. In the case called tracking-by-detection, you have a bunch of detections of objects (they can either be in 2D or in 3D) and you have to associate detections in time figuring out if they are observation of the same object.
+      <description>I find Multiple object tracking (MOT) a very interesting problem. In the case called tracking-by-detection, you have a bunch of detections of objects (they can either be in 2D or 3D) and you have to associate detections in time figuring out if they are observation of the same object.
 More formally, we can define the problem as a multi-variable estimation problem.
 Given a set of frames, we have a set of states of objects in each frame.</description>
     </item>
@@ -28,7 +28,7 @@ Given a set of frames, we have a set of states of objects in each frame.</descri
       
       <guid>/eightpoints/</guid>
       <description>In this blog post we had a look at how to estimate the optical flow (e.g., track how pixels move in time) in a set of images. The estimation we obtained gave us pixel matches across the image set.
-Given the correspondaces between two images, we can estimate the motion and the 3D position of the points we are observing. Solving this problem is known as Structure from Motion (SfM).</description>
+Given the correspondences between two images, we can estimate the motion and the 3D position of the points we are observing. Solving this problem is known as Structure from Motion (SfM).</description>
     </item>
     
     <item>

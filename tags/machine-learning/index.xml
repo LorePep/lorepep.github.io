@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>machine-learning on Lorenzo Peppoloni</title>
+    <link>/tags/machine-learning/</link>
+    <description>Recent content in machine-learning on Lorenzo Peppoloni</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Wed, 26 Feb 2020 07:13:50 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/machine-learning/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Re-identification with Triplet Loss</title>
+      <link>/reidentification/</link>
+      <pubDate>Wed, 26 Feb 2020 07:13:50 +0000</pubDate>
+      
+      <guid>/reidentification/</guid>
+      <description>One very interesting computer vision problem is re-identification. The idea is that you have images of some entity and you want to be able to re-identify that entity in new images. As a complementary problem, you might also want to be able to say if an identity is known or not.
+Classic use cases are people re-identification for surveillance, but there are also more fancy use cases such as whale re-identification for monitoring and conservation effort.</description>
+    </item>
+    
+  </channel>
+</rss>
