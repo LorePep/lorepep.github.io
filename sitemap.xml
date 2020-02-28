@@ -3,6 +3,36 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/tags/development/</loc>
+    <lastmod>2020-02-28T20:13:50+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/interfaces/</loc>
+    <lastmod>2020-02-28T20:13:50+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2020-02-28T20:13:50+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/</loc>
+    <lastmod>2020-02-28T20:13:50+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/software-engineer/</loc>
+    <lastmod>2020-02-28T20:13:50+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2020-02-28T20:13:50+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/tags/compute-vision/</loc>
     <lastmod>2020-02-26T07:13:50+00:00</lastmod>
   </url>
@@ -13,27 +43,12 @@
   </url>
   
   <url>
-    <loc>/</loc>
-    <lastmod>2020-02-26T07:13:50+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/tags/machine-learning/</loc>
     <lastmod>2020-02-26T07:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/post/</loc>
-    <lastmod>2020-02-26T07:13:50+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/reidentification/</loc>
-    <lastmod>2020-02-26T07:13:50+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/</loc>
     <lastmod>2020-02-26T07:13:50+00:00</lastmod>
   </url>
   
@@ -59,11 +74,6 @@
   
   <url>
     <loc>/learningtests/</loc>
-    <lastmod>2020-02-13T07:13:50+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/development/</loc>
     <lastmod>2020-02-13T07:13:50+00:00</lastmod>
   </url>
   

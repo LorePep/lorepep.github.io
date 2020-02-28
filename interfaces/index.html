@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Do not write misusable APIs &middot; </title>
+        <meta name="description" content="The art of writing APIs properly">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.63.2" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="Do not write misusable APIs">
+<meta property="og:description" content="The art of writing APIs properly">
+<meta property="og:type" content="article">
+<meta property="og:url" content="/interfaces/">
+        <link rel="stylesheet" href="/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+        
+    </head>
+    <body>
+        
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="Lorenzo Peppoloni" href="/">Lorenzo Peppoloni</a>
+                            </h1>
+                        
+                        <a class="button-square" href="/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                            <a class="button-square button-social hint--top" data-hint="Twitter" title="Twitter" href="https://twitter.com/lorepep" rel="me">
+                                <i class="fa fa-twitter"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/lorepep" rel="me">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="LinkedIn" title="LinkedIn" href="https://twitter.com/lpeppoloni" rel="me">
+                                <i class="fa fa-linkedin"></i>
+                            </a>
+                        
+                        
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="About" href="/page/about/">About</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="CV" href="">CV</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Do not write misusable APIs</h1>
+    
+        <p class="post-description" itemprop="description">The art of writing APIs properly</p>
+    
+    <p class="post-date post-line">
+        <span>Published <time datetime="2020-02-28" itemprop="datePublished">Fri, Feb 28, 2020</time></span>
+        <span>by</span>
+        <span itemscope="" itemprop="author" itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <a href="#" itemprop="url" rel="author">Lorenzo Peppoloni</a>
+            </span>
+        </span>
+    </p>
+    
+</header>
+
+        <div class="post-content clearfix" itemprop="articleBody">
+    
+
+    <blockquote>
+<p>APIs should be easy to use and hard to misuse.</p>
+<p>— Josh Bloch</p>
+</blockquote>
+<p>Today I found this quote on Twitter and for a moment I thought: I&rsquo;m gonna print it and frame it right now!!</p>
+<p>This is something I see a lot in my day to day life as a Software Engineer. Spending days and days looking for nasty bugs resulting in realising that I was misusing an API, taught me that a rule to live by it&rsquo;s:</p>
+<p><em>Make getting your APIs wrong really&hellip;really&hellip;really hard</em></p>
+<p>There should be no doubt in the usage of an API, nothing should be left for the user to guess, everyone should be able to read your API and understands immediately how to use it with no doubts.</p>
+<p>Let&rsquo;s write a bad API.</p>
+<p>Imagine we are writing a proto message for an API we are implementing, we want to model a shop transaction:</p>
+<pre><code>message Transaction {
+    int64 timestamp = 1;
+    string product_code = 2;
+    float price = 3;
+    string address = 4;
+  }
+</code></pre><p>This message it&rsquo;s not the most usable, you look at it and question arise:</p>
+<ol>
+<li>mmmm <code>int64 timestamp</code>, wait should I put there an epoch timestamp?</li>
+<li><code>price</code> should it be in the local currency?</li>
+<li><code>address</code> of what? presumably of the shop&hellip;maybe?</li>
+</ol>
+<p>In this message, for at least 3 fields, it is not immediately and unmistakenly clear how to use them.</p>
+<p>Let&rsquo;s try and improve our interface, we can achieve this in multiple ways.</p>
+<h3 id="good-documentation">Good documentation</h3>
+<p>That&rsquo;s a solution you see quite often and it&rsquo;s a good solution. If your API is well documented, people will know how to use it (presumably).</p>
+<pre><code>// Transaction models a shop transaction. Each transaction involves only one product.
+// Each product can be purchased in a shop.
+message Transaction {
+    // Unix epoch with nanoseconds indicating when the transaction was completed.
+    int64 timestamp = 1;
+    // Unique product code of the product involved in the transaction.
+    string product_code = 2;
+    // Price in the local currency of the product involved in the transaction.
+    // If the address is not specified, then the currency must be in USD.
+    float price = 3;
+    // Address of the shop where the transaction happened.
+    string address = 4;
+  }
+</code></pre><p>Ok good, now as a user, I have way more information, I know that a transaction it&rsquo;s a shop transaction, that the timestamp is an epoch timestamp with nanoseconds, that the price is in the local currency of the store and that the address it&rsquo;s the address of the shop.</p>
+<p>There is still something bugging, right? The price can be either in local currency if the address is specified, or in USD if no address is provided. Mmmmm despite the comments that document the behaviour that does sound quite right.</p>
+<p>Imagine you are a new hire, you don&rsquo;t know anything about this message, you have to return all the transaction happened in the US, you notice that some of the transactions are missing the address, but hey all of them have the price. Let&rsquo;s just fetch all the transactions in USD. That would return the wrong set of transactions&hellip;this could lead to bugs that are quite hard to find.</p>
+<p>The problem here is one of cognitive load, still, the API doesn&rsquo;t document itself fully, you still need to have some previous knowledge to use it (in this case that in the case of missing address the price is in USD).</p>
+<p>As an additional point, comments will not be available in the classes generated for this message. A developer will always have to dig up the proto definition and read the comments.</p>
+<h3 id="good-naming">Good naming</h3>
+<p>If the names of the fields speak for themselves and make themselves unmistakable, well&hellip;then it&rsquo;s really hard to get it wrong.</p>
+<pre><code>// ShopTransaction defines a transaction happened in a shop.
+message ShopTransaction {
+    int64 epoch_timestamp_ns = 1;
+    string purchased_product_code = 2;
+    // Price of the transaction, always in USD despite the location
+    // where the transaction happened.
+    float price_usd = 3;
+    string shop_address = 4;
+  }
+</code></pre><p>As you can clearly see at this point comments are basically superfluous. Each field tells exhaustively what it contains and what should be put in it. The currency it&rsquo;s always in USD, so no assumption can be made on the purchase location using the price, and it&rsquo;s clear from the name, the address it&rsquo;s the address of the shop (clear from the name), the timestamp is epoch nanoseconds, clear from the name.</p>
+<p>Good. We don&rsquo;t need much commenting at this point, but we are still free to add them. We can still drop a line saying that the price is always in USD, no matter the address, but it&rsquo;s not strictly necessary.</p>
+<p>As a bonus, to feel fully happy about the message, I would probably change the <code>int64</code> to a <a href="https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/timestamp.proto">google Timestamp</a> and maybe deal a bit better with the address field. Defining an <code>address</code> message might be a good idea but it really depends on the use case.</p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/software-engineer/">software-engineer</a>, 
+            
+                <a href="/tags/development/">development</a>
+            
+        </p>
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=Do%20not%20write%20misusable%20APIs&url=%2finterfaces%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=%2finterfaces%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+            <a class="icon-google-plus" href="https://plus.google.com/share?url=%2finterfaces%2f"
+              onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+              <i class="fa fa-google-plus"></i>
+                <span class="hidden">Google+</span>
+            </a>
+        
+        
+            <a class="icon-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&title=Do%20not%20write%20misusable%20APIs&url=%2finterfaces%2f&summary=The%20art%20of%20writing%20APIs%20properly"
+               onclick="window.open(this.href, 'linkedin-share', 'width=554,height=481');return false;">
+               <i class="fa fa-linkedin"></i>
+               <span class="hidden">LinkedIn</span>
+            </a>
+        
+    </div>
+</footer>
+
+        
+    </article>
+</div>
+
+</div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <div class="site-title-wrapper">
+            <h1 class="site-title">
+                <a title="Lorenzo Peppoloni" href="/">Lorenzo Peppoloni</a>
+            </h1>
+            <a class="button-square button-jump-top js-jump-top" href="#">
+                <i class="fa fa-angle-up"></i>
+            </a>
+        </div>
+
+        <p class="footer-copyright">
+            <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+        </p>
+        <p class="footer-copyright">
+            <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+            <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+        </p>
+    </div>
+</footer>
+
+<script src="/js/jquery-1.11.3.min.js"></script>
+<script src="/js/jquery.fitvids.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+<script src="/js/scripts.js"></script>
+</body>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</html>
+

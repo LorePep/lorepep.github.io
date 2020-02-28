@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>software-engineer on Lorenzo Peppoloni</title>
+    <link>/tags/software-engineer/</link>
+    <description>Recent content in software-engineer on Lorenzo Peppoloni</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Fri, 28 Feb 2020 20:13:50 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/software-engineer/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Do not write misusable APIs</title>
+      <link>/interfaces/</link>
+      <pubDate>Fri, 28 Feb 2020 20:13:50 +0000</pubDate>
+      
+      <guid>/interfaces/</guid>
+      <description>APIs should be easy to use and hard to misuse.
+— Josh Bloch
+ Today I found this quote on Twitter and for a moment I thought: I&amp;rsquo;m gonna print it and frame it right now!!
+This is something I see a lot in my day to day life as a Software Engineer. Spending days and days looking for nasty bugs resulting in realising that I was misusing an API, taught me that a rule to live by it&amp;rsquo;s:</description>
+    </item>
+    
+  </channel>
+</rss>
