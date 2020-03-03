@@ -5,7 +5,7 @@
     <link>/</link>
     <description>Recent content on Lorenzo Peppoloni</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Mon, 02 Mar 2020 07:13:50 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 03 Mar 2020 07:13:50 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
@@ -13,12 +13,12 @@
     <item>
       <title>Effective strategies for classification in CT scans</title>
       <link>/dicomscans/</link>
-      <pubDate>Mon, 02 Mar 2020 07:13:50 +0000</pubDate>
+      <pubDate>Tue, 03 Mar 2020 07:13:50 +0000</pubDate>
       
       <guid>/dicomscans/</guid>
-      <description>Last october I took part to the RSNA Intracranial Hemorrage Detection Kaggle challenge. I ended up in the top 10%, which considering my full-time job and travelling (at the time), was a placement I am quite happy with.
-The goal of this post is to share some ideas and strategies to work with classifiation from DICOM images.
-The task The task in this competition was to tackle a multiclass classification problem, with the goal of classifying 5 different types of brain hemorrage (+ non present) from computerized tomography (CT) scans of patient&#39;s heads.</description>
+      <description>Last October I took part in the RSNA Intracranial Haemorrhage Detection Kaggle challenge. I ended up in the top 10%, which considering my full-time job and travelling, was a placement I am quite happy with.
+The goal of this post is to share some ideas and strategies to work with classification in CT scans.
+The task The task in this competition was to tackle a multiclass classification problem, to classify 5 different types of brain haemorrhage (a sixth class was &amp;quot;not present&amp;quot;) from computerized tomography (CT) scans of patient&#39;s heads.</description>
     </item>
     
     <item>

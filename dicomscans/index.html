@@ -82,7 +82,7 @@
         <p class="post-description" itemprop="description">Some proven strategies and thoughts to deal with classification of CT scans.</p>
     
     <p class="post-date post-line">
-        <span>Published <time datetime="2020-03-02" itemprop="datePublished">Mon, Mar 2, 2020</time></span>
+        <span>Published <time datetime="2020-03-03" itemprop="datePublished">Tue, Mar 3, 2020</time></span>
         <span>by</span>
         <span itemscope="" itemprop="author" itemtype="https://schema.org/Person">
             <span itemprop="name">
@@ -96,23 +96,23 @@
         <div class="post-content clearfix" itemprop="articleBody">
     
 
-    <p>Last october I took part to the <a href="https://www.kaggle.com/c/rsna-intracranial-hemorrhage-detection">RSNA Intracranial Hemorrage Detection</a> Kaggle challenge. I ended up in the top 10%, which considering my full-time job and travelling (at the time), was a placement I am quite happy with.</p>
+    <p>Last October I took part in the <a href="https://www.kaggle.com/c/rsna-intracranial-hemorrhage-detection">RSNA Intracranial Haemorrhage Detection</a> Kaggle challenge. I ended up in the top 10%, which considering my full-time job and travelling, was a placement I am quite happy with.</p>
 
-<p>The goal of this post is to share some ideas and strategies to work with classifiation from DICOM images.</p>
+<p>The goal of this post is to share some ideas and strategies to work with classification in CT scans.</p>
 
 <h2 id="the-task">The task</h2>
 
-<p>The task in this competition was to tackle a multiclass classification problem, with the goal of classifying 5 different types of brain hemorrage (+ non present) from computerized tomography (CT) scans of patient's heads. Each type of hemorrage tends to appear in different location of the head with different features. A summary with examples is reported below.</p>
+<p>The task in this competition was to tackle a multiclass classification problem, to classify 5 different types of brain haemorrhage (a sixth class was &quot;not present&quot;) from computerized tomography (CT) scans of patient's heads. Each type of haemorrhage tends to appear in different location of the head with different features. A summary with examples is reported below.</p>
 
 <p><figure><img src="/dicom/hemorrage.png" alt="hemorrages"></figure></p>
 
-<p>CT scans usually are slices on the axial plane taken at different heights. This means that you can combine consecutive scans to obtain 3D information. In general scans are provided in the <strong>DICOM</strong> format, which is an international standard for digital medical images. Prior to this format. DICOM files represents pixel intensities in normal units (they can range for example between -32768 and 32767 or less according to the number of bits used).</p>
+<p>CT scans usually are slices on the axial plane taken at different heights. This means that you can combine consecutive scans to obtain 3D information. In general, scans are provided in the <strong>DICOM</strong> format, which is an international standard for digital medical images. DICOM files represent pixel intensities in normal units (they can range for example between -32768 and 32767 or less according to the number of bits used).</p>
 
 <h2 id="scans">Scans</h2>
 
-<p>First you can convert the scans from pixel intensitied to Hunsfeld Units (HU). Hunsfeld Units describe a linear scale of radiointensity. Basically values range between -1000 (radiointensity of air) and 1000 roughly metal. Harder materials (such as bone or metal) will have a higher radiointensity. Lighter materials, like flesh, soft tissue or water, will have a lower radiointensity.</p>
+<p>First, you can convert the scans from pixel intensities to Hounsfield Units (HU). Hounsfield Units describe a linear scale of radio intensity. Basically, values range between -1000 (radio intensity of air) and 1000 (roughly radio intensity of metal). Harder materials (such as bone or metal) will have a higher radio intensity. Lighter materials, like flesh, soft tissue or water, will have a lower radio intensity.</p>
 
-<p>To convert from the DICOM to HU you usually have to look for &quot;slope&quot; and &quot;intercept&quot; in the file metadata. The two values, which are usually provided by the manufactorer allows you to get the HU:</p>
+<p>To convert from the DICOM to HU you usually have to look for &quot;slope&quot; and &quot;intercept&quot; in the file metadata. The two values, which are usually provided by the manufacturer allow you to get the HU:</p>
 
 <p><span  class="math">\[ \text{scan}_{HU} = \text{scan} * \text{slope} + \text{intercept} \]</span></p>
 
@@ -122,13 +122,13 @@
 
 <p>So what's the problem?</p>
 
-<p>The problem is that in a normal grayscale image you can represent 256 different shades, this means that, being the HU roughly 2000 values, you have 8 values per shade of grey. As a human you cannot visually  detect changes in shades that are less than 120 HU (in gray scale). That's why you don't see the nice head scan that we were expecting, but instead you just see a grey blob.</p>
+<p>The problem is that in a normal grayscale image you can represent 256 different shades, this means that being the HU roughly 2000 values, you have 8 values per shade of grey. As a human, you cannot visually detect changes in shades that are less than 120 HU (in greyscale). That's why you don't see the nice head scans that we were expecting, but instead, you just see a grey blob.</p>
 
 <p>So what do doctors do?</p>
 
-<p>During scan assessment by a human doctor, what is actually done is that each scan is &quot;focused&quot; on a particular range, giving information about a certain type of tissue. Doctors usually focus on 2-3 different windows at the same time (according to the assessment they are performing).</p>
+<p>During scan assessment by a human doctor, what is actually done is that each scan is &quot;focused&quot; on a particular range of the Hounsfield Scale, giving information about a certain type of tissue. Doctors usually focus on 2-3 different windows at the same time (according to the assessment they are performing).</p>
 
-<p>In the case of brain hemmorages, there are 5 important windows, each one focusing on a type of tissue:</p>
+<p>In the case of brain haemorrhages, there are 5 important windows, each one focusing on a type of tissue:</p>
 
 <ol>
 <li><em>Brain Matter window</em>: W:80 L:40</li>
@@ -144,15 +144,67 @@
 
 <h2 id="mimic-doctors-with-ml">Mimic doctors with ML</h2>
 
-<p>A viable approach is to choose 3 different windows and use them as the channels of a 3-channel image. In this way our network will try and learn, as a human doctor does, to classify hemorrage using multiple windows of the same scan.</p>
+<p>A viable approach is to choose 3 different windows and use them as the channels of a 3-channel image. In this way our network will try and learn, as a human doctor does, to classify haemorrhage using multiple windows of the same scan.</p>
 
-<p>This approach works and was successfully used during the competition (including me). The approach is also backed up by several research papers.</p>
+<p>This approach works and was successfully used during the competition by lots of participants (including me). The approach is also backed up by several research papers.</p>
 
-<p>An example of the images one obtains, are shown in the pictures.</p>
+<p>Some examples of the images one obtains are shown in the pictures.</p>
 
-<h2 id="introduce-the-time-component">Introduce the time component</h2>
+<p><figure><img src="/dicom/windows.png" alt="windowing"></figure></p>
 
-<p>Another approach, that was quite successful in the competition was to introduce a time component instead of multiple windows.</p>
+<p>The images have been min-max scaled to then be fed to the network.</p>
+
+<p><strong>Pros</strong></p>
+
+<ul>
+<li>Quite a simple approach.</li>
+<li>We are feeding the network the same information a human expert would use (we know it's meaningful).</li>
+</ul>
+
+<p><strong>Cons</strong></p>
+
+<ul>
+<li>We are dropping information that the network might be able to use.</li>
+</ul>
+
+<h2 id="introduce-a-volume-component">Introduce a volume component</h2>
+
+<p>Another approach, that was quite successful in the competition was to introduce a volume component instead or together with using multiple windows.</p>
+
+<p>As shown in the figure, scans are consecutive snapshots on the axial plane of the head.</p>
+
+<p><figure><img src="/dicom/scans.png" alt="scans"></figure></p>
+
+<p>Three consecutive scans can be used as the three channels of an RGB image (using still some windowing on the Hounsfield Scale).</p>
+
+<p>An example of the input images (min-max scaled) is shown in the figure.</p>
+
+<p><figure><img src="/dicom/3dvolume.png" alt="volume"></figure></p>
+
+<p><strong>Pros</strong></p>
+
+<ul>
+<li>Quite a simple approach.</li>
+<li>We are now giving information to the network about volume, although limited.</li>
+</ul>
+
+<p><strong>Cons</strong></p>
+
+<ul>
+<li>We are dropping information that the network might be able to use (for the windowing).</li>
+</ul>
+
+<h2 id="no-windowing">No windowing</h2>
+
+<p>An interesting approach developed during the competition was to drop windows altogether and give the network the full range of HU values. The nuance to tackle with this approach is that the distribution of the pixels over the full range is usually strongly bimodal, with values that are not evenly distributed in the whole range. The distribution can change a lot with the type of tissue that is mainly present in each scan.</p>
+
+<p>A solution to this problem is to find (or craft) a nonlinear normalization function to &quot;normalize&quot; our data over the full range, or almost the full range.</p>
+
+<p>An example can be found in the <a href="https://www.kaggle.com/c/rsna-intracranial-hemorrhage-detection/discussion/118780">write-up</a> of the 8th place solution to the competition.</p>
+
+<hr>
+
+<p><em>Conclusions: We had at some possible approaches that work when dealing with classification in CT scans. We started explaining how scans work, how can we convert them to Hunsfeld Units and which strategies we can use to feed the data to a neural network.</em></p>
 
 </div>
 
