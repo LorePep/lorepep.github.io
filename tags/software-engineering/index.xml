@@ -18,8 +18,8 @@
       <guid>/gomath/</guid>
       <description>We don&#39;t usually associate GO with a language to do mathematics, geometry or deep learning. Those tasks are usually left mainly to Python.
 But is GO good at math as well?
-Let&#39;s try and explore the implementation of few simple mathematical problems using GO.
-Pre-requisite To implement our code we will use gonum, which is a GO library for numerical and scientific algorithms. As a plus, it has nice plotting functions as well.</description>
+Disclaimer
+This post is an effort to share my experience and knowledge about the topic. Are there languages that are a better fit for math? Yes. Is it possible to do math (at least some simple things) with GO? Yes.</description>
     </item>
     
   </channel>
