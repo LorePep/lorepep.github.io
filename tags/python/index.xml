@@ -18,7 +18,7 @@
       <guid>/nestedmessagepy/</guid>
       <description>Today I was having some problems populating a proto repeated message in Python with a nested message definition, and it took me a while to figure out how to do it.
 In reality it is pretty simple. Let&amp;rsquo;s make an example.
-syntax = &amp;quot;proto3&amp;quot;; package test; message Trajectory2d { message Point2d { float x = 1; float y = 2; } repeated Point2d points = 1; } Let&amp;rsquo;s save our test.</description>
+syntax = &amp;#34;proto3&amp;#34;;package test;message Trajectory2d { message Point2d { float x = 1; float y = 2; } repeated Point2d points = 1; }Let&amp;rsquo;s save our test.proto and generate the Python code.</description>
     </item>
     
     <item>

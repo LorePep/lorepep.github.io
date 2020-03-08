@@ -15,6 +15,7 @@
 <meta property="og:type" content="article">
 <meta property="og:url" content="/nestedmessagepy/">
         <link rel="stylesheet" href="/dist/styles.css">
+        <link rel="stylesheet" href="/dist/override.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
         
@@ -98,18 +99,18 @@
 
     <p>Today I was having some problems populating a proto repeated message in Python with a nested message definition, and it took me a while to figure out how to do it.</p>
 <p>In reality it is pretty simple. Let&rsquo;s make an example.</p>
-<pre><code>syntax = &quot;proto3&quot;;
-
-package test;
-
-message Trajectory2d {
-    message Point2d {
-      float x = 1;
-      float y = 2;
-    }
-    repeated Point2d points = 1;
-  }
-</code></pre><p>Let&rsquo;s save our <code>test.proto</code> and generate the Python code.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-proto" data-lang="proto">syntax <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;proto3&#34;</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#f92672">package</span> test;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">Trajectory2d</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">message</span> <span style="color:#a6e22e">Point2d</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>      <span style="color:#66d9ef">float</span> x <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>      <span style="color:#66d9ef">float</span> y <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    }<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">repeated</span> Point2d points <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  }<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><p>Let&rsquo;s save our <code>test.proto</code> and generate the Python code.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">protoc --proto_path<span style="color:#f92672">=</span>. --python_out<span style="color:#f92672">=</span>. test.proto
 </code></pre></div><p>Now if we want to create an element of <code>Trajectory2d</code> type and add points to it, we can just use the <code>add()</code> function. The function will create a new message object, append it to the list of repeated objects, and return it for the caller to fill. In addition it will forward keyword arguments to the class.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> test_pb2 <span style="color:#f92672">import</span> Trajectory2d

@@ -15,6 +15,7 @@
 <meta property="og:type" content="article">
 <meta property="og:url" content="/learningtests/">
         <link rel="stylesheet" href="/dist/styles.css">
+        <link rel="stylesheet" href="/dist/override.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
         
@@ -121,44 +122,44 @@ You basically write some tests in which you use the library as you will do in yo
 <p>After some research we encounter the <a href="https://golang.org/pkg/sort/">sort</a> package in GO and we decide to give a try to its <code>Search</code> function. The package provides functionalities to sort slices and user-defined collections.</p>
 <p>After a little bit of digging in the documentation, we think we got the mechanism.
 We write our search function</p>
-<pre><code>// MyStructWithTime a structure with time.
-type MyStructWithTime struct {
-	foo       int
-	timestamp time.Time
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// MyStructWithTime a structure with time.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">MyStructWithTime</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#a6e22e">foo</span>       <span style="color:#66d9ef">int</span>
+	<span style="color:#a6e22e">timestamp</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Time</span>
 }
 
-func findInStruct(in []MyStructWithTime, query time.Time) int {
-	i := sort.Search(len(in), func(i int) bool {
-		return in[i].timestamp.After(query)
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">findInStruct</span>(<span style="color:#a6e22e">in</span> []<span style="color:#a6e22e">MyStructWithTime</span>, <span style="color:#a6e22e">query</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Time</span>) <span style="color:#66d9ef">int</span> {
+	<span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sort</span>.<span style="color:#a6e22e">Search</span>(len(<span style="color:#a6e22e">in</span>), <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">i</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">bool</span> {
+		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">in</span>[<span style="color:#a6e22e">i</span>].<span style="color:#a6e22e">timestamp</span>.<span style="color:#a6e22e">After</span>(<span style="color:#a6e22e">query</span>)
 	})
-	if i &lt; len(in) &amp;&amp; in[i].timestamp.Equal(query) {
-		return i
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">i</span> &lt; len(<span style="color:#a6e22e">in</span>) <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">in</span>[<span style="color:#a6e22e">i</span>].<span style="color:#a6e22e">timestamp</span>.<span style="color:#a6e22e">Equal</span>(<span style="color:#a6e22e">query</span>) {
+		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">i</span>
 	}
 
-	return -1
+	<span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>
 }
-</code></pre><p>We then write a test in which we use the library in the same way we would in our production code.
+</code></pre></div><p>We then write a test in which we use the library in the same way we would in our production code.
 First, it is not clear for us if the slice must be already sorted before using <code>sort.Search</code>, so we write a test and see what happens.</p>
-<pre><code>earlier := time.Date(2020, time.January, 1, 2, 1, 0, 0, time.UTC)
-later := time.Date(2020, time.January, 1, 5, 1, 0, 0, time.UTC)
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">earlier</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Date</span>(<span style="color:#ae81ff">2020</span>, <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">January</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">UTC</span>)
+<span style="color:#a6e22e">later</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Date</span>(<span style="color:#ae81ff">2020</span>, <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">January</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">UTC</span>)
 
-testcases := []struct {
-  name     string
-  input    []MyStructWithTime
-  query    time.Time
-  expected int
+<span style="color:#a6e22e">testcases</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">struct</span> {
+  <span style="color:#a6e22e">name</span>     <span style="color:#66d9ef">string</span>
+  <span style="color:#a6e22e">input</span>    []<span style="color:#a6e22e">MyStructWithTime</span>
+  <span style="color:#a6e22e">query</span>    <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Time</span>
+  <span style="color:#a6e22e">expected</span> <span style="color:#66d9ef">int</span>
 }{
   {
-    name: &quot;not_sorted&quot;,
-    input: []MyStructWithTime{
-      {timestamp: later},
-      {timestamp: earlier},
+    <span style="color:#a6e22e">name</span>: <span style="color:#e6db74">&#34;not_sorted&#34;</span>,
+    <span style="color:#a6e22e">input</span>: []<span style="color:#a6e22e">MyStructWithTime</span>{
+      {<span style="color:#a6e22e">timestamp</span>: <span style="color:#a6e22e">later</span>},
+      {<span style="color:#a6e22e">timestamp</span>: <span style="color:#a6e22e">earlier</span>},
     },
-    query:    earlier,
-    expected: 1,
+    <span style="color:#a6e22e">query</span>:    <span style="color:#a6e22e">earlier</span>,
+    <span style="color:#a6e22e">expected</span>: <span style="color:#ae81ff">1</span>,
   },
 }
-</code></pre><p>You run the test and the result is:</p>
+</code></pre></div><p>You run the test and the result is:</p>
 <pre><code>--- FAIL: TestSort (0.00s)
     --- FAIL: TestSort/not_sorted (0.00s)
 expected 1, got -1
@@ -167,17 +168,17 @@ exit status 1
 FAIL	0.005s
 Error: Tests failed.
 </code></pre><p>Probably we are doing something, wrong, probably the slice need to be already sorted, so we change the struct to</p>
-<pre><code>{
-    name: &quot;sorted&quot;,
-    input: []MyStructWithTime{
-      {timestamp: earlier},
-      {timestamp: later},
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">{
+    <span style="color:#a6e22e">name</span>: <span style="color:#e6db74">&#34;sorted&#34;</span>,
+    <span style="color:#a6e22e">input</span>: []<span style="color:#a6e22e">MyStructWithTime</span>{
+      {<span style="color:#a6e22e">timestamp</span>: <span style="color:#a6e22e">earlier</span>},
+      {<span style="color:#a6e22e">timestamp</span>: <span style="color:#a6e22e">later</span>},
     },
-    query:    earlier,
-    expected: 0,
+    <span style="color:#a6e22e">query</span>:    <span style="color:#a6e22e">earlier</span>,
+    <span style="color:#a6e22e">expected</span>: <span style="color:#ae81ff">0</span>,
 },
 
-</code></pre><p>and we re-run the test</p>
+</code></pre></div><p>and we re-run the test</p>
 <pre><code>--- FAIL: TestSort (0.00s)
     --- FAIL: TestSort/not_sorted (0.00s)
 expected 1, got -1
@@ -188,17 +189,17 @@ Error: Tests failed.
 </code></pre><p>again&hellip;</p>
 <p>There must be something that we are missing here…We dig a bit more into the documentation, especially in the time package documentation, and we discover that After is not inclusive. From the sort documentation we got that we need to test for <code>&gt;=</code> in a case of ascending sorted slice&hellip;Perfect!</p>
 <p>Let&rsquo;s fix the function</p>
-<pre><code>func findInStruct(in []MyStructWithTime, query time.Time) int {
-	i := sort.Search(len(in), func(i int) bool {
-		return in[i].timestamp.After(query) || in[i].timestamp.Equal(query)
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">findInStruct</span>(<span style="color:#a6e22e">in</span> []<span style="color:#a6e22e">MyStructWithTime</span>, <span style="color:#a6e22e">query</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Time</span>) <span style="color:#66d9ef">int</span> {
+	<span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sort</span>.<span style="color:#a6e22e">Search</span>(len(<span style="color:#a6e22e">in</span>), <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">i</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">bool</span> {
+		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">in</span>[<span style="color:#a6e22e">i</span>].<span style="color:#a6e22e">timestamp</span>.<span style="color:#a6e22e">After</span>(<span style="color:#a6e22e">query</span>) <span style="color:#f92672">||</span> <span style="color:#a6e22e">in</span>[<span style="color:#a6e22e">i</span>].<span style="color:#a6e22e">timestamp</span>.<span style="color:#a6e22e">Equal</span>(<span style="color:#a6e22e">query</span>)
 	})
-	if i &lt; len(in) &amp;&amp; in[i].timestamp.Equal(query) {
-		return i
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">i</span> &lt; len(<span style="color:#a6e22e">in</span>) <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">in</span>[<span style="color:#a6e22e">i</span>].<span style="color:#a6e22e">timestamp</span>.<span style="color:#a6e22e">Equal</span>(<span style="color:#a6e22e">query</span>) {
+		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">i</span>
 	}
 
-	return -1
+	<span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>
 }
-</code></pre><p>we hit the run button&hellip;and</p>
+</code></pre></div><p>we hit the run button&hellip;and</p>
 <pre><code>Running tool: /usr/local/bin/go test -timeout 30s -run ^(TestSort)$
 
 PASS
