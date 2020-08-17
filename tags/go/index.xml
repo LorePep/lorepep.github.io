@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>go on Lorenzo Peppoloni</title>
-    <link>https://example.com/tags/go/</link>
+    <link>/tags/go/</link>
     <description>Recent content in go on Lorenzo Peppoloni</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
     <lastBuildDate>Thu, 13 Feb 2020 07:13:50 +0000</lastBuildDate>
     
-	<atom:link href="https://example.com/tags/go/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/go/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>All you need to know about Learning Tests</title>
-      <link>https://example.com/posts/learningtests/</link>
+      <link>/posts/learningtests/</link>
       <pubDate>Thu, 13 Feb 2020 07:13:50 +0000</pubDate>
       
-      <guid>https://example.com/posts/learningtests/</guid>
+      <guid>/posts/learningtests/</guid>
       <description>Picture this scenario: You have to solve a new task, a new amazing coding problem, after some googling, you find a library that solve part of the problem for you. Great! You write your code using the library, you write a test&amp;hellip;and
 FAIL!
 You tweak the code a bit&amp;hellip;FAIL!
@@ -27,10 +27,10 @@ What is happening is that, you found a new library to implement a certain behavi
     
     <item>
       <title>Table-driven tests in Python</title>
-      <link>https://example.com/posts/tabledriventestspy/</link>
+      <link>/posts/tabledriventestspy/</link>
       <pubDate>Sun, 02 Feb 2020 02:13:50 +0000</pubDate>
       
-      <guid>https://example.com/posts/tabledriventestspy/</guid>
+      <guid>/posts/tabledriventestspy/</guid>
       <description>Table-driven tests are an elegant and functional way to unittest your functions in Go. Let&amp;rsquo;s see some ideas on how to introduce this same testing pattern in Python.
 What are table-driven tests One thing I really love about Go is table-driven tests. If you are not familiar with them, table-driven tests are a very elegant way to write unittests for your code. The basic idea is that you write a list of named test cases, defining the input and the expected output for each test case, then you loop over the cases, run your function and check that the actual output is equal to the expected one.</description>
     </item>

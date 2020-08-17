@@ -3,142 +3,142 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://example.com/tags/golang/</loc>
+    <loc>/tags/golang/</loc>
     <lastmod>2020-03-07T07:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/posts/gomath/</loc>
+    <loc>/posts/gomath/</loc>
     <lastmod>2020-03-07T07:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/</loc>
+    <loc>/</loc>
     <lastmod>2020-03-07T07:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/tags/machine-learning/</loc>
+    <loc>/tags/machine-learning/</loc>
     <lastmod>2020-03-07T07:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/posts/</loc>
+    <loc>/posts/</loc>
     <lastmod>2020-03-07T07:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/tags/software-engineering/</loc>
+    <loc>/tags/software-engineering/</loc>
     <lastmod>2020-03-07T07:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/tags/</loc>
+    <loc>/tags/</loc>
     <lastmod>2020-03-07T07:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/tags/computer-vision/</loc>
+    <loc>/tags/computer-vision/</loc>
     <lastmod>2020-03-03T07:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/tags/deep-learning/</loc>
+    <loc>/tags/deep-learning/</loc>
     <lastmod>2020-03-03T07:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/posts/dicomscans/</loc>
+    <loc>/posts/dicomscans/</loc>
     <lastmod>2020-03-03T07:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/tags/development/</loc>
+    <loc>/tags/development/</loc>
     <lastmod>2020-02-28T20:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/posts/interfaces/</loc>
+    <loc>/posts/interfaces/</loc>
     <lastmod>2020-02-28T20:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/tags/software-engineer/</loc>
+    <loc>/tags/software-engineer/</loc>
     <lastmod>2020-02-28T20:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/posts/reidentification/</loc>
+    <loc>/posts/reidentification/</loc>
     <lastmod>2020-02-26T07:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/posts/mot/</loc>
+    <loc>/posts/mot/</loc>
     <lastmod>2020-02-21T07:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/tags/opencv/</loc>
+    <loc>/tags/opencv/</loc>
     <lastmod>2020-02-21T07:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/tags/robotics/</loc>
+    <loc>/tags/robotics/</loc>
     <lastmod>2020-02-21T07:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/posts/eightpoints/</loc>
+    <loc>/posts/eightpoints/</loc>
     <lastmod>2020-02-19T07:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/posts/learningtests/</loc>
+    <loc>/posts/learningtests/</loc>
     <lastmod>2020-02-13T07:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/tags/go/</loc>
+    <loc>/tags/go/</loc>
     <lastmod>2020-02-13T07:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/tags/tests/</loc>
+    <loc>/tags/tests/</loc>
     <lastmod>2020-02-13T07:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/posts/lkttracker/</loc>
+    <loc>/posts/lkttracker/</loc>
     <lastmod>2020-02-11T07:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/tags/proto/</loc>
+    <loc>/tags/proto/</loc>
     <lastmod>2020-02-04T20:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/posts/nestedmessagepy/</loc>
+    <loc>/posts/nestedmessagepy/</loc>
     <lastmod>2020-02-04T20:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/tags/python/</loc>
+    <loc>/tags/python/</loc>
     <lastmod>2020-02-04T20:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/posts/tabledriventestspy/</loc>
+    <loc>/posts/tabledriventestspy/</loc>
     <lastmod>2020-02-02T02:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/page/about/</loc>
+    <loc>/page/about/</loc>
     <lastmod>2015-04-03T02:13:50+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://example.com/page/</loc>
+    <loc>/page/</loc>
     <lastmod>2015-04-03T02:13:50+00:00</lastmod>
   </url>
   

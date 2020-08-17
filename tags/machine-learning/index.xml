@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>machine-learning on Lorenzo Peppoloni</title>
-    <link>https://example.com/tags/machine-learning/</link>
+    <link>/tags/machine-learning/</link>
     <description>Recent content in machine-learning on Lorenzo Peppoloni</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
     <lastBuildDate>Sat, 07 Mar 2020 07:13:50 +0000</lastBuildDate>
     
-	<atom:link href="https://example.com/tags/machine-learning/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/machine-learning/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Is GO good at Math?</title>
-      <link>https://example.com/posts/gomath/</link>
+      <link>/posts/gomath/</link>
       <pubDate>Sat, 07 Mar 2020 07:13:50 +0000</pubDate>
       
-      <guid>https://example.com/posts/gomath/</guid>
+      <guid>/posts/gomath/</guid>
       <description>We don&#39;t usually associate GO with a language to do mathematics, geometry or deep learning. Those tasks are usually left mainly to Python.
 But is GO good at math as well?
 Disclaimer
@@ -26,10 +26,10 @@ This post is an effort to share my experience and knowledge about the topic. Are
     
     <item>
       <title>Effective strategies for classification in CT scans</title>
-      <link>https://example.com/posts/dicomscans/</link>
+      <link>/posts/dicomscans/</link>
       <pubDate>Tue, 03 Mar 2020 07:13:50 +0000</pubDate>
       
-      <guid>https://example.com/posts/dicomscans/</guid>
+      <guid>/posts/dicomscans/</guid>
       <description>Last October I took part in the RSNA Intracranial Haemorrhage Detection Kaggle challenge. I ended up in the top 10%, which considering my full-time job and travelling, was a placement I am quite happy with.
 The goal of this post is to share some ideas and strategies to work with classification in CT scans.
 The task The task in this competition was to tackle a multiclass classification problem, to classify 5 different types of brain haemorrhage (a sixth class was &amp;quot;not present&amp;quot;) from computerized tomography (CT) scans of patient&#39;s heads.</description>
@@ -37,10 +37,10 @@ The task The task in this competition was to tackle a multiclass classification 
     
     <item>
       <title>Re-identification with Triplet Loss</title>
-      <link>https://example.com/posts/reidentification/</link>
+      <link>/posts/reidentification/</link>
       <pubDate>Wed, 26 Feb 2020 07:13:50 +0000</pubDate>
       
-      <guid>https://example.com/posts/reidentification/</guid>
+      <guid>/posts/reidentification/</guid>
       <description>One very interesting computer vision problem is re-identification. The idea is that you have images of some entity and you want to be able to re-identify that entity in new images. As a complementary problem, you might also want to be able to say if an identity is known or not.
 Classic use cases are people re-identification for surveillance, but there are also more fancy use cases such as whale re-identification for monitoring and conservation effort.</description>
     </item>
