@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+<meta itemprop="name" content="Is GO good at Math?">
+<meta itemprop="description" content="A journey into doing math with GO">
+<meta itemprop="datePublished" content="2020-03-07T07:13:50&#43;00:00" />
+<meta itemprop="dateModified" content="2020-03-07T07:13:50&#43;00:00" />
+<meta itemprop="wordCount" content="1095">
+
+
+
+<meta itemprop="keywords" content="software-engineering,golang,machine-learning," /><meta property="og:title" content="Is GO good at Math?" />
+<meta property="og:description" content="A journey into doing math with GO" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://example.com/posts/gomath/" />
+<meta property="article:published_time" content="2020-03-07T07:13:50+00:00" />
+<meta property="article:modified_time" content="2020-03-07T07:13:50+00:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Is GO good at Math?"/>
+<meta name="twitter:description" content="A journey into doing math with GO"/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>Is GO good at Math?</title>
+	<link rel="stylesheet" href="https://example.com/css/style.min.eac77496566fd7d5768fd650ddb0b2b181ca6a2d7c5fdd6fe6b8ba4bf47e566f.css" integrity="sha256-6sd0llZv19V2j9ZQ3bCysYHKai18X91v5ri6S/R+Vm8=" crossorigin="anonymous">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="https://example.com">Lorenzo Peppoloni</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					
+				<a href="https://example.com/posts/">Posts</a>
+				<a href="https://example.com/page/about">About</a>
+
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<span class="hdr-social hide-in-mobile"><a href="https://twitter.com/lorepep" target="_blank" rel="noopener me" title="Twitter"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a><a href="https://github.com/lorepep" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a><a href="https://www.linkedin.com/in/lorenzo-peppoloni/" target="_blank" rel="noopener me" title="Linkedin"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="https://example.com/posts/">Posts</a></li>
+			<li><a href="https://example.com/page/about">About</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Mar 7, 2020</span></div>
+				<h1>Is GO good at Math?</h1>
+			</header>
+			<div class="content">
+				<p>We don't usually associate GO with a language to do mathematics, geometry or deep learning. Those tasks are usually left mainly to Python.</p>
+
+<p>But is GO good at math as well?</p>
+
+<p><strong>Disclaimer</strong></p>
+
+<p>This post is an effort to share my experience and knowledge about the topic. Are there languages that are a better fit for math? Yes. Is it possible to do math (at least some simple things) with GO? Yes.</p>
+
+<h2 id="prerequisite">Pre-requisite<a href="#prerequisite" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>To implement our code we will use <a href="https://github.com/gonum/gonum">gonum</a>, which is a GO library for numerical and scientific algorithms. As a plus, it has nice plotting functions as well.</p>
+
+<p>Let's have a quick look at <a href="https://godoc.org/gonum.org/v1/gonum/mat">gonum/mat</a>, where the linear algebra libraries are implemented.</p>
+
+<p>The first thing to understand about the library is that everything is done using a pointer receiver, for example:</p>
+<div class="highlight"><pre class="chroma"><code class="language-golang" data-lang="golang"><span class="nx">m1</span> <span class="o">:=</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">NewDense</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">{</span>
+    <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="nx">m2</span> <span class="o">:=</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">NewDense</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">{</span>
+    <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="kd">var</span> <span class="nx">prod</span> <span class="nx">mat</span><span class="p">.</span><span class="nx">Dense</span>
+<span class="nx">prod</span><span class="p">.</span><span class="nf">Mul</span><span class="p">(</span><span class="nx">m1</span><span class="p">,</span> <span class="nx">m2</span><span class="p">)</span>
+<span class="nx">fc</span> <span class="o">:=</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">Formatted</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">prod</span><span class="p">,</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">Prefix</span><span class="p">(</span><span class="s">&#34;       &#34;</span><span class="p">),</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">Squeeze</span><span class="p">())</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;prod = %v\n&#34;</span><span class="p">,</span> <span class="nx">fc</span><span class="p">)</span></code></pre></div>
+<p>The code will output:</p>
+<pre><code>prod = ⎡16  0   0⎤
+       ⎣ 0  0  16⎦</code></pre>
+<p>If you see, we defined two matrices, passing the data with a slice of <code>float64</code> row-major, then we created a new matrix to contain the product and then called the <code>Mul</code> function with the new matrix as a pointer receiver. The final part is just printing using the built-in formatter.</p>
+
+<p>Let's see how to invert a matrix:</p>
+<div class="highlight"><pre class="chroma"><code class="language-golang" data-lang="golang"><span class="nx">m</span> <span class="o">:=</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">NewDense</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">{</span>
+    <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="kd">var</span> <span class="nx">inv</span> <span class="nx">mat</span><span class="p">.</span><span class="nx">Dense</span>
+<span class="nx">inv</span><span class="p">.</span><span class="nf">Inverse</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span>
+<span class="nx">fc</span> <span class="o">:=</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">Formatted</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">inv</span><span class="p">,</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">Prefix</span><span class="p">(</span><span class="s">&#34;      &#34;</span><span class="p">),</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">Squeeze</span><span class="p">())</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;inv = %v\n&#34;</span><span class="p">,</span> <span class="nx">fc</span><span class="p">)</span></code></pre></div>
+<p>The code will output:</p>
+<pre><code>inv = ⎡0.25    -0⎤
+      ⎣   0  0.25⎦</code></pre>
+<p>Again, we defined a matrix, we created an empty matrix to contain the inverse and then we inverted the first matrix.</p>
+
+<h3 id="solving-a-linear-system">Solving a linear system<a href="#solving-a-linear-system" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>Let's try to solve a linear system:</p>
+
+<p><span  class="math">\[ \begin{matrix} 
+x + y + z = 6 \\ 
+2y + 5z = -4 \\ 
+2x + 5y - z = 27
+\end{matrix} \]</span></p>
+
+<p>This can be rewritten as <span  class="math">\(Ax = b\)</span></p>
+
+<p><span  class="math">\[ \begin{bmatrix} 
+4 & 1 & 1 \\ 
+0 & 1 & 5 \\ 
+2 & 7 & -1  
+\end{bmatrix} \begin{bmatrix} 
+x \\ 
+y \\ 
+z  
+\end{bmatrix} = \begin{bmatrix} 
+4 \\
+-4 \\
+22
+\end{bmatrix} \]</span></p>
+
+<p>Now the solution would be <span  class="math">\( x = A^{-1}b\)</span> being <span  class="math">\(A\)</span> a square matrix with <span  class="math">\(det \neq 0\)</span>.</p>
+
+<p>Using <code>gonum</code>, we can either invert <span  class="math">\(A\)</span> or use the more generic function <code>SolveVec</code>, which solves a linear system.</p>
+<div class="highlight"><pre class="chroma"><code class="language-golang" data-lang="golang"><span class="nx">A</span> <span class="o">:=</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">NewDense</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">{</span>
+    <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="mi">2</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="nx">b</span> <span class="o">:=</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">NewVecDense</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">{</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">22</span><span class="p">})</span>
+<span class="nx">x</span> <span class="o">:=</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">NewVecDense</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
+
+<span class="nx">x</span><span class="p">.</span><span class="nf">SolveVec</span><span class="p">(</span><span class="nx">A</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%v\n&#34;</span><span class="p">,</span> <span class="nx">x</span><span class="p">)</span></code></pre></div>
+<p>Which outputs:</p>
+<pre><code>[0.64705 2.76470 -1.35294] </code></pre>
+<h3 id="neural-network">Neural Network<a href="#neural-network" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>Now it's time to try something a bit more complex... Let's implement a simple neural network in GO, without going too much into detail on the math (you will have to trust me on that).</p>
+
+<p><strong>Neural Networks ELI5</strong></p>
+
+<p><figure><img src="/gomath/nn.png" alt="nn"></figure></p>
+
+<p>In a multilayer perceptron, you have an input, an output layer and some hidden layers. Each layer, in its simplest form, consists of a linear transformation (<span  class="math">\(y_i = W_ix_i + b_i\)</span>, for the i-th layer) plus a nonlinear transformation called <strong>activation function</strong> (<span  class="math">\(y_i = a_i(W_ix_i + b_i)\)</span>). The network is trained using a cost function (<span  class="math">\(L\)</span>), which is a function we are trying to optimize.</p>
+
+<p>For example, we have samples as inputs and outputs and we want our network to learn a function that ties the two. The cost function could be the mean squared error (MSE) between the network output given the input or the sum of the squared error (SSE) (this is really ELI5). The weights at each layer (<span  class="math">\(W_i\)</span>) and the biases (<span  class="math">\(b_i\)</span>) are our tunable parameters.</p>
+
+<p>To optimize the cost function we use gradient descent: at each step, we compute the output of the network, we then compute the derivative at of the cost function with respect to the weights and biases and we update the weights in such a way that we follow the direction of the negative gradient. In principle, each step moves us closer to the minimum of the cost function.</p>
+
+<p><figure><img src="/gomath/gdesc.png" alt="nn"></figure></p>
+
+<p>To monitor the training of our network we will be plotting the values of the loss function.</p>
+
+<p>To simplify the code a bit we will assume that the network has no <span  class="math">\(b_i\)</span> terms. <span  class="math">\(L = \sum (\hat(y)_y - y_i)^2\)</span>, so the <strong>SSE</strong> and our activation function is the sigmoid function (<span  class="math">\(\sigma(x) = \frac{1}{1 + \exp(-x)} \)</span>).</p>
+
+<p>Let's see if our network can learn the toy problem in <a href="https://towardsdatascience.com/how-to-build-your-own-neural-network-from-scratch-in-python-68998a08e4f6">this</a> blog post.</p>
+
+<p><figure><img src="/gomath/toy.png" alt="nn"></figure></p>
+
+<p>After 1,500 iterations, the output generated by the network is <code>[0.014, 0.98, 0.98, 0.024]</code> (the original output of the table is <code>[0, 1, 1, 0]</code>) which means that our simple network was able to overfit and learn the training set.</p>
+
+<p><strong>The full code can be found <a href="https://github.com/LorePep/blogposts_code/tree/master/gomath">here</a>.</strong></p>
+
+<p>Below you can see the plot (made with <a href="https://github.com/gonum/plot">gonum/plot</a>) of the loss during training.</p>
+
+<p><figure><img src="/gomath/loss_history.png" alt="nn"></figure></p>
+
+<p>One gotcha to be aware of while doing some more complex math using <code>gonum</code> is that chaining multiplications in which the matrices dimension change will break the dimension check even if it appears correct.</p>
+
+<p>For example:</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">m1</span> <span class="o">:=</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">NewDense</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">{</span>
+    <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+<span class="p">})</span>
+
+<span class="nx">m2</span> <span class="o">:=</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">NewDense</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">{</span>
+    <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+<span class="p">})</span>
+
+<span class="nx">m3</span> <span class="o">:=</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">NewDense</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">{</span>
+    <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+<span class="p">})</span>
+
+<span class="kd">var</span> <span class="nx">mul</span> <span class="nx">mat</span><span class="p">.</span><span class="nx">Dense</span>
+<span class="nx">mul</span><span class="p">.</span><span class="nf">Mul</span><span class="p">(</span><span class="nx">m1</span><span class="p">,</span> <span class="nx">m2</span><span class="p">.</span><span class="nf">T</span><span class="p">())</span>
+<span class="nx">mul</span><span class="p">.</span><span class="nf">Mul</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">mul</span><span class="p">,</span> <span class="nx">m3</span><span class="p">)</span></code></pre></div>
+<p>This code will panic despite the multiplication being perfectly valid <span  class="math">\((2\times 3)(3\times 2)(2\times 3)\)</span>. The failure happens because the auxiliary matrix you are using as a point receiver is not of the right size to contain the new multiplication.</p>
+
+<p>The solution to this is to create a new auxiliary matrix for each step in which the dimension changes because of the multiplication.</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">mul1</span> <span class="nx">mat</span><span class="p">.</span><span class="nx">Dense</span>
+<span class="nx">mul1</span><span class="p">.</span><span class="nf">Mul</span><span class="p">(</span><span class="nx">m1</span><span class="p">,</span> <span class="nx">m2</span><span class="p">.</span><span class="nf">T</span><span class="p">())</span>
+<span class="kd">var</span> <span class="nx">mul2</span> <span class="nx">mat</span><span class="p">.</span><span class="nx">Dense</span>
+<span class="nx">mul2</span><span class="p">.</span><span class="nf">Mul</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">mul1</span><span class="p">,</span> <span class="nx">m3</span><span class="p">)</span></code></pre></div>
+<h2 id="plotting">Plotting<a href="#plotting" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>Plotting using <code>gonum/plot</code> is pretty straightforward: you can create an object of type <code>Plot</code> and then you add to it multiple plots using the <code>plotutil</code> package, which contains routines to simplify adding common plot types, such as line plots, scatter plots, etc...</p>
+
+<p>As an example, to plot the loss:</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">p</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">plot</span><span class="p">.</span><span class="nf">New</span><span class="p">()</span>
+<span class="c1">// check error.
+</span><span class="c1">// ...
+</span><span class="c1"></span><span class="nx">err</span> <span class="p">=</span> <span class="nx">plotutil</span><span class="p">.</span><span class="nf">AddLinePoints</span><span class="p">(</span><span class="nx">p</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="nx">points</span><span class="p">)</span>
+<span class="c1">// check error.
+</span><span class="c1"></span><span class="nx">err</span> <span class="p">=</span> <span class="nx">p</span><span class="p">.</span><span class="nf">Save</span><span class="p">(</span><span class="mi">5</span><span class="o">*</span><span class="nx">vg</span><span class="p">.</span><span class="nx">Inch</span><span class="p">,</span> <span class="mi">5</span><span class="o">*</span><span class="nx">vg</span><span class="p">.</span><span class="nx">Inch</span><span class="p">,</span> <span class="s">&#34;loss_history.png&#34;</span><span class="p">)</span>
+<span class="o">//</span> <span class="o">...</span></code></pre></div>
+<hr>
+
+<p><em>Conclusions: In this post, we explored the potential of GO to do math and linear algebra. We had a look at the <code>gonum</code> library, first solving a simple linear system and then implementing a simple neural network in GO. We also had a quick look at how you can use <code>gonum</code> to create plots.</em></p>
+
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-feather"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path><line x1="16" y1="8" x2="2" y2="22"></line><line x1="17.5" y1="15" x2="9" y2="15"></line></svg>Lorenzo Peppoloni</p>
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://example.com/tags/software-engineering">software-engineering</a></span><span class="tag"><a href="https://example.com/tags/golang">golang</a></span><span class="tag"><a href="https://example.com/tags/machine-learning">machine-learning</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>1095 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2020-03-07 08:13 &#43;0100</p>
+			</footer>
+		</article>
+		<div class="post-nav thin">
+			<a class="prev-post" href="https://example.com/posts/dicomscans/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>Effective strategies for classification in CT scans</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+</div>
+	</main>
+
+</div>
+</div>
+
+<footer class="footer">
+    
+</footer>
+
+<script src="https://example.comjs/jquery-1.11.3.min.js"></script>
+<script src="https://example.comjs/jquery.fitvids.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+<script src="https://example.comjs/scripts.js"></script>
+</body>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</html>
+
+
+
+	<script src="https://example.com/js/bundle.min.4a9a0ac3d2217822c7865b4161e6c2a71de1d70492264337755427898dd718f6.js" integrity="sha256-SpoKw9IheCLHhltBYebCpx3h1wSSJkM3dVQniY3XGPY=" crossorigin="anonymous"></script>
+	
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-159316457-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+</body>
+
+</html>

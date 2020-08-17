@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+<meta itemprop="name" content="All you need to know about Learning Tests">
+<meta itemprop="description" content="Understand libraries and protect your code">
+<meta itemprop="datePublished" content="2020-02-13T07:13:50&#43;00:00" />
+<meta itemprop="dateModified" content="2020-02-13T07:13:50&#43;00:00" />
+<meta itemprop="wordCount" content="925">
+
+
+
+<meta itemprop="keywords" content="go,golang,tests,development," /><meta property="og:title" content="All you need to know about Learning Tests" />
+<meta property="og:description" content="Understand libraries and protect your code" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://example.com/posts/learningtests/" />
+<meta property="article:published_time" content="2020-02-13T07:13:50+00:00" />
+<meta property="article:modified_time" content="2020-02-13T07:13:50+00:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="All you need to know about Learning Tests"/>
+<meta name="twitter:description" content="Understand libraries and protect your code"/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>All you need to know about Learning Tests</title>
+	<link rel="stylesheet" href="https://example.com/css/style.min.eac77496566fd7d5768fd650ddb0b2b181ca6a2d7c5fdd6fe6b8ba4bf47e566f.css" integrity="sha256-6sd0llZv19V2j9ZQ3bCysYHKai18X91v5ri6S/R+Vm8=" crossorigin="anonymous">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="https://example.com">Lorenzo Peppoloni</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					
+				<a href="https://example.com/posts/">Posts</a>
+				<a href="https://example.com/page/about">About</a>
+
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<span class="hdr-social hide-in-mobile"><a href="https://twitter.com/lorepep" target="_blank" rel="noopener me" title="Twitter"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a><a href="https://github.com/lorepep" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a><a href="https://www.linkedin.com/in/lorenzo-peppoloni/" target="_blank" rel="noopener me" title="Linkedin"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="https://example.com/posts/">Posts</a></li>
+			<li><a href="https://example.com/page/about">About</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Feb 13, 2020</span></div>
+				<h1>All you need to know about Learning Tests</h1>
+			</header>
+			<div class="content">
+				<p>Picture this scenario:
+You have to solve a new task, a new amazing coding problem, after some googling, you find a library that solve part of the problem for you. Great!
+You write your code using the library, you write a test&hellip;and</p>
+<p>FAIL!</p>
+<p>You tweak the code a bit&hellip;FAIL!</p>
+<p>I think we all went through this multiple times during our developer career.</p>
+<p>What is happening is that, you found a new library to implement a certain behaviour that you want, you think you understood the library (but you have this bugging feeling that maybe you did not), you think you know how to use it for your particular use case (but you have this bugging feeling that maybe you do not).</p>
+<p>What&rsquo;s a good approach? There is one simple answer: Learning tests</p>
+<h2 id="what-is-a-learning-test">What is a learning test?<a href="#what-is-a-learning-test" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>A learning test is a test you write to test your understanding of a third party API library.
+You basically write some tests in which you use the library as you will do in your production code and you check that the behaviour is what you expect.</p>
+<p>The point here is that you are NOT testing the library (it should have its own tests), you are testing your understanding of it.</p>
+<p>Why you should write learning tests?</p>
+<p>An alternative would be to perform your own experiments using the library and then, when you are sure about its behavior, just use it in the production code.</p>
+<p>While this may suffice, there are indeed several advantages in writing your &ldquo;experiments&rdquo; as actual tests.</p>
+<ul>
+<li>You would write the experiments anyway, so you are not adding any coding overhead.</li>
+<li>Learning tests protect your code against changes in the library itself. If a new version is released where a behaviour (or interface) is changed, you will immediately see your tests fail.  This will prevent you hours of painful debugging, only to understand that you&rsquo;re using a version of the library that is not compatible anymore with your code.</li>
+</ul>
+<p>Let&rsquo;s make an example of a learning test</p>
+<p><strong>Disclaimer</strong>: <em>the example is trivial and probably everything can be solved beforehand reading the documentation accurately.</em></p>
+<p>Let&rsquo;s say we have a data structure <code>myStructWithTime</code> abstracting some data with a timestamp and we want to write a function to search by timestamp in an slice of our data structure.</p>
+<p>After some research we encounter the <a href="https://golang.org/pkg/sort/">sort</a> package in GO and we decide to give a try to its <code>Search</code> function. The package provides functionalities to sort slices and user-defined collections.</p>
+<p>After a little bit of digging in the documentation, we think we got the mechanism.
+We write our search function</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// MyStructWithTime a structure with time.
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">MyStructWithTime</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">foo</span>       <span class="kt">int</span>
+	<span class="nx">timestamp</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">findInStruct</span><span class="p">(</span><span class="nx">in</span> <span class="p">[]</span><span class="nx">MyStructWithTime</span><span class="p">,</span> <span class="nx">query</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="nx">i</span> <span class="o">:=</span> <span class="nx">sort</span><span class="p">.</span><span class="nf">Search</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nx">in</span><span class="p">),</span> <span class="kd">func</span><span class="p">(</span><span class="nx">i</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">in</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">timestamp</span><span class="p">.</span><span class="nf">After</span><span class="p">(</span><span class="nx">query</span><span class="p">)</span>
+	<span class="p">})</span>
+	<span class="k">if</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="nx">in</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">in</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">timestamp</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">query</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">i</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+<span class="p">}</span>
+</code></pre></div><p>We then write a test in which we use the library in the same way we would in our production code.
+First, it is not clear for us if the slice must be already sorted before using <code>sort.Search</code>, so we write a test and see what happens.</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">earlier</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Date</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nx">January</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nx">UTC</span><span class="p">)</span>
+<span class="nx">later</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Date</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nx">January</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nx">UTC</span><span class="p">)</span>
+
+<span class="nx">testcases</span> <span class="o">:=</span> <span class="p">[]</span><span class="kd">struct</span> <span class="p">{</span>
+  <span class="nx">name</span>     <span class="kt">string</span>
+  <span class="nx">input</span>    <span class="p">[]</span><span class="nx">MyStructWithTime</span>
+  <span class="nx">query</span>    <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span>
+  <span class="nx">expected</span> <span class="kt">int</span>
+<span class="p">}{</span>
+  <span class="p">{</span>
+    <span class="nx">name</span><span class="p">:</span> <span class="s">&#34;not_sorted&#34;</span><span class="p">,</span>
+    <span class="nx">input</span><span class="p">:</span> <span class="p">[]</span><span class="nx">MyStructWithTime</span><span class="p">{</span>
+      <span class="p">{</span><span class="nx">timestamp</span><span class="p">:</span> <span class="nx">later</span><span class="p">},</span>
+      <span class="p">{</span><span class="nx">timestamp</span><span class="p">:</span> <span class="nx">earlier</span><span class="p">},</span>
+    <span class="p">},</span>
+    <span class="nx">query</span><span class="p">:</span>    <span class="nx">earlier</span><span class="p">,</span>
+    <span class="nx">expected</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="p">},</span>
+<span class="p">}</span>
+</code></pre></div><p>You run the test and the result is:</p>
+<pre><code>--- FAIL: TestSort (0.00s)
+    --- FAIL: TestSort/not_sorted (0.00s)
+expected 1, got -1
+FAIL
+exit status 1
+FAIL	0.005s
+Error: Tests failed.
+</code></pre><p>Probably we are doing something, wrong, probably the slice need to be already sorted, so we change the struct to</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="p">{</span>
+    <span class="nx">name</span><span class="p">:</span> <span class="s">&#34;sorted&#34;</span><span class="p">,</span>
+    <span class="nx">input</span><span class="p">:</span> <span class="p">[]</span><span class="nx">MyStructWithTime</span><span class="p">{</span>
+      <span class="p">{</span><span class="nx">timestamp</span><span class="p">:</span> <span class="nx">earlier</span><span class="p">},</span>
+      <span class="p">{</span><span class="nx">timestamp</span><span class="p">:</span> <span class="nx">later</span><span class="p">},</span>
+    <span class="p">},</span>
+    <span class="nx">query</span><span class="p">:</span>    <span class="nx">earlier</span><span class="p">,</span>
+    <span class="nx">expected</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">},</span>
+
+</code></pre></div><p>and we re-run the test</p>
+<pre><code>--- FAIL: TestSort (0.00s)
+    --- FAIL: TestSort/not_sorted (0.00s)
+expected 1, got -1
+FAIL
+exit status 1
+FAIL	0.005s
+Error: Tests failed.
+</code></pre><p>again&hellip;</p>
+<p>There must be something that we are missing here…We dig a bit more into the documentation, especially in the time package documentation, and we discover that After is not inclusive. From the sort documentation we got that we need to test for <code>&gt;=</code> in a case of ascending sorted slice&hellip;Perfect!</p>
+<p>Let&rsquo;s fix the function</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">findInStruct</span><span class="p">(</span><span class="nx">in</span> <span class="p">[]</span><span class="nx">MyStructWithTime</span><span class="p">,</span> <span class="nx">query</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="nx">i</span> <span class="o">:=</span> <span class="nx">sort</span><span class="p">.</span><span class="nf">Search</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nx">in</span><span class="p">),</span> <span class="kd">func</span><span class="p">(</span><span class="nx">i</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">in</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">timestamp</span><span class="p">.</span><span class="nf">After</span><span class="p">(</span><span class="nx">query</span><span class="p">)</span> <span class="o">||</span> <span class="nx">in</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">timestamp</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">query</span><span class="p">)</span>
+	<span class="p">})</span>
+	<span class="k">if</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="nx">in</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">in</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">timestamp</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">query</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">i</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+<span class="p">}</span>
+</code></pre></div><p>we hit the run button&hellip;and</p>
+<pre><code>Running tool: /usr/local/bin/go test -timeout 30s -run ^(TestSort)$
+
+PASS
+ok  	    0.005s
+Success: Tests passed.
+</code></pre><p>Success!!</p>
+<p>We understood how we should use the library, and in the meantime we learnt a great deal about the <code>sort</code> and <code>time</code> packages.</p>
+<p>At this point, the test can be factored into two test cases, which will be added to our test code base:</p>
+<ol>
+<li>A test expecting failure for an array which is not sorted.</li>
+<li>A working test where we put everything together.</li>
+</ol>
+<p>These three tests will make sure that, if something changes in the <code>sort.Search</code>, we will be immediately notified by a test failure.</p>
+<hr>
+<p><em>Conclusions: Anytime you are facing a new library, do not limit yourself to write some experimental code to understand its use. A better approach is to write learning tests in which you use the library as you would do in your production code. In this way you&rsquo;ll test your actual understanding of the library and you&rsquo;ll protect your code from disruptive changes from third parties.</em></p>
+
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-feather"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path><line x1="16" y1="8" x2="2" y2="22"></line><line x1="17.5" y1="15" x2="9" y2="15"></line></svg>Lorenzo Peppoloni</p>
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://example.com/tags/go">go</a></span><span class="tag"><a href="https://example.com/tags/golang">golang</a></span><span class="tag"><a href="https://example.com/tags/tests">tests</a></span><span class="tag"><a href="https://example.com/tags/development">development</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>925 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2020-02-13 08:13 &#43;0100</p>
+			</footer>
+		</article>
+		<div class="post-nav thin">
+			<a class="next-post" href="https://example.com/posts/eightpoints/">
+				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>&nbsp;Newer</span><br><span>The eight-points algorithm</span>
+			</a>
+			<a class="prev-post" href="https://example.com/posts/lkttracker/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>Everything you need to know about the Lucas-Kanade tracker</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+</div>
+	</main>
+
+</div>
+</div>
+
+<footer class="footer">
+    
+</footer>
+
+<script src="https://example.comjs/jquery-1.11.3.min.js"></script>
+<script src="https://example.comjs/jquery.fitvids.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+<script src="https://example.comjs/scripts.js"></script>
+</body>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</html>
+
+
+
+	<script src="https://example.com/js/bundle.min.4a9a0ac3d2217822c7865b4161e6c2a71de1d70492264337755427898dd718f6.js" integrity="sha256-SpoKw9IheCLHhltBYebCpx3h1wSSJkM3dVQniY3XGPY=" crossorigin="anonymous"></script>
+	
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-159316457-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+</body>
+
+</html>

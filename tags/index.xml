@@ -2,128 +2,103 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on Lorenzo Peppoloni</title>
-    <link>/tags/</link>
+    <link>https://example.com/tags/</link>
     <description>Recent content in Tags on Lorenzo Peppoloni</description>
     <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
     <lastBuildDate>Sat, 07 Mar 2020 07:13:50 +0000</lastBuildDate>
     
-	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://example.com/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>golang</title>
-      <link>/tags/golang/</link>
+      <link>https://example.com/tags/golang/</link>
       <pubDate>Sat, 07 Mar 2020 07:13:50 +0000</pubDate>
       
-      <guid>/tags/golang/</guid>
+      <guid>https://example.com/tags/golang/</guid>
       <description></description>
     </item>
     
     <item>
       <title>machine-learning</title>
-      <link>/tags/machine-learning/</link>
+      <link>https://example.com/tags/machine-learning/</link>
       <pubDate>Sat, 07 Mar 2020 07:13:50 +0000</pubDate>
       
-      <guid>/tags/machine-learning/</guid>
+      <guid>https://example.com/tags/machine-learning/</guid>
       <description></description>
     </item>
     
     <item>
       <title>software-engineering</title>
-      <link>/tags/software-engineering/</link>
+      <link>https://example.com/tags/software-engineering/</link>
       <pubDate>Sat, 07 Mar 2020 07:13:50 +0000</pubDate>
       
-      <guid>/tags/software-engineering/</guid>
+      <guid>https://example.com/tags/software-engineering/</guid>
       <description></description>
     </item>
     
     <item>
       <title>computer-vision</title>
-      <link>/tags/computer-vision/</link>
+      <link>https://example.com/tags/computer-vision/</link>
       <pubDate>Tue, 03 Mar 2020 07:13:50 +0000</pubDate>
       
-      <guid>/tags/computer-vision/</guid>
+      <guid>https://example.com/tags/computer-vision/</guid>
       <description></description>
     </item>
     
     <item>
       <title>deep-learning</title>
-      <link>/tags/deep-learning/</link>
+      <link>https://example.com/tags/deep-learning/</link>
       <pubDate>Tue, 03 Mar 2020 07:13:50 +0000</pubDate>
       
-      <guid>/tags/deep-learning/</guid>
+      <guid>https://example.com/tags/deep-learning/</guid>
       <description></description>
     </item>
     
     <item>
       <title>development</title>
-      <link>/tags/development/</link>
+      <link>https://example.com/tags/development/</link>
       <pubDate>Fri, 28 Feb 2020 20:13:50 +0000</pubDate>
       
-      <guid>/tags/development/</guid>
+      <guid>https://example.com/tags/development/</guid>
       <description></description>
     </item>
     
     <item>
       <title>software-engineer</title>
-      <link>/tags/software-engineer/</link>
+      <link>https://example.com/tags/software-engineer/</link>
       <pubDate>Fri, 28 Feb 2020 20:13:50 +0000</pubDate>
       
-      <guid>/tags/software-engineer/</guid>
+      <guid>https://example.com/tags/software-engineer/</guid>
       <description></description>
     </item>
     
     <item>
       <title>openCV</title>
-      <link>/tags/opencv/</link>
+      <link>https://example.com/tags/opencv/</link>
       <pubDate>Fri, 21 Feb 2020 07:13:50 +0000</pubDate>
       
-      <guid>/tags/opencv/</guid>
+      <guid>https://example.com/tags/opencv/</guid>
       <description></description>
     </item>
     
     <item>
       <title>robotics</title>
-      <link>/tags/robotics/</link>
+      <link>https://example.com/tags/robotics/</link>
       <pubDate>Fri, 21 Feb 2020 07:13:50 +0000</pubDate>
       
-      <guid>/tags/robotics/</guid>
+      <guid>https://example.com/tags/robotics/</guid>
       <description></description>
     </item>
     
     <item>
       <title>go</title>
-      <link>/tags/go/</link>
+      <link>https://example.com/tags/go/</link>
       <pubDate>Thu, 13 Feb 2020 07:13:50 +0000</pubDate>
       
-      <guid>/tags/go/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>tests</title>
-      <link>/tags/tests/</link>
-      <pubDate>Thu, 13 Feb 2020 07:13:50 +0000</pubDate>
-      
-      <guid>/tags/tests/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>proto</title>
-      <link>/tags/proto/</link>
-      <pubDate>Tue, 04 Feb 2020 20:13:50 +0000</pubDate>
-      
-      <guid>/tags/proto/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>python</title>
-      <link>/tags/python/</link>
-      <pubDate>Tue, 04 Feb 2020 20:13:50 +0000</pubDate>
-      
-      <guid>/tags/python/</guid>
+      <guid>https://example.com/tags/go/</guid>
       <description></description>
     </item>
     

@@ -2,20 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>development on Lorenzo Peppoloni</title>
-    <link>/tags/development/</link>
+    <link>https://example.com/tags/development/</link>
     <description>Recent content in development on Lorenzo Peppoloni</description>
     <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
     <lastBuildDate>Fri, 28 Feb 2020 20:13:50 +0000</lastBuildDate>
     
-	<atom:link href="/tags/development/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://example.com/tags/development/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Do not write misusable APIs</title>
-      <link>/interfaces/</link>
+      <link>https://example.com/posts/interfaces/</link>
       <pubDate>Fri, 28 Feb 2020 20:13:50 +0000</pubDate>
       
-      <guid>/interfaces/</guid>
+      <guid>https://example.com/posts/interfaces/</guid>
       <description>APIs should be easy to use and hard to misuse.
 — Josh Bloch
  Today I found this quote on Twitter and for a moment I thought: I&amp;rsquo;m gonna print it and frame it right now!!
@@ -24,10 +26,10 @@ This is something I see a lot in my day to day life as a Software Engineer. Spen
     
     <item>
       <title>All you need to know about Learning Tests</title>
-      <link>/learningtests/</link>
+      <link>https://example.com/posts/learningtests/</link>
       <pubDate>Thu, 13 Feb 2020 07:13:50 +0000</pubDate>
       
-      <guid>/learningtests/</guid>
+      <guid>https://example.com/posts/learningtests/</guid>
       <description>Picture this scenario: You have to solve a new task, a new amazing coding problem, after some googling, you find a library that solve part of the problem for you. Great! You write your code using the library, you write a test&amp;hellip;and
 FAIL!
 You tweak the code a bit&amp;hellip;FAIL!
@@ -37,10 +39,10 @@ What is happening is that, you found a new library to implement a certain behavi
     
     <item>
       <title>Proto nested messages and repeated fields in Python</title>
-      <link>/nestedmessagepy/</link>
+      <link>https://example.com/posts/nestedmessagepy/</link>
       <pubDate>Tue, 04 Feb 2020 20:13:50 +0000</pubDate>
       
-      <guid>/nestedmessagepy/</guid>
+      <guid>https://example.com/posts/nestedmessagepy/</guid>
       <description>Today I was having some problems populating a proto repeated message in Python with a nested message definition, and it took me a while to figure out how to do it.
 In reality it is pretty simple. Let&amp;rsquo;s make an example.
 syntax = &amp;#34;proto3&amp;#34;;package test;message Trajectory2d { message Point2d { float x = 1; float y = 2; } repeated Point2d points = 1; }Let&amp;rsquo;s save our test.proto and generate the Python code.</description>
@@ -48,10 +50,10 @@ syntax = &amp;#34;proto3&amp;#34;;package test;message Trajectory2d { message Po
     
     <item>
       <title>Table-driven tests in Python</title>
-      <link>/tabledriventestspy/</link>
+      <link>https://example.com/posts/tabledriventestspy/</link>
       <pubDate>Sun, 02 Feb 2020 02:13:50 +0000</pubDate>
       
-      <guid>/tabledriventestspy/</guid>
+      <guid>https://example.com/posts/tabledriventestspy/</guid>
       <description>Table-driven tests are an elegant and functional way to unittest your functions in Go. Let&amp;rsquo;s see some ideas on how to introduce this same testing pattern in Python.
 What are table-driven tests One thing I really love about Go is table-driven tests. If you are not familiar with them, table-driven tests are a very elegant way to write unittests for your code. The basic idea is that you write a list of named test cases, defining the input and the expected output for each test case, then you loop over the cases, run your function and check that the actual output is equal to the expected one.</description>
     </item>

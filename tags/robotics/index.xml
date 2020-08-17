@@ -2,20 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>robotics on Lorenzo Peppoloni</title>
-    <link>/tags/robotics/</link>
+    <link>https://example.com/tags/robotics/</link>
     <description>Recent content in robotics on Lorenzo Peppoloni</description>
     <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
     <lastBuildDate>Fri, 21 Feb 2020 07:13:50 +0000</lastBuildDate>
     
-	<atom:link href="/tags/robotics/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://example.com/tags/robotics/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Everything you need to know about multi-object tracking</title>
-      <link>/mot/</link>
+      <link>https://example.com/posts/mot/</link>
       <pubDate>Fri, 21 Feb 2020 07:13:50 +0000</pubDate>
       
-      <guid>/mot/</guid>
+      <guid>https://example.com/posts/mot/</guid>
       <description>I find Multiple object tracking (MOT) a very interesting problem. In the case called tracking-by-detection, you have a bunch of detections of objects (they can either be in 2D or 3D) and you have to associate detections in time figuring out if they are observation of the same object.
 More formally, we can define the problem as a multi-variable estimation problem.
 Given a set of frames, we have a set of states of objects in each frame.</description>
@@ -23,20 +25,20 @@ Given a set of frames, we have a set of states of objects in each frame.</descri
     
     <item>
       <title>The eight-points algorithm</title>
-      <link>/eightpoints/</link>
+      <link>https://example.com/posts/eightpoints/</link>
       <pubDate>Wed, 19 Feb 2020 07:13:50 +0000</pubDate>
       
-      <guid>/eightpoints/</guid>
+      <guid>https://example.com/posts/eightpoints/</guid>
       <description>In this blog post we had a look at how to estimate the optical flow (e.g., track how pixels move in time) in a set of images. The estimation we obtained gave us pixel matches across the image set.
 Given the correspondences between two images, we can estimate the motion and the 3D position of the points we are observing. Solving this problem is known as Structure from Motion (SfM).</description>
     </item>
     
     <item>
       <title>Everything you need to know about the Lucas-Kanade tracker</title>
-      <link>/lkttracker/</link>
+      <link>https://example.com/posts/lkttracker/</link>
       <pubDate>Tue, 11 Feb 2020 07:13:50 +0000</pubDate>
       
-      <guid>/lkttracker/</guid>
+      <guid>https://example.com/posts/lkttracker/</guid>
       <description>The Lucas-Kanade-Tomasi (LKT) tracker is one of the most used trackers in computer vision. It&#39;s easy to implement and understand, it&#39;s fast to compute and it works fairly well.
 The tracker is based on the Lucas-Kanade (LK) optical flow estimation algorithm. The problem of optical flow estimation is the problem of estimating the motion of the pixels in an image across a sequence of consecutive pictures (e.g., a video).
 The idea of the LK estimation is pretty straightforward.</description>

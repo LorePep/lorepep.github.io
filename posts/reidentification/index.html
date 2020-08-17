@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+<meta itemprop="name" content="Re-identification with Triplet Loss">
+<meta itemprop="description" content="How to solve re-identification tasks using Deep Learning">
+<meta itemprop="datePublished" content="2020-02-26T07:13:50&#43;00:00" />
+<meta itemprop="dateModified" content="2020-02-26T07:13:50&#43;00:00" />
+<meta itemprop="wordCount" content="1574">
+
+
+
+<meta itemprop="keywords" content="computer-vision,machine-learning,deep-learning," /><meta property="og:title" content="Re-identification with Triplet Loss" />
+<meta property="og:description" content="How to solve re-identification tasks using Deep Learning" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://example.com/posts/reidentification/" />
+<meta property="article:published_time" content="2020-02-26T07:13:50+00:00" />
+<meta property="article:modified_time" content="2020-02-26T07:13:50+00:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Re-identification with Triplet Loss"/>
+<meta name="twitter:description" content="How to solve re-identification tasks using Deep Learning"/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>Re-identification with Triplet Loss</title>
+	<link rel="stylesheet" href="https://example.com/css/style.min.eac77496566fd7d5768fd650ddb0b2b181ca6a2d7c5fdd6fe6b8ba4bf47e566f.css" integrity="sha256-6sd0llZv19V2j9ZQ3bCysYHKai18X91v5ri6S/R+Vm8=" crossorigin="anonymous">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="https://example.com">Lorenzo Peppoloni</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					
+				<a href="https://example.com/posts/">Posts</a>
+				<a href="https://example.com/page/about">About</a>
+
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<span class="hdr-social hide-in-mobile"><a href="https://twitter.com/lorepep" target="_blank" rel="noopener me" title="Twitter"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a><a href="https://github.com/lorepep" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a><a href="https://www.linkedin.com/in/lorenzo-peppoloni/" target="_blank" rel="noopener me" title="Linkedin"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="https://example.com/posts/">Posts</a></li>
+			<li><a href="https://example.com/page/about">About</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Feb 26, 2020</span></div>
+				<h1>Re-identification with Triplet Loss</h1>
+			</header>
+			<div class="content">
+				<p>One very interesting computer vision problem is re-identification. The idea is that you have images of some entity and you want to be able to re-identify that entity in new images. As a complementary problem, you might also want to be able to say if an identity is known or not.</p>
+
+<p>Classic use cases are people re-identification for surveillance, but there are also more fancy use cases such as whale re-identification for monitoring and conservation effort.</p>
+
+<p>A classic way of solving the re-identification problem with Deep Learning is to train a CNN to learn an embedding space where different observations of the same entity will be mapped close together, or better closer than observation of a different entity.</p>
+
+<p>Formally this approach, called learning metric embeddings, has the goal of learning a function that takes images in a space <span  class="math">\(R^{F}\)</span> to a space <span  class="math">\(R^{D}\)</span> where semantically similar points in the initial space are mapped to metrically close points. At the same time, semantically different points in the original space are mapped to metrically distant points.</p>
+
+<p>What we want to learn it's the function</p>
+
+<p><span  class="math">\[\textit{f}_\theta(x): R^{F} \rightarrow R^{D}\]</span></p>
+
+<p>The function is usually parametric and can be anything from a linear transform to complex non-linear maps.</p>
+
+<p>A way to tackle the problem is to train a neural network to learn that function. In this case, we can use one of the final layers of the network as the embedding space, we just have to come up with a loss function.</p>
+
+<p>A typical approach at this point is to use a loss function that pushes points belonging to the same entity close togheter while pushing points belonging to different entities far away.</p>
+
+<p>Let's define a metric <span  class="math">\(D_{x, y}: R^D \times R^D \rightarrow R\)</span> that measures a distance between the points <span  class="math">\(x\)</span> and <span  class="math">\(y\)</span> in <span  class="math">\(R^D\)</span>.</p>
+
+<p>In [1] the author proposed a loss function called <strong>Triplet Loss</strong>. The function is called triplet because it computes the loss over a triplet of points:</p>
+
+<ul>
+<li>the anchor <span  class="math">\(x_a\)</span>, which is a sample of one entity</li>
+<li>the positive sample <span  class="math">\(x_p\)</span>, which is another sample of the same entity used as anchor</li>
+<li>the negative sample <span  class="math">\(x_n\)</span>, which is a sample of a different entity.</li>
+</ul>
+
+<p>The function mathematically is:</p>
+
+<p><span  class="math">\[ L = \sum\limits_{a,p,n}[m + D_{a,p} - D_{a,n}]_+\]</span></p>
+
+<p>where <span  class="math">\([\bullet]_+\)</span> it's the hinge function <span  class="math">\(max(0, \bullet)\)</span>.</p>
+
+<p>It is pretty straightforward to see that the loss is pushing the distance function <span  class="math">\(D\)</span> between the anchor and the positive sample closer to the distance between the anchor and the negative sample by at least a margin <span  class="math">\(m\)</span>.</p>
+
+<p>Usually, the Euclidean distance is used as the metric <span  class="math">\(D\)</span>.</p>
+
+<p>A modification can be made to the Triplet Loss to introduce what is called a <em>soft margin</em>. In this case, the hinge function is modified to be</p>
+
+<p><span  class="math">\[\text{softplus} = log(1+e^x)\]</span></p>
+
+<p>This yields mainly two advantages:</p>
+
+<ol>
+<li>we remove one hyperparameter (<span  class="math">\(m\)</span>)</li>
+<li>the softplus function decays exponentially instead of having a hard cut-off like the hinge function. This means that triplets that already satisfies the margin <span  class="math">\(m\)</span> will still contribute a bit to the loss with the effect of still pushing/pulling samples as close or as far as possible.</li>
+</ol>
+
+<p>Ok so let's give this a try in a real re-identification case.</p>
+
+<h2 id="a-reallife-reidentification-problem">A real-life re-identification problem<a href="#a-reallife-reidentification-problem" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>Let's use as a test case the whale identification task from last year <a href="https://www.kaggle.com/c/humpback-whale-identification">Humpback Whale Identification</a> Kaggle competition. The task for the competition was to train a model able to identify a whale by their fluke (which is unique for each whale, kind of like a fingerprint). This is a nice real-life case, the dataset it's unbalanced, noisy and there are lots of nuances:</p>
+
+<ul>
+<li>it's not easy to take consistent pictures of moving flukes, so you will have a wide variety of viewpoints and occlusions (mainly water splashes)</li>
+<li>flukes can slightly change in time due to injuries</li>
+</ul>
+
+<p>Just for reference, that's what the images look like.</p>
+
+<p><figure><img src="/reid/flukes.png" alt="flukes"></figure></p>
+
+<p>The full code for our experiment can be found <a href="https://github.com/LorePep/re-identification">here</a>.</p>
+
+<p>To simplify the problem, let's use a smaller dataset consisting of only the 10 whales with the highest number of occurrences. The histogram of the sample count for this smaller toy dataset is shown below.</p>
+
+<p><figure><img src="/reid/distribution.png" alt="distribution"></figure></p>
+
+<p>For the task, we will use a pre-trained Resnet34 as the main feature extractor and we will add a final linear layer with <span  class="math">\(D=128\)</span>, which will be the dimension of our metric space.</p>
+
+<p>Let's see how the embeddings evolve in 2D during training, each colour represents a different whale.</p>
+
+<p><figure><img src="/reid/out_soft.gif" alt="embedding_triplet"></figure></p>
+
+<p>How do we evaluate now our network?</p>
+
+<p>Since we used the Euclidean distance, a solution it's to compute the embeddings for the validation set, for each of them find the nearest embeddings of the training set and use that information to infer the entities in the validation set. For the sake of this example, I just computed classification accuracy, assigning to each validation sample the label of the closest training sample.</p>
+
+<p>I used the accuracy as the monitor variable for early stopping. After 55 epochs we got an accuracy of 0.93.</p>
+
+<p>Some interesting variables to monitor while training for metric learning using the Triple Loss are the norms of the embeddings and the distances between embeddings. Let's have a look at the median and the p95 of those quantities as they evolve for any mini-batch.</p>
+
+<p><figure><img src="/reid/history_soft.png" alt="history_soft"></figure></p>
+
+<p>As you can see, as the training proceeds, the embeddings are pushed to become larger and larger and be more and more distant between each other. These plots are also really informative to decide when to stop the training (more on this later).</p>
+
+<p>Can we do better?</p>
+
+<p>If you think about how we trained the network, we randomly got anchor samples, for each one of them we randomly selected positives and negatives. What usually happens is that the network learns quickly the easy triplets which start to be uninformative during the training process. A solution to this would be to present all the possible combination to the network during the training process, but that can become impractical as the number of samples grows.</p>
+
+<p>The problem can be solved &quot;mining&quot; for hard triplets. What's a hard triplet?</p>
+
+<p>A triplet can be <strong>defined hard</strong> when <span  class="math">\(D_{a, p} > D_{a, n}\)</span>, that is the negative is closer to the anchor than the positive. Those are the triplets that need the biggest correction.</p>
+
+<p>We have two ways of mining triplets, offline and online.</p>
+
+<h3 id="offline-triplet-mining">Offline triplet mining<a href="#offline-triplet-mining" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>We compute all the embeddings at the beginning of each epoch and then we look for hard (or semi-hard triplet when <span  class="math">\(D_{a, n} - D_{a, p} < m \)</span>). We can then train one epoch on the mined triplets.</p>
+
+<p>Mining offline it's not super efficient, we need to compute all the embeddings and update the triplets often to keep our network seeing hard examples.</p>
+
+<h3 id="online-triplet-mining">Online triplet mining<a href="#online-triplet-mining" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>In online mining, we compute the hard triplets on the fly. The idea is that for each batch, we compute <span  class="math">\(B\)</span> embeddings (where <span  class="math">\(B\)</span> it's the batch size), we now use some smart strategy to create triplets from these <span  class="math">\(B\)</span> embeddings.</p>
+
+<p>An approach called <em>batch hard</em> was proposed in [2], where you select the hardest positive and the hardest negative triplets in the batch.</p>
+
+<ol>
+<li>Select for each batch <span  class="math">\(P\)</span> entities and <span  class="math">\(K\)</span> images for each entity (usually <span  class="math">\(B\leq PK \leq 3B\)</span>).</li>
+<li>For all the anchors find the hardest positive (biggest <span  class="math">\(D_{a,p}\)</span>) and the hardest negative (smallest <span  class="math">\(D_{a, n}\)</span>)</li>
+<li>Train the epoch on the mined hardest triplets.</li>
+</ol>
+
+<p>As a note on <span  class="math">\(P\)</span> and <span  class="math">\(K\)</span> size. <span  class="math">\(3B\)</span> it's the number of embeddings we would have to compute while mining offline. To get <span  class="math">\(B\)</span> unique triplets you will need <span  class="math">\(3B\)</span> embeddings.</p>
+
+<p>There are lots of practical considerations to be made with this approach, for example:</p>
+
+<ul>
+<li>Is the dataset clean? Are the hardest triplets impossible triplets that are just confusing the network?</li>
+<li>In some cases you might not have <span  class="math">\(K\)</span> samples for each instance (few-shot learning), or you might have only 1 (one-shot learning). In this case, augmentation might be your friend. If you can heavily augment the samples you could use the same images to reach <span  class="math">\(K\)</span>.</li>
+<li>Overall, it might be a good idea to do a first round of training without mining to bootstrap the network and then later switch to hard triplets mining.</li>
+</ul>
+
+<p>Still each use case it's different, so the best thing to do it's experimenting.</p>
+
+<p>Ok, let's retrain using hard batch online mining and let's see how our network behaves.</p>
+
+<p>After 47 epochs, our training stopped reaching 0.95 accuracy.</p>
+
+<p>This is the embeddings evolution during training.</p>
+
+<p><figure><img src="/reid/out_hard.gif" alt="embedding_hard"></figure></p>
+
+<p>Let's have a look again and the evolution of norms and distances of the embeddings.</p>
+
+<p><figure><img src="/reid/history_hard.png" alt="history_hard"></figure></p>
+
+<p>In this case, it is even more relevant to have a look at the distance/norm plots to decide when to stop training. What can happen is that the loss my appear stagnating, since as soon as the network has learnt hard cases, new ones will be presented. For example, looking at the graph we could have probably trained the model more.</p>
+
+<p>Another useful number to be checked to see how training is going it's the number of active triplets, that is the number of triplets with non-null loss.</p>
+
+<hr>
+
+<p><em>Conclusions: We had an in-depth look at how to solve the re-identification problem using Deep Learning. We understood the triplet loss and how it can be improved using triplet mining. We had a look at a real-life re-identification example and solved it with the concepts we learned.</em></p>
+
+<p>[1] <a href="https://arxiv.org/abs/1503.03832">FaceNet: A Unified Embedding for Face Recognition and Clustering</a></p>
+
+<p>[2] <a href="https://arxiv.org/abs/1703.07737">In Defense of the Triplet Loss for Person Re-Identification</a></p>
+
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-feather"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path><line x1="16" y1="8" x2="2" y2="22"></line><line x1="17.5" y1="15" x2="9" y2="15"></line></svg>Lorenzo Peppoloni</p>
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://example.com/tags/computer-vision">computer-vision</a></span><span class="tag"><a href="https://example.com/tags/machine-learning">machine-learning</a></span><span class="tag"><a href="https://example.com/tags/deep-learning">deep-learning</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>1574 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2020-02-26 08:13 &#43;0100</p>
+			</footer>
+		</article>
+		<div class="post-nav thin">
+			<a class="next-post" href="https://example.com/posts/interfaces/">
+				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>&nbsp;Newer</span><br><span>Do not write misusable APIs</span>
+			</a>
+			<a class="prev-post" href="https://example.com/posts/mot/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>Everything you need to know about multi-object tracking</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+</div>
+	</main>
+
+</div>
+</div>
+
+<footer class="footer">
+    
+</footer>
+
+<script src="https://example.comjs/jquery-1.11.3.min.js"></script>
+<script src="https://example.comjs/jquery.fitvids.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+<script src="https://example.comjs/scripts.js"></script>
+</body>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</html>
+
+
+
+	<script src="https://example.com/js/bundle.min.4a9a0ac3d2217822c7865b4161e6c2a71de1d70492264337755427898dd718f6.js" integrity="sha256-SpoKw9IheCLHhltBYebCpx3h1wSSJkM3dVQniY3XGPY=" crossorigin="anonymous"></script>
+	
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-159316457-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+</body>
+
+</html>

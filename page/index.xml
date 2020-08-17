@@ -2,20 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Pages on Lorenzo Peppoloni</title>
-    <link>/page/</link>
+    <link>https://example.com/page/</link>
     <description>Recent content in Pages on Lorenzo Peppoloni</description>
     <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
     <lastBuildDate>Fri, 03 Apr 2015 02:13:50 +0000</lastBuildDate>
     
-	<atom:link href="/page/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://example.com/page/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>About</title>
-      <link>/page/about/</link>
+      <link>https://example.com/page/about/</link>
       <pubDate>Fri, 03 Apr 2015 02:13:50 +0000</pubDate>
       
-      <guid>/page/about/</guid>
+      <guid>https://example.com/page/about/</guid>
       <description>About A brief history of my education and experience
 Education
 I got a BSc in Engineering Informatics and an MSc in Robotics and Automation from the University of Pisa. After that, I got a PhD in Perceptual Robotics from Scuola Superiore Sant&amp;rsquo;Anna. The main focus of my PhD was human motion reconstruction from cheap sensors applied to robotic teleoperation and robotic embodiment.

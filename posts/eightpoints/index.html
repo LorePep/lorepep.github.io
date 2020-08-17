@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+<meta itemprop="name" content="The eight-points algorithm">
+<meta itemprop="description" content="How to compute the transformation between two camera poses">
+<meta itemprop="datePublished" content="2020-02-19T07:13:50&#43;00:00" />
+<meta itemprop="dateModified" content="2020-02-19T07:13:50&#43;00:00" />
+<meta itemprop="wordCount" content="1251">
+
+
+
+<meta itemprop="keywords" content="computer-vision,openCV,robotics," /><meta property="og:title" content="The eight-points algorithm" />
+<meta property="og:description" content="How to compute the transformation between two camera poses" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://example.com/posts/eightpoints/" />
+<meta property="article:published_time" content="2020-02-19T07:13:50+00:00" />
+<meta property="article:modified_time" content="2020-02-19T07:13:50+00:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="The eight-points algorithm"/>
+<meta name="twitter:description" content="How to compute the transformation between two camera poses"/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>The eight-points algorithm</title>
+	<link rel="stylesheet" href="https://example.com/css/style.min.eac77496566fd7d5768fd650ddb0b2b181ca6a2d7c5fdd6fe6b8ba4bf47e566f.css" integrity="sha256-6sd0llZv19V2j9ZQ3bCysYHKai18X91v5ri6S/R+Vm8=" crossorigin="anonymous">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="https://example.com">Lorenzo Peppoloni</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					
+				<a href="https://example.com/posts/">Posts</a>
+				<a href="https://example.com/page/about">About</a>
+
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<span class="hdr-social hide-in-mobile"><a href="https://twitter.com/lorepep" target="_blank" rel="noopener me" title="Twitter"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a><a href="https://github.com/lorepep" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a><a href="https://www.linkedin.com/in/lorenzo-peppoloni/" target="_blank" rel="noopener me" title="Linkedin"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="https://example.com/posts/">Posts</a></li>
+			<li><a href="https://example.com/page/about">About</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Feb 19, 2020</span></div>
+				<h1>The eight-points algorithm</h1>
+			</header>
+			<div class="content">
+				<p>In <a href="https://lorenzopeppoloni.com/lkttracker/">this</a> blog post we had a look at how to estimate the optical flow (e.g., track how pixels move in time) in a set of images. The estimation we obtained gave us pixel matches across the image set.</p>
+
+<p>Given the correspondences between two images, we can estimate the motion and the 3D position of the points we are observing. Solving this problem is known as Structure from Motion (SfM).</p>
+
+<p><figure><img src="/eightpoints/pix.png" alt="Example"></figure></p>
+
+<p>Let's assume we are observing a 3D point <span  class="math">\(X\)</span>, in two different images. The two viewpoints are related by an affine transformation (rotation plus translation) given by the matrix <span  class="math">\(R\)</span> (for rotation) and by the vector <span  class="math">\(T\)</span> for the translation. If we draw an imaginary line between the image centres <span  class="math">\(c_1\)</span> and <span  class="math">\(c_2\)</span> to the 3D point, we have that the point is projected to the point <span  class="math">\(x_1\)</span> (in image space) in the first image and to the point <span  class="math">\(x_2\)</span> (in image space) in the second image.</p>
+
+<p>In the camera frame, we can also write that <span  class="math">\(\lambda_1 x_1 = X\)</span> and that <span  class="math">\(\lambda_2 x_2 = X\)</span>, being <span  class="math">\(\lambda_1\)</span> and <span  class="math">\(\lambda_2\)</span> the scaling factors to go from the points in the image to the point <span  class="math">\(X\)</span>.</p>
+
+<p>So, let's say that we know <span  class="math">\(x_1\)</span> and <span  class="math">\(x_2\)</span> (one of the matches we found between the two images), how can we recover <span  class="math">\(R\)</span>, <span  class="math">\(T\)</span> and <span  class="math">\(X\)</span>?</p>
+
+<p>Let's try and rewrite everything in the second camera frame.</p>
+
+<p><span  class="math">\[ \lambda_2x_2 = R\lambda_1 x_1 + T\]</span></p>
+
+<p>We can multiply for the <a href="https://en.wikipedia.org/wiki/Skew-symmetric_matrix">skew-symmetric</a> matrix of T</p>
+
+<p><span  class="math">\[ \lambda_2 \hat{T}x_2 = \lambda_1 \hat{T}Rx_1 \]</span></p>
+
+<p>we can then multiply for <span  class="math">\( x_2^T \)</span> and divide by <span  class="math">\(\lambda_1\)</span></p>
+
+<p><span  class="math">\[ x_2^{T}\hat{T}Rx_1 = 0 \]</span></p>
+
+<p>Note: the term on the left gets to zero because <span  class="math">\( T \times x_2\)</span> is orthogonal to <span  class="math">\(x_2\)</span> so if you compute the scalar product for <span  class="math">\( x_2 \)</span> you get zero.</p>
+
+<p>Now we have an expression that couples the camera motion and the two known 2D locations. This equation is called the <strong>epipolar constraint</strong>. Note that the 3D points <span  class="math">\(X\)</span> do not appear in the equation, we successfully decoupled the problem of computing <span  class="math">\(R\)</span> and <span  class="math">\(T\)</span> from the problem of computing the 3D coordinates of <span  class="math">\(X\)</span>.</p>
+
+<p>Geometrically, the epipolar constraint says something pretty straightforward. If you look at the first picture: the volume spanned by the vectors <span  class="math">\(x_2\)</span>, T (<span  class="math">\(\vec{o_2o_1}\)</span>) and <span  class="math">\(Rx_1\)</span> (which is <span  class="math">\(\vec{c_1x_1}\)</span> seen from the second camera) has a zero volume, thus the triangle <span  class="math">\((c_1c_2X)\)</span> lies on a plane.</p>
+
+<p>The epipolar constraint can be rewritten as:</p>
+
+<p><span  class="math">\[ x_2^{T}Ex_1 = 0 \]</span></p>
+
+<p><span  class="math">\(E\)</span> is called the essential matrix, and it has the following property:</p>
+
+<p><span  class="math">\[eig(S) = (\sigma, \sigma, 0)\]</span></p>
+
+<p>That is the essential matrix has three eigenvalues, two are equals and one is zero.</p>
+
+<p><span  class="math">\(R\)</span> and <span  class="math">\(T\)</span> can be extracted from the essential matrix. Usually what we do in practice is that we find a matrix <span  class="math">\(F\)</span> that solves the epipolar constraint and then we compute the &quot;closest&quot; essential matrix (projecting <span  class="math">\(F\)</span> to the space of the essential matrices).</p>
+
+<h3 id="the-eightpoints-algorithm">The eight-points algorithm<a href="#the-eightpoints-algorithm" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>To solve the equation in <span  class="math">\(E\)</span> we need to re-write it in such a way to separate known variables (<span  class="math">\(x_1\)</span> and <span  class="math">\(x_2\)</span>) from the unknown <span  class="math">\(E\)</span>.</p>
+
+<p>If we stack the columns of <span  class="math">\(E\)</span> in a single vector <span  class="math">\(E^{s}\)</span> and we use the <a href="https://en.wikipedia.org/wiki/Kronecker_product">Kronecker product</a> of <span  class="math">\(x_1\)</span> and <span  class="math">\(x_2\)</span> (<span  class="math">\(a\)</span>) we can write</p>
+
+<p><span  class="math">\[ x_2^TEx_1 = a^{T}E^{S} = 0 \]</span></p>
+
+<p>Now, we can stack this equation for all the matches we have between the two images and obtain the following linear system which contains all the epipolar constraints for all the points</p>
+
+<p><span  class="math">\[ \chi E^{S} = 0 \quad \text{with } \chi = (a^{1}, a^{2}, ..., a^{n})^{T} \]</span></p>
+
+<p>You can immediately see that the solution to the system is not unique and that every scaling factor multiplying <span  class="math">\(E^{s}\)</span> will solve the equation. In practice, this means that we are not able to compute the baseline, that is the translation between the two cameras, but only its direction. The solution is to consider the baseline equals to one and compute everything in &quot;baseline units&quot;.</p>
+
+<p>To have a unique solution at this points we need at least 8 points (that's what gives the name to the algorithm)</p>
+
+<p>Once we solved for a generic matrix <span  class="math">\(F\)</span>, we can find the closest <span  class="math">\(E\)</span> by doing</p>
+
+<p><span  class="math">\[
+\begin{matrix}
+F = U \text{diag}(\lambda_1, \lambda_2, \lambda_3) V^{T} \phantom{..........}\\
+E = U \text{diag}(\sigma, \sigma, 0)V^{T} \quad \sigma = \frac{\lambda_1+\lambda_2}{2}
+\end{matrix}
+\]</span></p>
+
+<p>As we said before, there is a scaling factor that we cannot reconstruct, to fix the scale we can impose <span  class="math">\(\sigma = 1\)</span>, obtaining a final essential matrix <span  class="math">\(E = U \text{diag}(1, 1, 0) V^T\)</span>.</p>
+
+<h3 id="caveats">Caveats<a href="#caveats" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<ul>
+<li><span  class="math">\(E = 0\)</span> is a solution in which we collapse everything to a point, it's a valid solution but we don't care about it</li>
+<li>There degenerate cases, (e.g., all the matches lie on a line or plane) where no matter how many points you have you cannot have a unique solution</li>
+<li>We cannot get the sign of E (also <span  class="math">\(-kE^{s}\)</span> is a solution), so we have 4 possible combinations for R and T. The solution to the problem is to pick the <span  class="math">\(R\)</span> and <span  class="math">\(T\)</span> couple which gives positive depth values (the 3D points are in front of the camera).</li>
+<li>If <span  class="math">\(T = 0\)</span>, that is there is no translation the algorithm fails, but this never happens in real life.</li>
+</ul>
+
+<p>How do we extract the possible combinations of <span  class="math">\(R\)</span> and <span  class="math">\(T\)</span>?</p>
+
+<p>Given</p>
+
+<p><span  class="math">\[
+W = \begin{pmatrix}
+0 & -1 & 0 \\
+1 & 0 & 0 \\
+0 & 0 & 1 \\
+\end{pmatrix}
+\]</span></p>
+
+<p>which describes a rotation of <span  class="math">\(\pi/2\)</span> aroubd <span  class="math">\(z\)</span>, we have four possible solutions given by two rotation matrices <span  class="math">\(R_1\)</span> and <span  class="math">\(R_2\)</span> and two translations <span  class="math">\(T_1\)</span> and <span  class="math">\(T_2\)</span>.</p>
+
+<p><span  class="math">\[
+R_1 = UWV^{T} \qquad R_2 = UW^{T}V^{T}
+\]</span></p>
+
+<p><span  class="math">\[
+T_1 = U_3 \qquad T_2 = -U_3
+\]</span></p>
+
+<p>Let's have a look at a toy example using Python, full code <a href="https://github.com/LorePep/blogposts_code/tree/master/eight-points">here</a>.</p>
+
+<p>Let's generate a fixture world with two cameras and eight 3D points. In the image, each frame is represented with r (x-axis), g (y-axis) and b (z-axis).</p>
+
+<p><figure><img src="/eightpoints/3d_world.png" alt="Example"></figure></p>
+
+<p>Now, we assume that our cameras have a focal length of one and we transform the points into the normalized image space. The resulting images for both the cameras are represented in the figure, where colours match point correspondences.</p>
+
+<p><figure><img src="/eightpoints/images.png" alt="Example"></figure></p>
+
+<p>From the points, we can compute the Kronecker product and extract our estimated essential matrix.</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">_extract_rot_transl</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">V</span><span class="p">):</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">V</span><span class="p">)),</span> <span class="n">U</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]],</span>
+        <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">V</span><span class="p">)),</span> <span class="o">-</span><span class="n">U</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]],</span>
+        <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">V</span><span class="p">)),</span> <span class="n">U</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]],</span>
+        <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">V</span><span class="p">)),</span> <span class="o">-</span><span class="n">U</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]],</span>
+    <span class="p">]</span>
+
+
+<span class="n">chi</span> <span class="o">=</span> <span class="n">_compute_kronecker</span><span class="p">(</span><span class="n">points_1</span><span class="p">,</span> <span class="n">points_2</span><span class="p">)</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">V1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">chi</span><span class="p">)</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">V1</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+<span class="n">U</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>
+<span class="n">possible_r_t</span> <span class="o">=</span> <span class="n">_extract_rot_transl</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">V</span><span class="p">)</span></code></pre></div>
+<p>Let's compare the results we got with the original rotation and translation from camera_1 to camera_2.</p>
+
+<p>One of the solutions we get:</p>
+<pre><code>R = [[ 0.95533649, -0.        ,  0.29552021],
+     [ 0.0587108 ,  0.98006658, -0.18979606],
+     [-0.28962948,  0.19866933,  0.93629336]]
+t = [-1.,  0.,  0.]</code></pre>
+<p>With the original <span  class="math">\(R\)</span> and <span  class="math">\(T\)</span>:</p>
+<pre><code>R = [[ 0.95533649, -0.        ,  0.29552021],
+     [ 0.0587108,   0.98006658, -0.18979606],
+     [-0.28962948,  0.19866933,  0.93629336]]
+t = [-1.5,  0.,  0.]</code></pre>
+<p>As you can see we were able to fully recover <span  class="math">\(R\)</span> and <span  class="math">\(T\)</span>, but only up to a scaling factor.</p>
+
+<hr>
+
+<p><em>Conclusions: We had an in-depth look at the eight-points algorithm to reconstruct the affine transformation between two camera poses observing the same 3D points. We formally introduce the algorithm, discussed caveats and we had a look at a real example using synthetic data in Python.</em></p>
+
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-feather"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path><line x1="16" y1="8" x2="2" y2="22"></line><line x1="17.5" y1="15" x2="9" y2="15"></line></svg>Lorenzo Peppoloni</p>
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://example.com/tags/computer-vision">computer-vision</a></span><span class="tag"><a href="https://example.com/tags/opencv">openCV</a></span><span class="tag"><a href="https://example.com/tags/robotics">robotics</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>1251 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2020-02-19 08:13 &#43;0100</p>
+			</footer>
+		</article>
+		<div class="post-nav thin">
+			<a class="next-post" href="https://example.com/posts/mot/">
+				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>&nbsp;Newer</span><br><span>Everything you need to know about multi-object tracking</span>
+			</a>
+			<a class="prev-post" href="https://example.com/posts/learningtests/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>All you need to know about Learning Tests</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+</div>
+	</main>
+
+</div>
+</div>
+
+<footer class="footer">
+    
+</footer>
+
+<script src="https://example.comjs/jquery-1.11.3.min.js"></script>
+<script src="https://example.comjs/jquery.fitvids.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+<script src="https://example.comjs/scripts.js"></script>
+</body>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</html>
+
+
+
+	<script src="https://example.com/js/bundle.min.4a9a0ac3d2217822c7865b4161e6c2a71de1d70492264337755427898dd718f6.js" integrity="sha256-SpoKw9IheCLHhltBYebCpx3h1wSSJkM3dVQniY3XGPY=" crossorigin="anonymous"></script>
+	
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-159316457-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+</body>
+
+</html>

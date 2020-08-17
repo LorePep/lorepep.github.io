@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+<meta itemprop="name" content="Everything you need to know about multi-object tracking">
+<meta itemprop="description" content="An in-depth look at Multi-object tracking">
+<meta itemprop="datePublished" content="2020-02-21T07:13:50&#43;00:00" />
+<meta itemprop="dateModified" content="2020-02-21T07:13:50&#43;00:00" />
+<meta itemprop="wordCount" content="1357">
+
+
+
+<meta itemprop="keywords" content="computer-vision,openCV,robotics," /><meta property="og:title" content="Everything you need to know about multi-object tracking" />
+<meta property="og:description" content="An in-depth look at Multi-object tracking" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://example.com/posts/mot/" />
+<meta property="article:published_time" content="2020-02-21T07:13:50+00:00" />
+<meta property="article:modified_time" content="2020-02-21T07:13:50+00:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Everything you need to know about multi-object tracking"/>
+<meta name="twitter:description" content="An in-depth look at Multi-object tracking"/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>Everything you need to know about multi-object tracking</title>
+	<link rel="stylesheet" href="https://example.com/css/style.min.eac77496566fd7d5768fd650ddb0b2b181ca6a2d7c5fdd6fe6b8ba4bf47e566f.css" integrity="sha256-6sd0llZv19V2j9ZQ3bCysYHKai18X91v5ri6S/R+Vm8=" crossorigin="anonymous">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="https://example.com">Lorenzo Peppoloni</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					
+				<a href="https://example.com/posts/">Posts</a>
+				<a href="https://example.com/page/about">About</a>
+
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<span class="hdr-social hide-in-mobile"><a href="https://twitter.com/lorepep" target="_blank" rel="noopener me" title="Twitter"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a><a href="https://github.com/lorepep" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a><a href="https://www.linkedin.com/in/lorenzo-peppoloni/" target="_blank" rel="noopener me" title="Linkedin"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="https://example.com/posts/">Posts</a></li>
+			<li><a href="https://example.com/page/about">About</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Feb 21, 2020</span></div>
+				<h1>Everything you need to know about multi-object tracking</h1>
+			</header>
+			<div class="content">
+				<p>I find Multiple object tracking (MOT) a very interesting problem. In the case called <em>tracking-by-detection</em>, you have a bunch of detections of objects (they can either be in 2D or 3D) and you have to associate detections in time figuring out if they are observation of the same object.</p>
+
+<p>More formally, we can define the problem as a multi-variable estimation problem.</p>
+
+<p>Given a set of frames, we have a set of states of objects in each frame. Let's call <span  class="math">\(s_j^{i}\)</span> the state of the object <span  class="math">\(i\)</span> in frame <span  class="math">\(j\)</span>, all the <span  class="math">\(M_j\)</span> objects in the <span  class="math">\(j\)</span>-th frame are the set <span  class="math">\(S_j = \{s^{1}_j, s^{2}_j, ..., s_j^{M_j}\}\)</span>.
+The set of the states <span  class="math">\(S_{1:t} = \{S_1, S_2, S_3, ..., S_t\}\)</span>, defines all the states for all the objects in the frame sequence.</p>
+
+<p>Now we have a set of observations for each frame <span  class="math">\(O_{1:t} = \{O_1, O_2, ..., O_t\}\)</span>, where <span  class="math">\(O_j = \{o^{1}_{j}, o^{2}_{j}, ... o^{M_j}_{j} \}\)</span> are all the observations for frame <span  class="math">\(j\)</span>. Note that for the sake of the notation we are assuming that we have exactly one observation for every and each object, <span  class="math">\(M_j\)</span> states and <span  class="math">\(M_j\)</span> observation at frame <span  class="math">\(j\)</span>.</p>
+
+<p>Now the problem that we want to solve is to find the &quot;optimal&quot; sequence of states given the observations. This can be solved as a maximum a posteriori estimation (MAP) problem</p>
+
+<p><span  class="math">\[\hat{S}_{1:t} = \text{argmax}_{{S_{1:t}}} P(S_{1:t}| O_{1:t})\]</span></p>
+
+<p>Usually, this can be solved either with a probabilistic approach or with an optimization approach. The former usually works online (more on this later) the latter is usually more suited for offline tracking since you want to optimize and find the global optimum on the whole frame sequence. This approach is also known as non-causal since you are using the future and past observations at the same time.</p>
+
+<h2 id="probabilistic-approach">Probabilistic approach<a href="#probabilistic-approach" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>Usually, to solve the problem with a probabilistic approach you can adopt a two-step iterative process:</p>
+
+<ol>
+<li>you predict the state at the next step without using the observations (<strong>predict</strong>)</li>
+<li>you correct your prediction with the observations (<strong>update</strong>).</li>
+</ol>
+
+<p>To perform the predict step you need some dynamic model that you can use to compute predictions. To perform the update step you need some measurement/observation model that ties the observations back to the state so that you can perform the correction.</p>
+
+<p>More formally:</p>
+
+<p><span  class="math">\[ \textit{Predict}: P(S_t|O_{1:t-1}) = \int P(S_t|S_{t-1})P(S_{t-1}|O_{1:t-1})dS_{t-1}\]</span></p>
+
+<p><span  class="math">\[ \textit{Update}: P(S_t|O_{1:t}) \propto P(O_t|S_t)P(S_t|O_{1:t-1})\]</span></p>
+
+<p>Where <span  class="math">\(P(S_t|S_{t-1})\)</span> is the dynamic model that tells us how the states are supposed to evolve in time, and <span  class="math">\(P(O_t|S_{t})\)</span> is the measurement model.</p>
+
+<p>Note that to be able to formulate this solution to the problem, we are assuming that the <a href="https://en.wikipedia.org/wiki/Markov_property">Markov assumption</a> holds (past and future are independent given the current state).</p>
+
+<p><strong>Pros</strong></p>
+
+<ul>
+<li>Works online.</li>
+<li>Can be less heavy computationally.</li>
+</ul>
+
+<p><strong>Cons</strong></p>
+
+<ul>
+<li>Might not provide a global optimum, since we are not using the whole sequence.</li>
+</ul>
+
+<h2 id="optimization-approach">Optimization approach<a href="#optimization-approach" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>A second approach is to solve the estimation problem via optimization either of the Likelihood or minimizing an energy function.</p>
+
+<p>More formally</p>
+
+<p><span  class="math">\[ \hat{S}_{1:t} = \text{argmax}_{S_{1:t}} P(S_{1:t}| O_{1:t}) = \text{argmax}_{S_{1:t}} L(O_{1:t} | S_{1:t})\]</span></p>
+
+<p>or considering an Energy function</p>
+
+<p><span  class="math">\[ \hat{S}_{1:t} = \text{argmax}_{S_{1:t}} P(S_{1:t}| O_{1:t}) = \text{argmax}_{S_{1:t}} E(S_{1:t} | O_{1:t})\]</span></p>
+
+<p>Note that models and in general knowledge about the expected behaviour of the objects can be injected also in the optimization approach. One very used approach is to enforce motion constraints through the function E.</p>
+
+<p><strong>Pros</strong></p>
+
+<ul>
+<li>Converge to a global optimum.</li>
+</ul>
+
+<p><strong>Cons</strong></p>
+
+<ul>
+<li>&quot;Heavier&quot; computationally.</li>
+<li>Works offline (you are using the future).</li>
+</ul>
+
+<h2 id="the-models">The Models<a href="#the-models" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>Let's talk a bit about the models which I find to be a very interesting aspect of MOT.</p>
+
+<p>You have two problems to solve</p>
+
+<ol>
+<li>how to measure the similarity between objects across frames</li>
+<li>how to use that similarity information to recover identity across frames.</li>
+</ol>
+
+<p>Roughly speaking, the first problem involves
+usually modelling the appearance or the motion of an object. While the second is the inference problem.
+Appearance here is used as a generic term, that could be the visual appearance if you are using a camera.</p>
+
+<p>Two widely used approaches for modelling in MOT are <strong>appearance models</strong> and <strong>motion models</strong>. The former uses how an object appears to the sensor, the latter uses the expected motion of the object.</p>
+
+<p>Let's have a look at examples, one of the simplest motion model consists of assuming that from one frame to the other an object didn't move much. If I have an observation in the frame <span  class="math">\(j\)</span> and I have a &quot;close&quot; observation in frame <span  class="math">\(j+1\)</span> I will associate them to the same object. What does close mean? I can for example measure the distance between the centroids, or I can use intersection over union, that is if the two boxes intersect more than a certain threshold they are matched in time.</p>
+
+<p>This is a pretty simple approach that works. The main problems come from occlusions and the assumption (which might not hold) that the rate at which frames are captured it's &quot;high&quot; enough to capture very small motions in the observations. In the case of occlusions, you will likely experience id switches. This is given by the fact that boxes of different objects will overlap for some frames.</p>
+
+<p>Let's see how a centroid tracker behaves for example. These results are obtained using the <a href="http://www.robots.ox.ac.uk/~lav/Research/Projects/2009bbenfold_headpose/project.html">Oxford Towncentre Database</a> for pedestrian tracking.</p>
+
+<p>Detections are already available to be used for tracking.</p>
+
+<p><figure><img src="/mot/centroid.gif" alt="Centroid"></figure></p>
+
+<p>As you can see the tracker works, but there are cases where id switch does happen, especially when the scene gets more crowded.</p>
+
+<p>Now, if we want to make the tracker more robust we could either use an appearance model and use information about how the detected object looks or use a motion model and make assumptions about the motion of the detected objects (e.g., in the case of a pedestrian we can assume that the object will move with constant velocity).</p>
+
+<p><strong>Appearance models</strong></p>
+
+<p>Appearance models include two components:</p>
+
+<ol>
+<li>a representation of the object appearance</li>
+<li>a measurement of the distance between such two representations</li>
+</ol>
+
+<p>In the case of visual tracking, lots of different representations can be used, such as local features (or deep features) of the image, colour histogram, <a href="https://en.wikipedia.org/wiki/Histogram_of_oriented_gradients">HOG</a>, etc...</p>
+
+<p>In general gradient-based features, like HOG can describe the shape of an object and are robust to lightning changes, but they cannot handle occlusion and deformation well. <a href="http://www.bmva.org/bmvc/2014/papers/paper038/index.html">Region covariance matrix features</a> are more robust as they take more information into account, but they are more computationally expensive.</p>
+
+<p>The distance between two representations can be computed in several ways, mainly depending on the appearance model used.</p>
+
+<p>Let's see how our tracker improves using an appearance model.</p>
+
+<p><figure><img src="/mot/vis.gif" alt="Visual"></figure></p>
+
+<p>As you can see the tracker is more robust to occlusion. This is given by the fact that we are using information about the appearance of the tracked objects so we don't &quot;confuse&quot; it with a different occluding object.</p>
+
+<p><strong>Motion Models</strong></p>
+
+<p>As a final topic let's have a look at motion models.
+Motion models assume knowledge about how an object moves and predict the expected position of the object. The predicted position is later corrected and updated with the measurement, which is now matched to the predictions.</p>
+
+<p>A very common way to use motion models in the probabilistic iterative approach is to use <a href="https://medium.com/@l.peppoloni/kalman-filters-for-software-engineers-3d2a05dee465">Kalman Filters</a>. A very common assumption is that the objects move with constant velocity or constant acceleration.</p>
+
+<p>Let's have a look again at how using motion models
+improves our tracker.</p>
+
+<p><figure><img src="/mot/motion.gif" alt="Motion"></figure></p>
+
+<p>Here we are using a Kalman Filter with a constant velocity model. The tracker is still robust to occlusion since we are predicting the future position of each object using the motion model.</p>
+
+<p>The models solve the problem of how to measure similarity, the second problem of using the similarity to recover identity can be solved in several different ways. In the presented demo cases, it was solved by optimization of the intersection over union between the tracker tracks after the update and the observations.</p>
+
+<p>The examples were created using modified versions of tracking code from <a href="https://github.com/ZidanMusk/experimenting-with-sort">this repository</a>.</p>
+
+<hr>
+
+<p><em>Conclusions: We had an in-depth look at the multi-object tracking problem, how it can be formalized formally and solved. We had a look at some classic ways of solving it and we also had a look at the real-life example of pedestrian tracking</em></p>
+
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-feather"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path><line x1="16" y1="8" x2="2" y2="22"></line><line x1="17.5" y1="15" x2="9" y2="15"></line></svg>Lorenzo Peppoloni</p>
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://example.com/tags/computer-vision">computer-vision</a></span><span class="tag"><a href="https://example.com/tags/opencv">openCV</a></span><span class="tag"><a href="https://example.com/tags/robotics">robotics</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>1357 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2020-02-21 08:13 &#43;0100</p>
+			</footer>
+		</article>
+		<div class="post-nav thin">
+			<a class="next-post" href="https://example.com/posts/reidentification/">
+				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>&nbsp;Newer</span><br><span>Re-identification with Triplet Loss</span>
+			</a>
+			<a class="prev-post" href="https://example.com/posts/eightpoints/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>The eight-points algorithm</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+</div>
+	</main>
+
+</div>
+</div>
+
+<footer class="footer">
+    
+</footer>
+
+<script src="https://example.comjs/jquery-1.11.3.min.js"></script>
+<script src="https://example.comjs/jquery.fitvids.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+<script src="https://example.comjs/scripts.js"></script>
+</body>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</html>
+
+
+
+	<script src="https://example.com/js/bundle.min.4a9a0ac3d2217822c7865b4161e6c2a71de1d70492264337755427898dd718f6.js" integrity="sha256-SpoKw9IheCLHhltBYebCpx3h1wSSJkM3dVQniY3XGPY=" crossorigin="anonymous"></script>
+	
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-159316457-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+</body>
+
+</html>

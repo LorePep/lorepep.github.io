@@ -1,0 +1,1269 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Posts on Lorenzo Peppoloni</title>
+		<link>https://example.com/posts/</link>
+		<description>Recent content in Posts on Lorenzo Peppoloni</description>
+		<generator>Hugo -- gohugo.io</generator>
+		<language>en-us</language>
+		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+		<lastBuildDate>Sat, 07 Mar 2020 07:13:50 +0000</lastBuildDate>
+		<atom:link href="https://example.com/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>Is GO good at Math?</title>
+			<link>https://example.com/posts/gomath/</link>
+			<pubDate>Sat, 07 Mar 2020 07:13:50 +0000</pubDate>
+			
+			<guid>https://example.com/posts/gomath/</guid>
+			<description>We don&#39;t usually associate GO with a language to do mathematics, geometry or deep learning. Those tasks are usually left mainly to Python.
+But is GO good at math as well?
+Disclaimer
+This post is an effort to share my experience and knowledge about the topic. Are there languages that are a better fit for math? Yes. Is it possible to do math (at least some simple things) with GO? Yes.</description>
+			<content type="html"><![CDATA[<p>We don't usually associate GO with a language to do mathematics, geometry or deep learning. Those tasks are usually left mainly to Python.</p>
+
+<p>But is GO good at math as well?</p>
+
+<p><strong>Disclaimer</strong></p>
+
+<p>This post is an effort to share my experience and knowledge about the topic. Are there languages that are a better fit for math? Yes. Is it possible to do math (at least some simple things) with GO? Yes.</p>
+
+<h2 id="prerequisite">Pre-requisite</h2>
+
+<p>To implement our code we will use <a href="https://github.com/gonum/gonum">gonum</a>, which is a GO library for numerical and scientific algorithms. As a plus, it has nice plotting functions as well.</p>
+
+<p>Let's have a quick look at <a href="https://godoc.org/gonum.org/v1/gonum/mat">gonum/mat</a>, where the linear algebra libraries are implemented.</p>
+
+<p>The first thing to understand about the library is that everything is done using a pointer receiver, for example:</p>
+<div class="highlight"><pre class="chroma"><code class="language-golang" data-lang="golang"><span class="nx">m1</span> <span class="o">:=</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">NewDense</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">{</span>
+    <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="nx">m2</span> <span class="o">:=</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">NewDense</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">{</span>
+    <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="kd">var</span> <span class="nx">prod</span> <span class="nx">mat</span><span class="p">.</span><span class="nx">Dense</span>
+<span class="nx">prod</span><span class="p">.</span><span class="nf">Mul</span><span class="p">(</span><span class="nx">m1</span><span class="p">,</span> <span class="nx">m2</span><span class="p">)</span>
+<span class="nx">fc</span> <span class="o">:=</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">Formatted</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">prod</span><span class="p">,</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">Prefix</span><span class="p">(</span><span class="s">&#34;       &#34;</span><span class="p">),</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">Squeeze</span><span class="p">())</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;prod = %v\n&#34;</span><span class="p">,</span> <span class="nx">fc</span><span class="p">)</span></code></pre></div>
+<p>The code will output:</p>
+<pre><code>prod = ⎡16  0   0⎤
+       ⎣ 0  0  16⎦</code></pre>
+<p>If you see, we defined two matrices, passing the data with a slice of <code>float64</code> row-major, then we created a new matrix to contain the product and then called the <code>Mul</code> function with the new matrix as a pointer receiver. The final part is just printing using the built-in formatter.</p>
+
+<p>Let's see how to invert a matrix:</p>
+<div class="highlight"><pre class="chroma"><code class="language-golang" data-lang="golang"><span class="nx">m</span> <span class="o">:=</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">NewDense</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">{</span>
+    <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="kd">var</span> <span class="nx">inv</span> <span class="nx">mat</span><span class="p">.</span><span class="nx">Dense</span>
+<span class="nx">inv</span><span class="p">.</span><span class="nf">Inverse</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span>
+<span class="nx">fc</span> <span class="o">:=</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">Formatted</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">inv</span><span class="p">,</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">Prefix</span><span class="p">(</span><span class="s">&#34;      &#34;</span><span class="p">),</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">Squeeze</span><span class="p">())</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;inv = %v\n&#34;</span><span class="p">,</span> <span class="nx">fc</span><span class="p">)</span></code></pre></div>
+<p>The code will output:</p>
+<pre><code>inv = ⎡0.25    -0⎤
+      ⎣   0  0.25⎦</code></pre>
+<p>Again, we defined a matrix, we created an empty matrix to contain the inverse and then we inverted the first matrix.</p>
+
+<h3 id="solving-a-linear-system">Solving a linear system</h3>
+
+<p>Let's try to solve a linear system:</p>
+
+<p><span  class="math">\[ \begin{matrix} 
+x + y + z = 6 \\ 
+2y + 5z = -4 \\ 
+2x + 5y - z = 27
+\end{matrix} \]</span></p>
+
+<p>This can be rewritten as <span  class="math">\(Ax = b\)</span></p>
+
+<p><span  class="math">\[ \begin{bmatrix} 
+4 & 1 & 1 \\ 
+0 & 1 & 5 \\ 
+2 & 7 & -1  
+\end{bmatrix} \begin{bmatrix} 
+x \\ 
+y \\ 
+z  
+\end{bmatrix} = \begin{bmatrix} 
+4 \\
+-4 \\
+22
+\end{bmatrix} \]</span></p>
+
+<p>Now the solution would be <span  class="math">\( x = A^{-1}b\)</span> being <span  class="math">\(A\)</span> a square matrix with <span  class="math">\(det \neq 0\)</span>.</p>
+
+<p>Using <code>gonum</code>, we can either invert <span  class="math">\(A\)</span> or use the more generic function <code>SolveVec</code>, which solves a linear system.</p>
+<div class="highlight"><pre class="chroma"><code class="language-golang" data-lang="golang"><span class="nx">A</span> <span class="o">:=</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">NewDense</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">{</span>
+    <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="mi">2</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="nx">b</span> <span class="o">:=</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">NewVecDense</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">{</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">22</span><span class="p">})</span>
+<span class="nx">x</span> <span class="o">:=</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">NewVecDense</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
+
+<span class="nx">x</span><span class="p">.</span><span class="nf">SolveVec</span><span class="p">(</span><span class="nx">A</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%v\n&#34;</span><span class="p">,</span> <span class="nx">x</span><span class="p">)</span></code></pre></div>
+<p>Which outputs:</p>
+<pre><code>[0.64705 2.76470 -1.35294] </code></pre>
+<h3 id="neural-network">Neural Network</h3>
+
+<p>Now it's time to try something a bit more complex... Let's implement a simple neural network in GO, without going too much into detail on the math (you will have to trust me on that).</p>
+
+<p><strong>Neural Networks ELI5</strong></p>
+
+<p><figure><img src="/gomath/nn.png" alt="nn"></figure></p>
+
+<p>In a multilayer perceptron, you have an input, an output layer and some hidden layers. Each layer, in its simplest form, consists of a linear transformation (<span  class="math">\(y_i = W_ix_i + b_i\)</span>, for the i-th layer) plus a nonlinear transformation called <strong>activation function</strong> (<span  class="math">\(y_i = a_i(W_ix_i + b_i)\)</span>). The network is trained using a cost function (<span  class="math">\(L\)</span>), which is a function we are trying to optimize.</p>
+
+<p>For example, we have samples as inputs and outputs and we want our network to learn a function that ties the two. The cost function could be the mean squared error (MSE) between the network output given the input or the sum of the squared error (SSE) (this is really ELI5). The weights at each layer (<span  class="math">\(W_i\)</span>) and the biases (<span  class="math">\(b_i\)</span>) are our tunable parameters.</p>
+
+<p>To optimize the cost function we use gradient descent: at each step, we compute the output of the network, we then compute the derivative at of the cost function with respect to the weights and biases and we update the weights in such a way that we follow the direction of the negative gradient. In principle, each step moves us closer to the minimum of the cost function.</p>
+
+<p><figure><img src="/gomath/gdesc.png" alt="nn"></figure></p>
+
+<p>To monitor the training of our network we will be plotting the values of the loss function.</p>
+
+<p>To simplify the code a bit we will assume that the network has no <span  class="math">\(b_i\)</span> terms. <span  class="math">\(L = \sum (\hat(y)_y - y_i)^2\)</span>, so the <strong>SSE</strong> and our activation function is the sigmoid function (<span  class="math">\(\sigma(x) = \frac{1}{1 + \exp(-x)} \)</span>).</p>
+
+<p>Let's see if our network can learn the toy problem in <a href="https://towardsdatascience.com/how-to-build-your-own-neural-network-from-scratch-in-python-68998a08e4f6">this</a> blog post.</p>
+
+<p><figure><img src="/gomath/toy.png" alt="nn"></figure></p>
+
+<p>After 1,500 iterations, the output generated by the network is <code>[0.014, 0.98, 0.98, 0.024]</code> (the original output of the table is <code>[0, 1, 1, 0]</code>) which means that our simple network was able to overfit and learn the training set.</p>
+
+<p><strong>The full code can be found <a href="https://github.com/LorePep/blogposts_code/tree/master/gomath">here</a>.</strong></p>
+
+<p>Below you can see the plot (made with <a href="https://github.com/gonum/plot">gonum/plot</a>) of the loss during training.</p>
+
+<p><figure><img src="/gomath/loss_history.png" alt="nn"></figure></p>
+
+<p>One gotcha to be aware of while doing some more complex math using <code>gonum</code> is that chaining multiplications in which the matrices dimension change will break the dimension check even if it appears correct.</p>
+
+<p>For example:</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">m1</span> <span class="o">:=</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">NewDense</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">{</span>
+    <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+<span class="p">})</span>
+
+<span class="nx">m2</span> <span class="o">:=</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">NewDense</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">{</span>
+    <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+<span class="p">})</span>
+
+<span class="nx">m3</span> <span class="o">:=</span> <span class="nx">mat</span><span class="p">.</span><span class="nf">NewDense</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">{</span>
+    <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+<span class="p">})</span>
+
+<span class="kd">var</span> <span class="nx">mul</span> <span class="nx">mat</span><span class="p">.</span><span class="nx">Dense</span>
+<span class="nx">mul</span><span class="p">.</span><span class="nf">Mul</span><span class="p">(</span><span class="nx">m1</span><span class="p">,</span> <span class="nx">m2</span><span class="p">.</span><span class="nf">T</span><span class="p">())</span>
+<span class="nx">mul</span><span class="p">.</span><span class="nf">Mul</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">mul</span><span class="p">,</span> <span class="nx">m3</span><span class="p">)</span></code></pre></div>
+<p>This code will panic despite the multiplication being perfectly valid <span  class="math">\((2\times 3)(3\times 2)(2\times 3)\)</span>. The failure happens because the auxiliary matrix you are using as a point receiver is not of the right size to contain the new multiplication.</p>
+
+<p>The solution to this is to create a new auxiliary matrix for each step in which the dimension changes because of the multiplication.</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">mul1</span> <span class="nx">mat</span><span class="p">.</span><span class="nx">Dense</span>
+<span class="nx">mul1</span><span class="p">.</span><span class="nf">Mul</span><span class="p">(</span><span class="nx">m1</span><span class="p">,</span> <span class="nx">m2</span><span class="p">.</span><span class="nf">T</span><span class="p">())</span>
+<span class="kd">var</span> <span class="nx">mul2</span> <span class="nx">mat</span><span class="p">.</span><span class="nx">Dense</span>
+<span class="nx">mul2</span><span class="p">.</span><span class="nf">Mul</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">mul1</span><span class="p">,</span> <span class="nx">m3</span><span class="p">)</span></code></pre></div>
+<h2 id="plotting">Plotting</h2>
+
+<p>Plotting using <code>gonum/plot</code> is pretty straightforward: you can create an object of type <code>Plot</code> and then you add to it multiple plots using the <code>plotutil</code> package, which contains routines to simplify adding common plot types, such as line plots, scatter plots, etc...</p>
+
+<p>As an example, to plot the loss:</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">p</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">plot</span><span class="p">.</span><span class="nf">New</span><span class="p">()</span>
+<span class="c1">// check error.
+</span><span class="c1">// ...
+</span><span class="c1"></span><span class="nx">err</span> <span class="p">=</span> <span class="nx">plotutil</span><span class="p">.</span><span class="nf">AddLinePoints</span><span class="p">(</span><span class="nx">p</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="nx">points</span><span class="p">)</span>
+<span class="c1">// check error.
+</span><span class="c1"></span><span class="nx">err</span> <span class="p">=</span> <span class="nx">p</span><span class="p">.</span><span class="nf">Save</span><span class="p">(</span><span class="mi">5</span><span class="o">*</span><span class="nx">vg</span><span class="p">.</span><span class="nx">Inch</span><span class="p">,</span> <span class="mi">5</span><span class="o">*</span><span class="nx">vg</span><span class="p">.</span><span class="nx">Inch</span><span class="p">,</span> <span class="s">&#34;loss_history.png&#34;</span><span class="p">)</span>
+<span class="o">//</span> <span class="o">...</span></code></pre></div>
+<hr>
+
+<p><em>Conclusions: In this post, we explored the potential of GO to do math and linear algebra. We had a look at the <code>gonum</code> library, first solving a simple linear system and then implementing a simple neural network in GO. We also had a quick look at how you can use <code>gonum</code> to create plots.</em></p>
+]]></content>
+		</item>
+		
+		<item>
+			<title>Effective strategies for classification in CT scans</title>
+			<link>https://example.com/posts/dicomscans/</link>
+			<pubDate>Tue, 03 Mar 2020 07:13:50 +0000</pubDate>
+			
+			<guid>https://example.com/posts/dicomscans/</guid>
+			<description>Last October I took part in the RSNA Intracranial Haemorrhage Detection Kaggle challenge. I ended up in the top 10%, which considering my full-time job and travelling, was a placement I am quite happy with.
+The goal of this post is to share some ideas and strategies to work with classification in CT scans.
+The task The task in this competition was to tackle a multiclass classification problem, to classify 5 different types of brain haemorrhage (a sixth class was &amp;quot;not present&amp;quot;) from computerized tomography (CT) scans of patient&#39;s heads.</description>
+			<content type="html"><![CDATA[<p>Last October I took part in the <a href="https://www.kaggle.com/c/rsna-intracranial-hemorrhage-detection">RSNA Intracranial Haemorrhage Detection</a> Kaggle challenge. I ended up in the top 10%, which considering my full-time job and travelling, was a placement I am quite happy with.</p>
+
+<p>The goal of this post is to share some ideas and strategies to work with classification in CT scans.</p>
+
+<h2 id="the-task">The task</h2>
+
+<p>The task in this competition was to tackle a multiclass classification problem, to classify 5 different types of brain haemorrhage (a sixth class was &quot;not present&quot;) from computerized tomography (CT) scans of patient's heads. Each type of haemorrhage tends to appear in different location of the head with different features. A summary with examples is reported below.</p>
+
+<p><figure><img src="/dicom/hemorrage.png" alt="hemorrages"></figure></p>
+
+<p>CT scans usually are slices on the axial plane taken at different heights. This means that you can combine consecutive scans to obtain 3D information. In general, scans are provided in the <strong>DICOM</strong> format, which is an international standard for digital medical images. DICOM files represent pixel intensities in normal units (they can range for example between -32768 and 32767 or less according to the number of bits used).</p>
+
+<h2 id="scans">Scans</h2>
+
+<p>First, you can convert the scans from pixel intensities to Hounsfield Units (HU). Hounsfield Units describe a linear scale of radio intensity. Basically, values range between -1000 (radio intensity of air) and 1000 (roughly radio intensity of metal). Harder materials (such as bone or metal) will have a higher radio intensity. Lighter materials, like flesh, soft tissue or water, will have a lower radio intensity.</p>
+
+<p>To convert from the DICOM to HU you usually have to look for &quot;slope&quot; and &quot;intercept&quot; in the file metadata. The two values, which are usually provided by the manufacturer allow you to get the HU:</p>
+
+<p><span  class="math">\[ \text{scan}_{HU} = \text{scan} * \text{slope} + \text{intercept} \]</span></p>
+
+<p>Now if you try and visualize the images in HU you will probably see something like this</p>
+
+<p><figure><img src="/dicom/hunsfeld.png" alt="hunsfeld_example"></figure></p>
+
+<p>So what's the problem?</p>
+
+<p>The problem is that in a normal grayscale image you can represent 256 different shades, this means that being the HU roughly 2000 values, you have 8 values per shade of grey. As a human, you cannot visually detect changes in shades that are less than 120 HU (in greyscale). That's why you don't see the nice head scans that we were expecting, but instead, you just see a grey blob.</p>
+
+<p>So what do doctors do?</p>
+
+<p>During scan assessment by a human doctor, what is actually done is that each scan is &quot;focused&quot; on a particular range of the Hounsfield Scale, giving information about a certain type of tissue. Doctors usually focus on 2-3 different windows at the same time (according to the assessment they are performing).</p>
+
+<p>In the case of brain haemorrhages, there are 5 important windows, each one focusing on a type of tissue:</p>
+
+<ol>
+<li><em>Brain Matter window</em>: W:80 L:40</li>
+<li><em>Blood/subdural window</em>: W:130-300 L:50-100</li>
+<li><em>Soft tissue window</em>: W:350–400 L:20–60</li>
+<li><em>Bone window</em>: W:2800 L:600</li>
+<li><em>Grey-white differentiation window</em>: W:8 L:32 or W:40 L:40</li>
+</ol>
+
+<p>The windows are expressed with two numbers <code>W</code> the width of the window and <code>L</code> the center. Each window focuses on the range:</p>
+
+<p><span  class="math">\[ L - W / 2 < \text{HU} < L + W / 2 \]</span></p>
+
+<h2 id="mimic-doctors-with-ml">Mimic doctors with ML</h2>
+
+<p>A viable approach is to choose 3 different windows and use them as the channels of a 3-channel image. In this way our network will try and learn, as a human doctor does, to classify haemorrhage using multiple windows of the same scan.</p>
+
+<p>This approach works and was successfully used during the competition by lots of participants (including me). The approach is also backed up by several research papers.</p>
+
+<p>Some examples of the images one obtains are shown in the pictures.</p>
+
+<p><figure><img src="/dicom/windows.png" alt="windowing"></figure></p>
+
+<p>The images have been min-max scaled to then be fed to the network.</p>
+
+<p><strong>Pros</strong></p>
+
+<ul>
+<li>Quite a simple approach.</li>
+<li>We are feeding the network the same information a human expert would use (we know it's meaningful).</li>
+</ul>
+
+<p><strong>Cons</strong></p>
+
+<ul>
+<li>We are dropping information that the network might be able to use.</li>
+</ul>
+
+<h2 id="introduce-a-volume-component">Introduce a volume component</h2>
+
+<p>Another approach, that was quite successful in the competition was to introduce a volume component instead or together with using multiple windows.</p>
+
+<p>As shown in the figure, scans are consecutive snapshots on the axial plane of the head.</p>
+
+<p><figure><img src="/dicom/scans.png" alt="scans"></figure></p>
+
+<p>Three consecutive scans can be used as the three channels of an RGB image (using still some windowing on the Hounsfield Scale).</p>
+
+<p>An example of the input images (min-max scaled) is shown in the figure.</p>
+
+<p><figure><img src="/dicom/3dvolume.png" alt="volume"></figure></p>
+
+<p><strong>Pros</strong></p>
+
+<ul>
+<li>Quite a simple approach.</li>
+<li>We are now giving information to the network about volume, although limited.</li>
+</ul>
+
+<p><strong>Cons</strong></p>
+
+<ul>
+<li>We are dropping information that the network might be able to use (for the windowing).</li>
+</ul>
+
+<h2 id="no-windowing">No windowing</h2>
+
+<p>An interesting approach developed during the competition was to drop windows altogether and give the network the full range of HU values. The nuance to tackle with this approach is that the distribution of the pixels over the full range is usually strongly bimodal, with values that are not evenly distributed in the whole range. The distribution can change a lot with the type of tissue that is mainly present in each scan.</p>
+
+<p>A solution to this problem is to find (or craft) a nonlinear normalization function to &quot;normalize&quot; our data over the full range, or almost the full range.</p>
+
+<p>An example can be found in the <a href="https://www.kaggle.com/c/rsna-intracranial-hemorrhage-detection/discussion/118780">write-up</a> of the 8th place solution to the competition.</p>
+
+<hr>
+
+<p><em>Conclusions: We had a look at some possible approaches that work when dealing with classification in CT scans. We started explaining how scans work, how we can convert them to Hounsfield Units and which strategies we can use to feed the data to a neural network.</em></p>
+]]></content>
+		</item>
+		
+		<item>
+			<title>Do not write misusable APIs</title>
+			<link>https://example.com/posts/interfaces/</link>
+			<pubDate>Fri, 28 Feb 2020 20:13:50 +0000</pubDate>
+			
+			<guid>https://example.com/posts/interfaces/</guid>
+			<description>APIs should be easy to use and hard to misuse.
+— Josh Bloch
+ Today I found this quote on Twitter and for a moment I thought: I&amp;rsquo;m gonna print it and frame it right now!!
+This is something I see a lot in my day to day life as a Software Engineer. Spending days and days looking for nasty bugs resulting in realising that I was misusing an API, taught me that a rule to live by it&amp;rsquo;s:</description>
+			<content type="html"><![CDATA[<blockquote>
+<p>APIs should be easy to use and hard to misuse.</p>
+<p>— Josh Bloch</p>
+</blockquote>
+<p>Today I found this quote on Twitter and for a moment I thought: I&rsquo;m gonna print it and frame it right now!!</p>
+<p>This is something I see a lot in my day to day life as a Software Engineer. Spending days and days looking for nasty bugs resulting in realising that I was misusing an API, taught me that a rule to live by it&rsquo;s:</p>
+<p><em>Make getting your APIs wrong really&hellip;really&hellip;really hard</em></p>
+<p>There should be no doubt in the usage of an API, nothing should be left for the user to guess, everyone should be able to read your API and understands immediately how to use it with no doubts.</p>
+<p>Let&rsquo;s write a bad API.</p>
+<p>Imagine we are writing a proto message for an API we are implementing, we want to model a shop transaction:</p>
+<div class="highlight"><pre class="chroma"><code class="language-proto" data-lang="proto"><span class="kd">message</span> <span class="nc">Transaction</span> <span class="p">{</span><span class="err">
+</span><span class="err"></span>    <span class="kt">int64</span> <span class="n">timestamp</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="err">
+</span><span class="err"></span>    <span class="kt">string</span> <span class="n">product_code</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span><span class="err">
+</span><span class="err"></span>    <span class="kt">float</span> <span class="n">price</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span><span class="err">
+</span><span class="err"></span>    <span class="kt">string</span> <span class="n">address</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span><span class="err">
+</span><span class="err"></span>  <span class="p">}</span><span class="err">
+</span></code></pre></div><p>This message it&rsquo;s not the most usable, you look at it and question arise:</p>
+<ol>
+<li>mmmm <code>int64 timestamp</code>, wait should I put there an epoch timestamp?</li>
+<li><code>price</code> should it be in the local currency?</li>
+<li><code>address</code> of what? presumably of the shop&hellip;maybe?</li>
+</ol>
+<p>In this message, for at least 3 fields, it is not immediately and unmistakenly clear how to use them.</p>
+<p>Let&rsquo;s try and improve our interface, we can achieve this in multiple ways.</p>
+<h3 id="good-documentation">Good documentation</h3>
+<p>That&rsquo;s a solution you see quite often and it&rsquo;s a good solution. If your API is well documented, people will know how to use it (presumably).</p>
+<div class="highlight"><pre class="chroma"><code class="language-proto" data-lang="proto"><span class="c1">// Transaction models a shop transaction. Each transaction involves only one product.
+</span><span class="c1">// Each product can be purchased in a shop.
+</span><span class="c1"></span><span class="kd">message</span> <span class="nc">Transaction</span> <span class="p">{</span><span class="err">
+</span><span class="err"></span>    <span class="c1">// Unix epoch with nanoseconds indicating when the transaction was completed.
+</span><span class="c1"></span>    <span class="kt">int64</span> <span class="n">timestamp</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="err">
+</span><span class="err"></span>    <span class="c1">// Unique product code of the product involved in the transaction.
+</span><span class="c1"></span>    <span class="kt">string</span> <span class="n">product_code</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span><span class="err">
+</span><span class="err"></span>    <span class="c1">// Price in the local currency of the product involved in the transaction.
+</span><span class="c1"></span>    <span class="c1">// If the address is not specified, then the currency must be in USD.
+</span><span class="c1"></span>    <span class="kt">float</span> <span class="n">price</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span><span class="err">
+</span><span class="err"></span>    <span class="c1">// Address of the shop where the transaction happened.
+</span><span class="c1"></span>    <span class="kt">string</span> <span class="n">address</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span><span class="err">
+</span><span class="err"></span>  <span class="p">}</span><span class="err">
+</span></code></pre></div><p>Ok good, now as a user, I have way more information, I know that a transaction it&rsquo;s a shop transaction, that the timestamp is an epoch timestamp with nanoseconds, that the price is in the local currency of the store and that the address it&rsquo;s the address of the shop.</p>
+<p>There is still something bugging, right? The price can be either in local currency if the address is specified, or in USD if no address is provided. Mmmmm despite the comments that document the behaviour that does sound quite right.</p>
+<p>Imagine you are a new hire, you don&rsquo;t know anything about this message, you have to return all the transaction happened in the US, you notice that some of the transactions are missing the address, but hey all of them have the price. Let&rsquo;s just fetch all the transactions in USD. That would return the wrong set of transactions&hellip;this could lead to bugs that are quite hard to find.</p>
+<p>The problem here is one of cognitive load, still, the API doesn&rsquo;t document itself fully, you still need to have some previous knowledge to use it (in this case that in the case of missing address the price is in USD).</p>
+<p>As an additional point, comments will not be available in the classes generated for this message. A developer will always have to dig up the proto definition and read the comments.</p>
+<h3 id="good-naming">Good naming</h3>
+<p>If the names of the fields speak for themselves and make themselves unmistakable, well&hellip;then it&rsquo;s really hard to get it wrong.</p>
+<div class="highlight"><pre class="chroma"><code class="language-proto" data-lang="proto"><span class="c1">// ShopTransaction defines a transaction happened in a shop.
+</span><span class="c1"></span><span class="kd">message</span> <span class="nc">ShopTransaction</span> <span class="p">{</span><span class="err">
+</span><span class="err"></span>    <span class="kt">int64</span> <span class="n">epoch_timestamp_ns</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="err">
+</span><span class="err"></span>    <span class="kt">string</span> <span class="n">purchased_product_code</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span><span class="err">
+</span><span class="err"></span>    <span class="c1">// Price of the transaction, always in USD despite the location
+</span><span class="c1"></span>    <span class="c1">// where the transaction happened.
+</span><span class="c1"></span>    <span class="kt">float</span> <span class="n">price_usd</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span><span class="err">
+</span><span class="err"></span>    <span class="kt">string</span> <span class="n">shop_address</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span><span class="err">
+</span><span class="err"></span>  <span class="p">}</span><span class="err">
+</span></code></pre></div><p>As you can clearly see at this point comments are basically superfluous. Each field tells exhaustively what it contains and what should be put in it. The currency it&rsquo;s always in USD, so no assumption can be made on the purchase location using the price, and it&rsquo;s clear from the name, the address it&rsquo;s the address of the shop (clear from the name), the timestamp is epoch nanoseconds, clear from the name.</p>
+<p>Good. We don&rsquo;t need much commenting at this point, but we are still free to add them. We can still drop a line saying that the price is always in USD, no matter the address, but it&rsquo;s not strictly necessary.</p>
+<p>As a bonus, to feel fully happy about the message, I would probably change the <code>int64</code> to a <a href="https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/timestamp.proto">google Timestamp</a> and maybe deal a bit better with the address field. Defining an <code>address</code> message might be a good idea but it really depends on the use case.</p>
+]]></content>
+		</item>
+		
+		<item>
+			<title>Re-identification with Triplet Loss</title>
+			<link>https://example.com/posts/reidentification/</link>
+			<pubDate>Wed, 26 Feb 2020 07:13:50 +0000</pubDate>
+			
+			<guid>https://example.com/posts/reidentification/</guid>
+			<description>One very interesting computer vision problem is re-identification. The idea is that you have images of some entity and you want to be able to re-identify that entity in new images. As a complementary problem, you might also want to be able to say if an identity is known or not.
+Classic use cases are people re-identification for surveillance, but there are also more fancy use cases such as whale re-identification for monitoring and conservation effort.</description>
+			<content type="html"><![CDATA[<p>One very interesting computer vision problem is re-identification. The idea is that you have images of some entity and you want to be able to re-identify that entity in new images. As a complementary problem, you might also want to be able to say if an identity is known or not.</p>
+
+<p>Classic use cases are people re-identification for surveillance, but there are also more fancy use cases such as whale re-identification for monitoring and conservation effort.</p>
+
+<p>A classic way of solving the re-identification problem with Deep Learning is to train a CNN to learn an embedding space where different observations of the same entity will be mapped close together, or better closer than observation of a different entity.</p>
+
+<p>Formally this approach, called learning metric embeddings, has the goal of learning a function that takes images in a space <span  class="math">\(R^{F}\)</span> to a space <span  class="math">\(R^{D}\)</span> where semantically similar points in the initial space are mapped to metrically close points. At the same time, semantically different points in the original space are mapped to metrically distant points.</p>
+
+<p>What we want to learn it's the function</p>
+
+<p><span  class="math">\[\textit{f}_\theta(x): R^{F} \rightarrow R^{D}\]</span></p>
+
+<p>The function is usually parametric and can be anything from a linear transform to complex non-linear maps.</p>
+
+<p>A way to tackle the problem is to train a neural network to learn that function. In this case, we can use one of the final layers of the network as the embedding space, we just have to come up with a loss function.</p>
+
+<p>A typical approach at this point is to use a loss function that pushes points belonging to the same entity close togheter while pushing points belonging to different entities far away.</p>
+
+<p>Let's define a metric <span  class="math">\(D_{x, y}: R^D \times R^D \rightarrow R\)</span> that measures a distance between the points <span  class="math">\(x\)</span> and <span  class="math">\(y\)</span> in <span  class="math">\(R^D\)</span>.</p>
+
+<p>In [1] the author proposed a loss function called <strong>Triplet Loss</strong>. The function is called triplet because it computes the loss over a triplet of points:</p>
+
+<ul>
+<li>the anchor <span  class="math">\(x_a\)</span>, which is a sample of one entity</li>
+<li>the positive sample <span  class="math">\(x_p\)</span>, which is another sample of the same entity used as anchor</li>
+<li>the negative sample <span  class="math">\(x_n\)</span>, which is a sample of a different entity.</li>
+</ul>
+
+<p>The function mathematically is:</p>
+
+<p><span  class="math">\[ L = \sum\limits_{a,p,n}[m + D_{a,p} - D_{a,n}]_+\]</span></p>
+
+<p>where <span  class="math">\([\bullet]_+\)</span> it's the hinge function <span  class="math">\(max(0, \bullet)\)</span>.</p>
+
+<p>It is pretty straightforward to see that the loss is pushing the distance function <span  class="math">\(D\)</span> between the anchor and the positive sample closer to the distance between the anchor and the negative sample by at least a margin <span  class="math">\(m\)</span>.</p>
+
+<p>Usually, the Euclidean distance is used as the metric <span  class="math">\(D\)</span>.</p>
+
+<p>A modification can be made to the Triplet Loss to introduce what is called a <em>soft margin</em>. In this case, the hinge function is modified to be</p>
+
+<p><span  class="math">\[\text{softplus} = log(1+e^x)\]</span></p>
+
+<p>This yields mainly two advantages:</p>
+
+<ol>
+<li>we remove one hyperparameter (<span  class="math">\(m\)</span>)</li>
+<li>the softplus function decays exponentially instead of having a hard cut-off like the hinge function. This means that triplets that already satisfies the margin <span  class="math">\(m\)</span> will still contribute a bit to the loss with the effect of still pushing/pulling samples as close or as far as possible.</li>
+</ol>
+
+<p>Ok so let's give this a try in a real re-identification case.</p>
+
+<h2 id="a-reallife-reidentification-problem">A real-life re-identification problem</h2>
+
+<p>Let's use as a test case the whale identification task from last year <a href="https://www.kaggle.com/c/humpback-whale-identification">Humpback Whale Identification</a> Kaggle competition. The task for the competition was to train a model able to identify a whale by their fluke (which is unique for each whale, kind of like a fingerprint). This is a nice real-life case, the dataset it's unbalanced, noisy and there are lots of nuances:</p>
+
+<ul>
+<li>it's not easy to take consistent pictures of moving flukes, so you will have a wide variety of viewpoints and occlusions (mainly water splashes)</li>
+<li>flukes can slightly change in time due to injuries</li>
+</ul>
+
+<p>Just for reference, that's what the images look like.</p>
+
+<p><figure><img src="/reid/flukes.png" alt="flukes"></figure></p>
+
+<p>The full code for our experiment can be found <a href="https://github.com/LorePep/re-identification">here</a>.</p>
+
+<p>To simplify the problem, let's use a smaller dataset consisting of only the 10 whales with the highest number of occurrences. The histogram of the sample count for this smaller toy dataset is shown below.</p>
+
+<p><figure><img src="/reid/distribution.png" alt="distribution"></figure></p>
+
+<p>For the task, we will use a pre-trained Resnet34 as the main feature extractor and we will add a final linear layer with <span  class="math">\(D=128\)</span>, which will be the dimension of our metric space.</p>
+
+<p>Let's see how the embeddings evolve in 2D during training, each colour represents a different whale.</p>
+
+<p><figure><img src="/reid/out_soft.gif" alt="embedding_triplet"></figure></p>
+
+<p>How do we evaluate now our network?</p>
+
+<p>Since we used the Euclidean distance, a solution it's to compute the embeddings for the validation set, for each of them find the nearest embeddings of the training set and use that information to infer the entities in the validation set. For the sake of this example, I just computed classification accuracy, assigning to each validation sample the label of the closest training sample.</p>
+
+<p>I used the accuracy as the monitor variable for early stopping. After 55 epochs we got an accuracy of 0.93.</p>
+
+<p>Some interesting variables to monitor while training for metric learning using the Triple Loss are the norms of the embeddings and the distances between embeddings. Let's have a look at the median and the p95 of those quantities as they evolve for any mini-batch.</p>
+
+<p><figure><img src="/reid/history_soft.png" alt="history_soft"></figure></p>
+
+<p>As you can see, as the training proceeds, the embeddings are pushed to become larger and larger and be more and more distant between each other. These plots are also really informative to decide when to stop the training (more on this later).</p>
+
+<p>Can we do better?</p>
+
+<p>If you think about how we trained the network, we randomly got anchor samples, for each one of them we randomly selected positives and negatives. What usually happens is that the network learns quickly the easy triplets which start to be uninformative during the training process. A solution to this would be to present all the possible combination to the network during the training process, but that can become impractical as the number of samples grows.</p>
+
+<p>The problem can be solved &quot;mining&quot; for hard triplets. What's a hard triplet?</p>
+
+<p>A triplet can be <strong>defined hard</strong> when <span  class="math">\(D_{a, p} > D_{a, n}\)</span>, that is the negative is closer to the anchor than the positive. Those are the triplets that need the biggest correction.</p>
+
+<p>We have two ways of mining triplets, offline and online.</p>
+
+<h3 id="offline-triplet-mining">Offline triplet mining</h3>
+
+<p>We compute all the embeddings at the beginning of each epoch and then we look for hard (or semi-hard triplet when <span  class="math">\(D_{a, n} - D_{a, p} < m \)</span>). We can then train one epoch on the mined triplets.</p>
+
+<p>Mining offline it's not super efficient, we need to compute all the embeddings and update the triplets often to keep our network seeing hard examples.</p>
+
+<h3 id="online-triplet-mining">Online triplet mining</h3>
+
+<p>In online mining, we compute the hard triplets on the fly. The idea is that for each batch, we compute <span  class="math">\(B\)</span> embeddings (where <span  class="math">\(B\)</span> it's the batch size), we now use some smart strategy to create triplets from these <span  class="math">\(B\)</span> embeddings.</p>
+
+<p>An approach called <em>batch hard</em> was proposed in [2], where you select the hardest positive and the hardest negative triplets in the batch.</p>
+
+<ol>
+<li>Select for each batch <span  class="math">\(P\)</span> entities and <span  class="math">\(K\)</span> images for each entity (usually <span  class="math">\(B\leq PK \leq 3B\)</span>).</li>
+<li>For all the anchors find the hardest positive (biggest <span  class="math">\(D_{a,p}\)</span>) and the hardest negative (smallest <span  class="math">\(D_{a, n}\)</span>)</li>
+<li>Train the epoch on the mined hardest triplets.</li>
+</ol>
+
+<p>As a note on <span  class="math">\(P\)</span> and <span  class="math">\(K\)</span> size. <span  class="math">\(3B\)</span> it's the number of embeddings we would have to compute while mining offline. To get <span  class="math">\(B\)</span> unique triplets you will need <span  class="math">\(3B\)</span> embeddings.</p>
+
+<p>There are lots of practical considerations to be made with this approach, for example:</p>
+
+<ul>
+<li>Is the dataset clean? Are the hardest triplets impossible triplets that are just confusing the network?</li>
+<li>In some cases you might not have <span  class="math">\(K\)</span> samples for each instance (few-shot learning), or you might have only 1 (one-shot learning). In this case, augmentation might be your friend. If you can heavily augment the samples you could use the same images to reach <span  class="math">\(K\)</span>.</li>
+<li>Overall, it might be a good idea to do a first round of training without mining to bootstrap the network and then later switch to hard triplets mining.</li>
+</ul>
+
+<p>Still each use case it's different, so the best thing to do it's experimenting.</p>
+
+<p>Ok, let's retrain using hard batch online mining and let's see how our network behaves.</p>
+
+<p>After 47 epochs, our training stopped reaching 0.95 accuracy.</p>
+
+<p>This is the embeddings evolution during training.</p>
+
+<p><figure><img src="/reid/out_hard.gif" alt="embedding_hard"></figure></p>
+
+<p>Let's have a look again and the evolution of norms and distances of the embeddings.</p>
+
+<p><figure><img src="/reid/history_hard.png" alt="history_hard"></figure></p>
+
+<p>In this case, it is even more relevant to have a look at the distance/norm plots to decide when to stop training. What can happen is that the loss my appear stagnating, since as soon as the network has learnt hard cases, new ones will be presented. For example, looking at the graph we could have probably trained the model more.</p>
+
+<p>Another useful number to be checked to see how training is going it's the number of active triplets, that is the number of triplets with non-null loss.</p>
+
+<hr>
+
+<p><em>Conclusions: We had an in-depth look at how to solve the re-identification problem using Deep Learning. We understood the triplet loss and how it can be improved using triplet mining. We had a look at a real-life re-identification example and solved it with the concepts we learned.</em></p>
+
+<p>[1] <a href="https://arxiv.org/abs/1503.03832">FaceNet: A Unified Embedding for Face Recognition and Clustering</a></p>
+
+<p>[2] <a href="https://arxiv.org/abs/1703.07737">In Defense of the Triplet Loss for Person Re-Identification</a></p>
+]]></content>
+		</item>
+		
+		<item>
+			<title>Everything you need to know about multi-object tracking</title>
+			<link>https://example.com/posts/mot/</link>
+			<pubDate>Fri, 21 Feb 2020 07:13:50 +0000</pubDate>
+			
+			<guid>https://example.com/posts/mot/</guid>
+			<description>I find Multiple object tracking (MOT) a very interesting problem. In the case called tracking-by-detection, you have a bunch of detections of objects (they can either be in 2D or 3D) and you have to associate detections in time figuring out if they are observation of the same object.
+More formally, we can define the problem as a multi-variable estimation problem.
+Given a set of frames, we have a set of states of objects in each frame.</description>
+			<content type="html"><![CDATA[<p>I find Multiple object tracking (MOT) a very interesting problem. In the case called <em>tracking-by-detection</em>, you have a bunch of detections of objects (they can either be in 2D or 3D) and you have to associate detections in time figuring out if they are observation of the same object.</p>
+
+<p>More formally, we can define the problem as a multi-variable estimation problem.</p>
+
+<p>Given a set of frames, we have a set of states of objects in each frame. Let's call <span  class="math">\(s_j^{i}\)</span> the state of the object <span  class="math">\(i\)</span> in frame <span  class="math">\(j\)</span>, all the <span  class="math">\(M_j\)</span> objects in the <span  class="math">\(j\)</span>-th frame are the set <span  class="math">\(S_j = \{s^{1}_j, s^{2}_j, ..., s_j^{M_j}\}\)</span>.
+The set of the states <span  class="math">\(S_{1:t} = \{S_1, S_2, S_3, ..., S_t\}\)</span>, defines all the states for all the objects in the frame sequence.</p>
+
+<p>Now we have a set of observations for each frame <span  class="math">\(O_{1:t} = \{O_1, O_2, ..., O_t\}\)</span>, where <span  class="math">\(O_j = \{o^{1}_{j}, o^{2}_{j}, ... o^{M_j}_{j} \}\)</span> are all the observations for frame <span  class="math">\(j\)</span>. Note that for the sake of the notation we are assuming that we have exactly one observation for every and each object, <span  class="math">\(M_j\)</span> states and <span  class="math">\(M_j\)</span> observation at frame <span  class="math">\(j\)</span>.</p>
+
+<p>Now the problem that we want to solve is to find the &quot;optimal&quot; sequence of states given the observations. This can be solved as a maximum a posteriori estimation (MAP) problem</p>
+
+<p><span  class="math">\[\hat{S}_{1:t} = \text{argmax}_{{S_{1:t}}} P(S_{1:t}| O_{1:t})\]</span></p>
+
+<p>Usually, this can be solved either with a probabilistic approach or with an optimization approach. The former usually works online (more on this later) the latter is usually more suited for offline tracking since you want to optimize and find the global optimum on the whole frame sequence. This approach is also known as non-causal since you are using the future and past observations at the same time.</p>
+
+<h2 id="probabilistic-approach">Probabilistic approach</h2>
+
+<p>Usually, to solve the problem with a probabilistic approach you can adopt a two-step iterative process:</p>
+
+<ol>
+<li>you predict the state at the next step without using the observations (<strong>predict</strong>)</li>
+<li>you correct your prediction with the observations (<strong>update</strong>).</li>
+</ol>
+
+<p>To perform the predict step you need some dynamic model that you can use to compute predictions. To perform the update step you need some measurement/observation model that ties the observations back to the state so that you can perform the correction.</p>
+
+<p>More formally:</p>
+
+<p><span  class="math">\[ \textit{Predict}: P(S_t|O_{1:t-1}) = \int P(S_t|S_{t-1})P(S_{t-1}|O_{1:t-1})dS_{t-1}\]</span></p>
+
+<p><span  class="math">\[ \textit{Update}: P(S_t|O_{1:t}) \propto P(O_t|S_t)P(S_t|O_{1:t-1})\]</span></p>
+
+<p>Where <span  class="math">\(P(S_t|S_{t-1})\)</span> is the dynamic model that tells us how the states are supposed to evolve in time, and <span  class="math">\(P(O_t|S_{t})\)</span> is the measurement model.</p>
+
+<p>Note that to be able to formulate this solution to the problem, we are assuming that the <a href="https://en.wikipedia.org/wiki/Markov_property">Markov assumption</a> holds (past and future are independent given the current state).</p>
+
+<p><strong>Pros</strong></p>
+
+<ul>
+<li>Works online.</li>
+<li>Can be less heavy computationally.</li>
+</ul>
+
+<p><strong>Cons</strong></p>
+
+<ul>
+<li>Might not provide a global optimum, since we are not using the whole sequence.</li>
+</ul>
+
+<h2 id="optimization-approach">Optimization approach</h2>
+
+<p>A second approach is to solve the estimation problem via optimization either of the Likelihood or minimizing an energy function.</p>
+
+<p>More formally</p>
+
+<p><span  class="math">\[ \hat{S}_{1:t} = \text{argmax}_{S_{1:t}} P(S_{1:t}| O_{1:t}) = \text{argmax}_{S_{1:t}} L(O_{1:t} | S_{1:t})\]</span></p>
+
+<p>or considering an Energy function</p>
+
+<p><span  class="math">\[ \hat{S}_{1:t} = \text{argmax}_{S_{1:t}} P(S_{1:t}| O_{1:t}) = \text{argmax}_{S_{1:t}} E(S_{1:t} | O_{1:t})\]</span></p>
+
+<p>Note that models and in general knowledge about the expected behaviour of the objects can be injected also in the optimization approach. One very used approach is to enforce motion constraints through the function E.</p>
+
+<p><strong>Pros</strong></p>
+
+<ul>
+<li>Converge to a global optimum.</li>
+</ul>
+
+<p><strong>Cons</strong></p>
+
+<ul>
+<li>&quot;Heavier&quot; computationally.</li>
+<li>Works offline (you are using the future).</li>
+</ul>
+
+<h2 id="the-models">The Models</h2>
+
+<p>Let's talk a bit about the models which I find to be a very interesting aspect of MOT.</p>
+
+<p>You have two problems to solve</p>
+
+<ol>
+<li>how to measure the similarity between objects across frames</li>
+<li>how to use that similarity information to recover identity across frames.</li>
+</ol>
+
+<p>Roughly speaking, the first problem involves
+usually modelling the appearance or the motion of an object. While the second is the inference problem.
+Appearance here is used as a generic term, that could be the visual appearance if you are using a camera.</p>
+
+<p>Two widely used approaches for modelling in MOT are <strong>appearance models</strong> and <strong>motion models</strong>. The former uses how an object appears to the sensor, the latter uses the expected motion of the object.</p>
+
+<p>Let's have a look at examples, one of the simplest motion model consists of assuming that from one frame to the other an object didn't move much. If I have an observation in the frame <span  class="math">\(j\)</span> and I have a &quot;close&quot; observation in frame <span  class="math">\(j+1\)</span> I will associate them to the same object. What does close mean? I can for example measure the distance between the centroids, or I can use intersection over union, that is if the two boxes intersect more than a certain threshold they are matched in time.</p>
+
+<p>This is a pretty simple approach that works. The main problems come from occlusions and the assumption (which might not hold) that the rate at which frames are captured it's &quot;high&quot; enough to capture very small motions in the observations. In the case of occlusions, you will likely experience id switches. This is given by the fact that boxes of different objects will overlap for some frames.</p>
+
+<p>Let's see how a centroid tracker behaves for example. These results are obtained using the <a href="http://www.robots.ox.ac.uk/~lav/Research/Projects/2009bbenfold_headpose/project.html">Oxford Towncentre Database</a> for pedestrian tracking.</p>
+
+<p>Detections are already available to be used for tracking.</p>
+
+<p><figure><img src="/mot/centroid.gif" alt="Centroid"></figure></p>
+
+<p>As you can see the tracker works, but there are cases where id switch does happen, especially when the scene gets more crowded.</p>
+
+<p>Now, if we want to make the tracker more robust we could either use an appearance model and use information about how the detected object looks or use a motion model and make assumptions about the motion of the detected objects (e.g., in the case of a pedestrian we can assume that the object will move with constant velocity).</p>
+
+<p><strong>Appearance models</strong></p>
+
+<p>Appearance models include two components:</p>
+
+<ol>
+<li>a representation of the object appearance</li>
+<li>a measurement of the distance between such two representations</li>
+</ol>
+
+<p>In the case of visual tracking, lots of different representations can be used, such as local features (or deep features) of the image, colour histogram, <a href="https://en.wikipedia.org/wiki/Histogram_of_oriented_gradients">HOG</a>, etc...</p>
+
+<p>In general gradient-based features, like HOG can describe the shape of an object and are robust to lightning changes, but they cannot handle occlusion and deformation well. <a href="http://www.bmva.org/bmvc/2014/papers/paper038/index.html">Region covariance matrix features</a> are more robust as they take more information into account, but they are more computationally expensive.</p>
+
+<p>The distance between two representations can be computed in several ways, mainly depending on the appearance model used.</p>
+
+<p>Let's see how our tracker improves using an appearance model.</p>
+
+<p><figure><img src="/mot/vis.gif" alt="Visual"></figure></p>
+
+<p>As you can see the tracker is more robust to occlusion. This is given by the fact that we are using information about the appearance of the tracked objects so we don't &quot;confuse&quot; it with a different occluding object.</p>
+
+<p><strong>Motion Models</strong></p>
+
+<p>As a final topic let's have a look at motion models.
+Motion models assume knowledge about how an object moves and predict the expected position of the object. The predicted position is later corrected and updated with the measurement, which is now matched to the predictions.</p>
+
+<p>A very common way to use motion models in the probabilistic iterative approach is to use <a href="https://medium.com/@l.peppoloni/kalman-filters-for-software-engineers-3d2a05dee465">Kalman Filters</a>. A very common assumption is that the objects move with constant velocity or constant acceleration.</p>
+
+<p>Let's have a look again at how using motion models
+improves our tracker.</p>
+
+<p><figure><img src="/mot/motion.gif" alt="Motion"></figure></p>
+
+<p>Here we are using a Kalman Filter with a constant velocity model. The tracker is still robust to occlusion since we are predicting the future position of each object using the motion model.</p>
+
+<p>The models solve the problem of how to measure similarity, the second problem of using the similarity to recover identity can be solved in several different ways. In the presented demo cases, it was solved by optimization of the intersection over union between the tracker tracks after the update and the observations.</p>
+
+<p>The examples were created using modified versions of tracking code from <a href="https://github.com/ZidanMusk/experimenting-with-sort">this repository</a>.</p>
+
+<hr>
+
+<p><em>Conclusions: We had an in-depth look at the multi-object tracking problem, how it can be formalized formally and solved. We had a look at some classic ways of solving it and we also had a look at the real-life example of pedestrian tracking</em></p>
+]]></content>
+		</item>
+		
+		<item>
+			<title>The eight-points algorithm</title>
+			<link>https://example.com/posts/eightpoints/</link>
+			<pubDate>Wed, 19 Feb 2020 07:13:50 +0000</pubDate>
+			
+			<guid>https://example.com/posts/eightpoints/</guid>
+			<description>In this blog post we had a look at how to estimate the optical flow (e.g., track how pixels move in time) in a set of images. The estimation we obtained gave us pixel matches across the image set.
+Given the correspondences between two images, we can estimate the motion and the 3D position of the points we are observing. Solving this problem is known as Structure from Motion (SfM).</description>
+			<content type="html"><![CDATA[<p>In <a href="https://lorenzopeppoloni.com/lkttracker/">this</a> blog post we had a look at how to estimate the optical flow (e.g., track how pixels move in time) in a set of images. The estimation we obtained gave us pixel matches across the image set.</p>
+
+<p>Given the correspondences between two images, we can estimate the motion and the 3D position of the points we are observing. Solving this problem is known as Structure from Motion (SfM).</p>
+
+<p><figure><img src="/eightpoints/pix.png" alt="Example"></figure></p>
+
+<p>Let's assume we are observing a 3D point <span  class="math">\(X\)</span>, in two different images. The two viewpoints are related by an affine transformation (rotation plus translation) given by the matrix <span  class="math">\(R\)</span> (for rotation) and by the vector <span  class="math">\(T\)</span> for the translation. If we draw an imaginary line between the image centres <span  class="math">\(c_1\)</span> and <span  class="math">\(c_2\)</span> to the 3D point, we have that the point is projected to the point <span  class="math">\(x_1\)</span> (in image space) in the first image and to the point <span  class="math">\(x_2\)</span> (in image space) in the second image.</p>
+
+<p>In the camera frame, we can also write that <span  class="math">\(\lambda_1 x_1 = X\)</span> and that <span  class="math">\(\lambda_2 x_2 = X\)</span>, being <span  class="math">\(\lambda_1\)</span> and <span  class="math">\(\lambda_2\)</span> the scaling factors to go from the points in the image to the point <span  class="math">\(X\)</span>.</p>
+
+<p>So, let's say that we know <span  class="math">\(x_1\)</span> and <span  class="math">\(x_2\)</span> (one of the matches we found between the two images), how can we recover <span  class="math">\(R\)</span>, <span  class="math">\(T\)</span> and <span  class="math">\(X\)</span>?</p>
+
+<p>Let's try and rewrite everything in the second camera frame.</p>
+
+<p><span  class="math">\[ \lambda_2x_2 = R\lambda_1 x_1 + T\]</span></p>
+
+<p>We can multiply for the <a href="https://en.wikipedia.org/wiki/Skew-symmetric_matrix">skew-symmetric</a> matrix of T</p>
+
+<p><span  class="math">\[ \lambda_2 \hat{T}x_2 = \lambda_1 \hat{T}Rx_1 \]</span></p>
+
+<p>we can then multiply for <span  class="math">\( x_2^T \)</span> and divide by <span  class="math">\(\lambda_1\)</span></p>
+
+<p><span  class="math">\[ x_2^{T}\hat{T}Rx_1 = 0 \]</span></p>
+
+<p>Note: the term on the left gets to zero because <span  class="math">\( T \times x_2\)</span> is orthogonal to <span  class="math">\(x_2\)</span> so if you compute the scalar product for <span  class="math">\( x_2 \)</span> you get zero.</p>
+
+<p>Now we have an expression that couples the camera motion and the two known 2D locations. This equation is called the <strong>epipolar constraint</strong>. Note that the 3D points <span  class="math">\(X\)</span> do not appear in the equation, we successfully decoupled the problem of computing <span  class="math">\(R\)</span> and <span  class="math">\(T\)</span> from the problem of computing the 3D coordinates of <span  class="math">\(X\)</span>.</p>
+
+<p>Geometrically, the epipolar constraint says something pretty straightforward. If you look at the first picture: the volume spanned by the vectors <span  class="math">\(x_2\)</span>, T (<span  class="math">\(\vec{o_2o_1}\)</span>) and <span  class="math">\(Rx_1\)</span> (which is <span  class="math">\(\vec{c_1x_1}\)</span> seen from the second camera) has a zero volume, thus the triangle <span  class="math">\((c_1c_2X)\)</span> lies on a plane.</p>
+
+<p>The epipolar constraint can be rewritten as:</p>
+
+<p><span  class="math">\[ x_2^{T}Ex_1 = 0 \]</span></p>
+
+<p><span  class="math">\(E\)</span> is called the essential matrix, and it has the following property:</p>
+
+<p><span  class="math">\[eig(S) = (\sigma, \sigma, 0)\]</span></p>
+
+<p>That is the essential matrix has three eigenvalues, two are equals and one is zero.</p>
+
+<p><span  class="math">\(R\)</span> and <span  class="math">\(T\)</span> can be extracted from the essential matrix. Usually what we do in practice is that we find a matrix <span  class="math">\(F\)</span> that solves the epipolar constraint and then we compute the &quot;closest&quot; essential matrix (projecting <span  class="math">\(F\)</span> to the space of the essential matrices).</p>
+
+<h3 id="the-eightpoints-algorithm">The eight-points algorithm</h3>
+
+<p>To solve the equation in <span  class="math">\(E\)</span> we need to re-write it in such a way to separate known variables (<span  class="math">\(x_1\)</span> and <span  class="math">\(x_2\)</span>) from the unknown <span  class="math">\(E\)</span>.</p>
+
+<p>If we stack the columns of <span  class="math">\(E\)</span> in a single vector <span  class="math">\(E^{s}\)</span> and we use the <a href="https://en.wikipedia.org/wiki/Kronecker_product">Kronecker product</a> of <span  class="math">\(x_1\)</span> and <span  class="math">\(x_2\)</span> (<span  class="math">\(a\)</span>) we can write</p>
+
+<p><span  class="math">\[ x_2^TEx_1 = a^{T}E^{S} = 0 \]</span></p>
+
+<p>Now, we can stack this equation for all the matches we have between the two images and obtain the following linear system which contains all the epipolar constraints for all the points</p>
+
+<p><span  class="math">\[ \chi E^{S} = 0 \quad \text{with } \chi = (a^{1}, a^{2}, ..., a^{n})^{T} \]</span></p>
+
+<p>You can immediately see that the solution to the system is not unique and that every scaling factor multiplying <span  class="math">\(E^{s}\)</span> will solve the equation. In practice, this means that we are not able to compute the baseline, that is the translation between the two cameras, but only its direction. The solution is to consider the baseline equals to one and compute everything in &quot;baseline units&quot;.</p>
+
+<p>To have a unique solution at this points we need at least 8 points (that's what gives the name to the algorithm)</p>
+
+<p>Once we solved for a generic matrix <span  class="math">\(F\)</span>, we can find the closest <span  class="math">\(E\)</span> by doing</p>
+
+<p><span  class="math">\[
+\begin{matrix}
+F = U \text{diag}(\lambda_1, \lambda_2, \lambda_3) V^{T} \phantom{..........}\\
+E = U \text{diag}(\sigma, \sigma, 0)V^{T} \quad \sigma = \frac{\lambda_1+\lambda_2}{2}
+\end{matrix}
+\]</span></p>
+
+<p>As we said before, there is a scaling factor that we cannot reconstruct, to fix the scale we can impose <span  class="math">\(\sigma = 1\)</span>, obtaining a final essential matrix <span  class="math">\(E = U \text{diag}(1, 1, 0) V^T\)</span>.</p>
+
+<h3 id="caveats">Caveats</h3>
+
+<ul>
+<li><span  class="math">\(E = 0\)</span> is a solution in which we collapse everything to a point, it's a valid solution but we don't care about it</li>
+<li>There degenerate cases, (e.g., all the matches lie on a line or plane) where no matter how many points you have you cannot have a unique solution</li>
+<li>We cannot get the sign of E (also <span  class="math">\(-kE^{s}\)</span> is a solution), so we have 4 possible combinations for R and T. The solution to the problem is to pick the <span  class="math">\(R\)</span> and <span  class="math">\(T\)</span> couple which gives positive depth values (the 3D points are in front of the camera).</li>
+<li>If <span  class="math">\(T = 0\)</span>, that is there is no translation the algorithm fails, but this never happens in real life.</li>
+</ul>
+
+<p>How do we extract the possible combinations of <span  class="math">\(R\)</span> and <span  class="math">\(T\)</span>?</p>
+
+<p>Given</p>
+
+<p><span  class="math">\[
+W = \begin{pmatrix}
+0 & -1 & 0 \\
+1 & 0 & 0 \\
+0 & 0 & 1 \\
+\end{pmatrix}
+\]</span></p>
+
+<p>which describes a rotation of <span  class="math">\(\pi/2\)</span> aroubd <span  class="math">\(z\)</span>, we have four possible solutions given by two rotation matrices <span  class="math">\(R_1\)</span> and <span  class="math">\(R_2\)</span> and two translations <span  class="math">\(T_1\)</span> and <span  class="math">\(T_2\)</span>.</p>
+
+<p><span  class="math">\[
+R_1 = UWV^{T} \qquad R_2 = UW^{T}V^{T}
+\]</span></p>
+
+<p><span  class="math">\[
+T_1 = U_3 \qquad T_2 = -U_3
+\]</span></p>
+
+<p>Let's have a look at a toy example using Python, full code <a href="https://github.com/LorePep/blogposts_code/tree/master/eight-points">here</a>.</p>
+
+<p>Let's generate a fixture world with two cameras and eight 3D points. In the image, each frame is represented with r (x-axis), g (y-axis) and b (z-axis).</p>
+
+<p><figure><img src="/eightpoints/3d_world.png" alt="Example"></figure></p>
+
+<p>Now, we assume that our cameras have a focal length of one and we transform the points into the normalized image space. The resulting images for both the cameras are represented in the figure, where colours match point correspondences.</p>
+
+<p><figure><img src="/eightpoints/images.png" alt="Example"></figure></p>
+
+<p>From the points, we can compute the Kronecker product and extract our estimated essential matrix.</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">_extract_rot_transl</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">V</span><span class="p">):</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">V</span><span class="p">)),</span> <span class="n">U</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]],</span>
+        <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">V</span><span class="p">)),</span> <span class="o">-</span><span class="n">U</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]],</span>
+        <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">V</span><span class="p">)),</span> <span class="n">U</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]],</span>
+        <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">V</span><span class="p">)),</span> <span class="o">-</span><span class="n">U</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]],</span>
+    <span class="p">]</span>
+
+
+<span class="n">chi</span> <span class="o">=</span> <span class="n">_compute_kronecker</span><span class="p">(</span><span class="n">points_1</span><span class="p">,</span> <span class="n">points_2</span><span class="p">)</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">V1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">chi</span><span class="p">)</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">V1</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+<span class="n">U</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">F</span><span class="p">)</span>
+<span class="n">possible_r_t</span> <span class="o">=</span> <span class="n">_extract_rot_transl</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">V</span><span class="p">)</span></code></pre></div>
+<p>Let's compare the results we got with the original rotation and translation from camera_1 to camera_2.</p>
+
+<p>One of the solutions we get:</p>
+<pre><code>R = [[ 0.95533649, -0.        ,  0.29552021],
+     [ 0.0587108 ,  0.98006658, -0.18979606],
+     [-0.28962948,  0.19866933,  0.93629336]]
+t = [-1.,  0.,  0.]</code></pre>
+<p>With the original <span  class="math">\(R\)</span> and <span  class="math">\(T\)</span>:</p>
+<pre><code>R = [[ 0.95533649, -0.        ,  0.29552021],
+     [ 0.0587108,   0.98006658, -0.18979606],
+     [-0.28962948,  0.19866933,  0.93629336]]
+t = [-1.5,  0.,  0.]</code></pre>
+<p>As you can see we were able to fully recover <span  class="math">\(R\)</span> and <span  class="math">\(T\)</span>, but only up to a scaling factor.</p>
+
+<hr>
+
+<p><em>Conclusions: We had an in-depth look at the eight-points algorithm to reconstruct the affine transformation between two camera poses observing the same 3D points. We formally introduce the algorithm, discussed caveats and we had a look at a real example using synthetic data in Python.</em></p>
+]]></content>
+		</item>
+		
+		<item>
+			<title>All you need to know about Learning Tests</title>
+			<link>https://example.com/posts/learningtests/</link>
+			<pubDate>Thu, 13 Feb 2020 07:13:50 +0000</pubDate>
+			
+			<guid>https://example.com/posts/learningtests/</guid>
+			<description>Picture this scenario: You have to solve a new task, a new amazing coding problem, after some googling, you find a library that solve part of the problem for you. Great! You write your code using the library, you write a test&amp;hellip;and
+FAIL!
+You tweak the code a bit&amp;hellip;FAIL!
+I think we all went through this multiple times during our developer career.
+What is happening is that, you found a new library to implement a certain behaviour that you want, you think you understood the library (but you have this bugging feeling that maybe you did not), you think you know how to use it for your particular use case (but you have this bugging feeling that maybe you do not).</description>
+			<content type="html"><![CDATA[<p>Picture this scenario:
+You have to solve a new task, a new amazing coding problem, after some googling, you find a library that solve part of the problem for you. Great!
+You write your code using the library, you write a test&hellip;and</p>
+<p>FAIL!</p>
+<p>You tweak the code a bit&hellip;FAIL!</p>
+<p>I think we all went through this multiple times during our developer career.</p>
+<p>What is happening is that, you found a new library to implement a certain behaviour that you want, you think you understood the library (but you have this bugging feeling that maybe you did not), you think you know how to use it for your particular use case (but you have this bugging feeling that maybe you do not).</p>
+<p>What&rsquo;s a good approach? There is one simple answer: Learning tests</p>
+<h2 id="what-is-a-learning-test">What is a learning test?</h2>
+<p>A learning test is a test you write to test your understanding of a third party API library.
+You basically write some tests in which you use the library as you will do in your production code and you check that the behaviour is what you expect.</p>
+<p>The point here is that you are NOT testing the library (it should have its own tests), you are testing your understanding of it.</p>
+<p>Why you should write learning tests?</p>
+<p>An alternative would be to perform your own experiments using the library and then, when you are sure about its behavior, just use it in the production code.</p>
+<p>While this may suffice, there are indeed several advantages in writing your &ldquo;experiments&rdquo; as actual tests.</p>
+<ul>
+<li>You would write the experiments anyway, so you are not adding any coding overhead.</li>
+<li>Learning tests protect your code against changes in the library itself. If a new version is released where a behaviour (or interface) is changed, you will immediately see your tests fail.  This will prevent you hours of painful debugging, only to understand that you&rsquo;re using a version of the library that is not compatible anymore with your code.</li>
+</ul>
+<p>Let&rsquo;s make an example of a learning test</p>
+<p><strong>Disclaimer</strong>: <em>the example is trivial and probably everything can be solved beforehand reading the documentation accurately.</em></p>
+<p>Let&rsquo;s say we have a data structure <code>myStructWithTime</code> abstracting some data with a timestamp and we want to write a function to search by timestamp in an slice of our data structure.</p>
+<p>After some research we encounter the <a href="https://golang.org/pkg/sort/">sort</a> package in GO and we decide to give a try to its <code>Search</code> function. The package provides functionalities to sort slices and user-defined collections.</p>
+<p>After a little bit of digging in the documentation, we think we got the mechanism.
+We write our search function</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// MyStructWithTime a structure with time.
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">MyStructWithTime</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">foo</span>       <span class="kt">int</span>
+	<span class="nx">timestamp</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">findInStruct</span><span class="p">(</span><span class="nx">in</span> <span class="p">[]</span><span class="nx">MyStructWithTime</span><span class="p">,</span> <span class="nx">query</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="nx">i</span> <span class="o">:=</span> <span class="nx">sort</span><span class="p">.</span><span class="nf">Search</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nx">in</span><span class="p">),</span> <span class="kd">func</span><span class="p">(</span><span class="nx">i</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">in</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">timestamp</span><span class="p">.</span><span class="nf">After</span><span class="p">(</span><span class="nx">query</span><span class="p">)</span>
+	<span class="p">})</span>
+	<span class="k">if</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="nx">in</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">in</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">timestamp</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">query</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">i</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+<span class="p">}</span>
+</code></pre></div><p>We then write a test in which we use the library in the same way we would in our production code.
+First, it is not clear for us if the slice must be already sorted before using <code>sort.Search</code>, so we write a test and see what happens.</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">earlier</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Date</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nx">January</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nx">UTC</span><span class="p">)</span>
+<span class="nx">later</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Date</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nx">January</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nx">UTC</span><span class="p">)</span>
+
+<span class="nx">testcases</span> <span class="o">:=</span> <span class="p">[]</span><span class="kd">struct</span> <span class="p">{</span>
+  <span class="nx">name</span>     <span class="kt">string</span>
+  <span class="nx">input</span>    <span class="p">[]</span><span class="nx">MyStructWithTime</span>
+  <span class="nx">query</span>    <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span>
+  <span class="nx">expected</span> <span class="kt">int</span>
+<span class="p">}{</span>
+  <span class="p">{</span>
+    <span class="nx">name</span><span class="p">:</span> <span class="s">&#34;not_sorted&#34;</span><span class="p">,</span>
+    <span class="nx">input</span><span class="p">:</span> <span class="p">[]</span><span class="nx">MyStructWithTime</span><span class="p">{</span>
+      <span class="p">{</span><span class="nx">timestamp</span><span class="p">:</span> <span class="nx">later</span><span class="p">},</span>
+      <span class="p">{</span><span class="nx">timestamp</span><span class="p">:</span> <span class="nx">earlier</span><span class="p">},</span>
+    <span class="p">},</span>
+    <span class="nx">query</span><span class="p">:</span>    <span class="nx">earlier</span><span class="p">,</span>
+    <span class="nx">expected</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="p">},</span>
+<span class="p">}</span>
+</code></pre></div><p>You run the test and the result is:</p>
+<pre><code>--- FAIL: TestSort (0.00s)
+    --- FAIL: TestSort/not_sorted (0.00s)
+expected 1, got -1
+FAIL
+exit status 1
+FAIL	0.005s
+Error: Tests failed.
+</code></pre><p>Probably we are doing something, wrong, probably the slice need to be already sorted, so we change the struct to</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="p">{</span>
+    <span class="nx">name</span><span class="p">:</span> <span class="s">&#34;sorted&#34;</span><span class="p">,</span>
+    <span class="nx">input</span><span class="p">:</span> <span class="p">[]</span><span class="nx">MyStructWithTime</span><span class="p">{</span>
+      <span class="p">{</span><span class="nx">timestamp</span><span class="p">:</span> <span class="nx">earlier</span><span class="p">},</span>
+      <span class="p">{</span><span class="nx">timestamp</span><span class="p">:</span> <span class="nx">later</span><span class="p">},</span>
+    <span class="p">},</span>
+    <span class="nx">query</span><span class="p">:</span>    <span class="nx">earlier</span><span class="p">,</span>
+    <span class="nx">expected</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">},</span>
+
+</code></pre></div><p>and we re-run the test</p>
+<pre><code>--- FAIL: TestSort (0.00s)
+    --- FAIL: TestSort/not_sorted (0.00s)
+expected 1, got -1
+FAIL
+exit status 1
+FAIL	0.005s
+Error: Tests failed.
+</code></pre><p>again&hellip;</p>
+<p>There must be something that we are missing here…We dig a bit more into the documentation, especially in the time package documentation, and we discover that After is not inclusive. From the sort documentation we got that we need to test for <code>&gt;=</code> in a case of ascending sorted slice&hellip;Perfect!</p>
+<p>Let&rsquo;s fix the function</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">findInStruct</span><span class="p">(</span><span class="nx">in</span> <span class="p">[]</span><span class="nx">MyStructWithTime</span><span class="p">,</span> <span class="nx">query</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="nx">i</span> <span class="o">:=</span> <span class="nx">sort</span><span class="p">.</span><span class="nf">Search</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nx">in</span><span class="p">),</span> <span class="kd">func</span><span class="p">(</span><span class="nx">i</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">in</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">timestamp</span><span class="p">.</span><span class="nf">After</span><span class="p">(</span><span class="nx">query</span><span class="p">)</span> <span class="o">||</span> <span class="nx">in</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">timestamp</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">query</span><span class="p">)</span>
+	<span class="p">})</span>
+	<span class="k">if</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="nx">in</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">in</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">timestamp</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">query</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">i</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+<span class="p">}</span>
+</code></pre></div><p>we hit the run button&hellip;and</p>
+<pre><code>Running tool: /usr/local/bin/go test -timeout 30s -run ^(TestSort)$
+
+PASS
+ok  	    0.005s
+Success: Tests passed.
+</code></pre><p>Success!!</p>
+<p>We understood how we should use the library, and in the meantime we learnt a great deal about the <code>sort</code> and <code>time</code> packages.</p>
+<p>At this point, the test can be factored into two test cases, which will be added to our test code base:</p>
+<ol>
+<li>A test expecting failure for an array which is not sorted.</li>
+<li>A working test where we put everything together.</li>
+</ol>
+<p>These three tests will make sure that, if something changes in the <code>sort.Search</code>, we will be immediately notified by a test failure.</p>
+<hr>
+<p><em>Conclusions: Anytime you are facing a new library, do not limit yourself to write some experimental code to understand its use. A better approach is to write learning tests in which you use the library as you would do in your production code. In this way you&rsquo;ll test your actual understanding of the library and you&rsquo;ll protect your code from disruptive changes from third parties.</em></p>
+]]></content>
+		</item>
+		
+		<item>
+			<title>Everything you need to know about the Lucas-Kanade tracker</title>
+			<link>https://example.com/posts/lkttracker/</link>
+			<pubDate>Tue, 11 Feb 2020 07:13:50 +0000</pubDate>
+			
+			<guid>https://example.com/posts/lkttracker/</guid>
+			<description>The Lucas-Kanade-Tomasi (LKT) tracker is one of the most used trackers in computer vision. It&#39;s easy to implement and understand, it&#39;s fast to compute and it works fairly well.
+The tracker is based on the Lucas-Kanade (LK) optical flow estimation algorithm. The problem of optical flow estimation is the problem of estimating the motion of the pixels in an image across a sequence of consecutive pictures (e.g., a video).
+The idea of the LK estimation is pretty straightforward.</description>
+			<content type="html"><![CDATA[<p>The Lucas-Kanade-Tomasi (LKT) tracker is one of the most used trackers in computer vision. It's easy to implement and understand, it's fast to compute and it works fairly well.</p>
+
+<p>The tracker is based on the Lucas-Kanade (LK) optical flow estimation algorithm. The problem of optical flow estimation is the problem of estimating the motion of the pixels in an image across a sequence of consecutive pictures (e.g., a video).</p>
+
+<p>The idea of the LK estimation is pretty straightforward.</p>
+
+<p>Now, let's imagine you are observing the image from a small hole of the size of a pixel. If you know the gradient of the brightness, if you move the image, you can infer something about the direction of the movement. This is true only if the brightness cannot change for any other reasons other then motion.</p>
+
+<p>We just introduced the first basic assumption of the LK tracker: the brightness of each pixel does not change in time, as each point moves in the image, it will keep it's brightness constant.</p>
+
+<p>Let's exemplify with a drawing.</p>
+
+<p><figure><img src="/lktracker/lk_pix.png" alt="Example"></figure></p>
+
+<p>Let's assume at time <code>t</code> you are observing a pixel of an image (left image), and you know that the brightness is increasing towards left and down (the arrows show the gradient of the brightness). At the next time instant, after the camera moved (right image), you notice that the brightness observed through the pixel increased, given that the brightness does not change for any other reason, you can safely assume that the underlying object observed by the camera, has moved up and right (black arrows), or conversely, the camera moved with a certain velocity <code>v</code> down and left.</p>
+
+<p>You can immediately notice one possible problem: what if the brightness doesn't change for the point we are observing? Or what if the brightness doesn't change in a certain direction?
+This is called the <strong>aperture problem</strong>. You can only perceive motion in the directions that are not orthogonal to the direction of the gradient. For example, if you observe a pixel in a monochrome patch you won't be able to perceive any motion, or if you are observing a pixel on a straight edge, you cannot perceive any movement along the edge. Luckily, in natural images it's really hard to find this scenario, usually zooming to different levels will usually give you some texture with a brightness gradient in both <code>x</code> and <code>y</code> directions.
+An alternative solution is to observe a window around a pixel, increasing the likelihood of a &quot;full&quot; brightness gradient. It is to be noted that if you use a window you are implicitly assuming that all the pixels in the window move in the same way, for this assumption to be safely made you need to have very small displacements and a properly sized window, otherwise, for complex motions you will easily break it.</p>
+
+<p>Let's now have a look at the math. If you assume that the brightness (<strong>I</strong>) remains constant for each pixel (<strong>x</strong>) in time, you can write:</p>
+
+<p><span  class="math">\[I(x(t), t) = \text{const} \Rightarrow \frac{dI}{dt} = 0\]</span></p>
+
+<p>Applying the chain rule to compute the derivatives we get</p>
+
+<p><span  class="math">\[\nabla I^{T}\frac{dx}{dt}+\frac{\partial I}{\partial t} = 0\]</span></p>
+
+<p>If you observe the equation, you can see that it exactly describes the intuition we had about brightness changes and motion, and it becomes particularly clear if you rewrite it as:</p>
+
+<p><span  class="math">\[\nabla I^{T}v = -\frac{\partial I}{\partial t}\]</span></p>
+
+<p>where we called <strong>v</strong> the velocity of the camera motion. The equation basically says that the delta in brightness given by the velocity of the camera motion accounts for the total change of brightness in time. The velocity vector <strong>v</strong> is the unknown.</p>
+
+<p>The aperture problem is clearly visible now. On the left, you have the scalar product of the gradient of the brightness and the velocity of motion. Any velocity orthogonal to the gradient will result in a null change in brightness, thus every velocity will satisfy the equation.</p>
+
+<p>In the LK paper the authors proposed to solve the equation in the least square terms, that is finding the <strong>v</strong> that minimizes the equation. If we consider the case of a window (<strong>W</strong>) around the pixel <strong>x</strong>:</p>
+
+<p><span  class="math">\[E(v) = \int_{W(x)} |\nabla I^{T}v + \frac{\partial I}{\partial t}|^{2}dx' \]</span></p>
+
+<p>This function is quadratic in <strong>v</strong>, thus it's optimum is where the derivative is equal to zero:</p>
+
+<p><span  class="math">\[\frac{dE}{dv} = 0 \Rightarrow v = -M^{-1}q\]</span></p>
+
+<p>where</p>
+
+<p><span  class="math">\[M = \int_{W(x)}\nabla I\nabla I ^{T}dx'\]</span></p>
+
+<p>and</p>
+
+<p><span  class="math">\[q = \int_{W(x)}\frac{\partial I(x')}{\partial t}dx'\]</span></p>
+
+<p>As you can clearly see from the derivative expression, the matrix <strong>M</strong> which is called the <strong>structure tensor</strong>, is a 2x2 matrix. If <span  class="math">\(det(M) = 0\)</span>, we have a patch with constant brightness, thus we are not able to solve in <strong>v</strong>, since <strong>M</strong> is not invertible. If <span  class="math">\(det(M) = 2\)</span> we can find <strong>v</strong> and the solution is unique. If <span  class="math">\(det(M) = 1\)</span> we can only find the component of <strong>v</strong> in one direction.</p>
+
+<p>In the case presented, we are estimating motion given only by translation, the math can be simply modified to estimate an affine transformation (rotation plus translation) in the following way</p>
+
+<p><span  class="math">\[E(v) = \int_{W(x)} |\nabla I^{T}S(x')p + \frac{\partial I}{\partial t}|^{2}dx' \]</span></p>
+
+<p>where the affine transformation is modeled with a parametric model:</p>
+
+<p><span  class="math">\[S(x)p = \begin{pmatrix}
+x & y& 1&0&0&0\\
+0 &0&0&x&y&1
+\end{pmatrix}\begin{pmatrix}
+p1&p2&p3&p4&p5&p6\\
+\end{pmatrix}^{T}\]</span></p>
+
+<p>Now we can easily solve <span  class="math">\(dE/dp = 0\)</span>.</p>
+
+<p>Let's see an example using OpenCV and Python (you can find the full code <a href="https://github.com/LorePep/blogposts_code/tree/master/lkt-tracker">here</a>).</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">video</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="n">input_video</span><span class="p">)</span> 
+<span class="n">success</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">video</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="n">previous_frame_gray</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2GRAY</span><span class="p">)</span>
+<span class="n">previous_points</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">goodFeaturesToTrack</span><span class="p">(</span><span class="n">previous_frame_gray</span><span class="p">,</span> <span class="o">**</span><span class="n">DEFAULT_FEATURES_PARAMS</span><span class="p">)</span></code></pre></div>
+<p>First we open the video stream, read the first frame and find pixels to track.
+OpenCV provides the function <a href="https://docs.opencv.org/2.4/modules/imgproc/doc/feature_detection.html">goodFeaturesToTrack</a>. Under the hood, the function finds the most prominent corners of the image using the <a href="https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_feature2d/py_shi_tomasi/py_shi_tomasi.html">Shi-Tomasi corner detector</a>.</p>
+
+<p>If you had to do it in practice, a simple way to identify good points is to compute the matrix <strong>M</strong> for all the pixels in the image and choose a set of points for which <span  class="math">\(det(M)\)</span> is greater than a certain threshold.</p>
+
+<p>An alternative is to use the Harris corner detector. The idea is to weight the matrix <strong>M</strong> with a Gaussian centred on the window <strong>W</strong> centre</p>
+
+<p><span  class="math">\[M =  G_{\sigma}\nabla I \nabla I ^{T}\]</span></p>
+
+<p>and then choose pixels such that</p>
+
+<p><span  class="math">\[C(x) = det(M) + k*tr^{2}(M) > \vartheta \]</span></p>
+
+<p>Intuitively, the eigenvectors of <strong>M</strong> tell the direction of maximum and minimum variation of the brightness, while the eigenvalues tell the amount of variation. In particular, if the eigenvalues are both low we are in a flat region (there is not much change in gradient), if one of the eigenvalues is bigger then the other we are on an edge, and if both the eigenvalues are high, we are probably on a corner (brightness changes in both the directions).</p>
+
+<p>The Gaussian improves the results, weighting <strong>M</strong> based on the distance from the centre.</p>
+
+<p>Now, if you remember from linear algebra</p>
+
+<p><span  class="math">\[C(x) = det(M) + k*tr^{2}(M) = \lambda_1 \lambda_2 + k(\lambda_1+\lambda_2)^{2}\]</span></p>
+
+<p>so the criteria that we are using to choose the points will yield a higher value if both the eigenvalues are high.</p>
+
+<p>In OpenCV, you can specify to use the Harris detector (you can check in the code how).</p>
+
+<p>Once we found the first interesting points, we can just iteratively extract a new frame and use the LK tracker to compute the optical flow.</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">success</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">video</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="n">frame_gray</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2GRAY</span><span class="p">)</span>
+<span class="n">new_points</span><span class="p">,</span> <span class="n">st</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">calcOpticalFlowPyrLK</span><span class="p">(</span><span class="n">previous_frame_gray</span><span class="p">,</span>
+                                             <span class="n">frame_gray</span><span class="p">,</span>
+                                             <span class="n">previous_points</span><span class="p">,</span> 
+                                             <span class="bp">None</span><span class="p">,</span>
+                                             <span class="o">**</span><span class="n">DEFAULT_LK_PARAMS</span><span class="p">)</span></code></pre></div>
+<p>That's what the results look like:</p>
+
+<p><figure><img src="/lktracker/lkt.gif" alt="Results"></figure></p>
+
+<p>If you check the full code you will notice that the LK tracker has some termination criteria argument. This is interesting because we didn't talk about LK being an iterative algorithm (you iterate on the frames but you do not iterate on each frame). The parameter is used because OpenCV uses a more robust version of LK, which uses &quot;pyramids&quot;. One of the main assumptions of the LK algorithm is that we are dealing with very small motions (~1 pixel) and this is never the case, especially with high-res cameras. A solution is to use a coarse to fine approach (a sort of resolution pyramid). We start making the image more coarse (bigger pixels will result in smaller motions) and compute the tracking after we estimated the flow at a coarser scale, we then make the image finer and go on iteratively at higher and higher levels of resolution.</p>
+
+<hr>
+
+<p><em>Conclusions: We had an in-depth look at the Lucas-Kanade tracker to estimate the optical flow from a sequence of images. We introduced the Harris corner detector and we had a look at a real-life example using OpenCV.</em></p>
+]]></content>
+		</item>
+		
+		<item>
+			<title>Proto nested messages and repeated fields in Python</title>
+			<link>https://example.com/posts/nestedmessagepy/</link>
+			<pubDate>Tue, 04 Feb 2020 20:13:50 +0000</pubDate>
+			
+			<guid>https://example.com/posts/nestedmessagepy/</guid>
+			<description>Today I was having some problems populating a proto repeated message in Python with a nested message definition, and it took me a while to figure out how to do it.
+In reality it is pretty simple. Let&amp;rsquo;s make an example.
+syntax = &amp;#34;proto3&amp;#34;;package test;message Trajectory2d { message Point2d { float x = 1; float y = 2; } repeated Point2d points = 1; }Let&amp;rsquo;s save our test.proto and generate the Python code.</description>
+			<content type="html"><![CDATA[<p>Today I was having some problems populating a proto repeated message in Python with a nested message definition, and it took me a while to figure out how to do it.</p>
+<p>In reality it is pretty simple. Let&rsquo;s make an example.</p>
+<div class="highlight"><pre class="chroma"><code class="language-proto" data-lang="proto"><span class="n">syntax</span> <span class="o">=</span> <span class="s">&#34;proto3&#34;</span><span class="p">;</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="kn">package</span> <span class="nn">test</span><span class="p">;</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="kd">message</span> <span class="nc">Trajectory2d</span> <span class="p">{</span><span class="err">
+</span><span class="err"></span>    <span class="kd">message</span> <span class="nc">Point2d</span> <span class="p">{</span><span class="err">
+</span><span class="err"></span>      <span class="kt">float</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="err">
+</span><span class="err"></span>      <span class="kt">float</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span><span class="err">
+</span><span class="err"></span>    <span class="p">}</span><span class="err">
+</span><span class="err"></span>    <span class="k">repeated</span> <span class="n">Point2d</span> <span class="n">points</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="err">
+</span><span class="err"></span>  <span class="p">}</span><span class="err">
+</span></code></pre></div><p>Let&rsquo;s save our <code>test.proto</code> and generate the Python code.</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">protoc --proto_path<span class="o">=</span>. --python_out<span class="o">=</span>. test.proto
+</code></pre></div><p>Now if we want to create an element of <code>Trajectory2d</code> type and add points to it, we can just use the <code>add()</code> function. The function will create a new message object, append it to the list of repeated objects, and return it for the caller to fill. In addition it will forward keyword arguments to the class.</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">test_pb2</span> <span class="kn">import</span> <span class="n">Trajectory2d</span>
+
+<span class="n">trajectory</span> <span class="o">=</span> <span class="n">Trajectory2d</span><span class="p">()</span>
+<span class="n">trajectory</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="n">trajectory</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
+
+<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">trajectory</span><span class="o">.</span><span class="n">points</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+
+<span class="k">assert</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="mi">10</span>
+<span class="k">assert</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="mi">30</span>
+
+<span class="k">assert</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="mi">14</span>
+<span class="k">assert</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="mi">22</span>
+</code></pre></div>]]></content>
+		</item>
+		
+		<item>
+			<title>Table-driven tests in Python</title>
+			<link>https://example.com/posts/tabledriventestspy/</link>
+			<pubDate>Sun, 02 Feb 2020 02:13:50 +0000</pubDate>
+			
+			<guid>https://example.com/posts/tabledriventestspy/</guid>
+			<description>Table-driven tests are an elegant and functional way to unittest your functions in Go. Let&amp;rsquo;s see some ideas on how to introduce this same testing pattern in Python.
+What are table-driven tests One thing I really love about Go is table-driven tests. If you are not familiar with them, table-driven tests are a very elegant way to write unittests for your code. The basic idea is that you write a list of named test cases, defining the input and the expected output for each test case, then you loop over the cases, run your function and check that the actual output is equal to the expected one.</description>
+			<content type="html"><![CDATA[<p><a href="https://dave.cheney.net/2013/06/09/writing-table-driven-tests-in-go">Table-driven tests</a> are an elegant and functional way to unittest your functions in Go. Let&rsquo;s see some ideas on how to introduce this same testing pattern in Python.</p>
+<h2 id="what-are-table-driven-tests">What are table-driven tests</h2>
+<p>One thing I really love about Go is table-driven tests. If you are not familiar with them, table-driven tests are a very elegant way to write unittests for your code. The basic idea is that you write a list of named test cases, defining the input and the expected output for each test case, then you loop over the cases, run your function and check that the actual output is equal to the expected one.</p>
+<p>An example in Go looks like this, let&rsquo;s imagine we want to test a sorting function we wrote:</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestMySort</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">testcases</span> <span class="o">:=</span> <span class="p">[]</span><span class="kd">struct</span> <span class="p">{</span>
+		<span class="nx">name</span>     <span class="kt">string</span>
+		<span class="nx">input</span>    <span class="p">[]</span><span class="kt">float64</span>
+		<span class="nx">expected</span> <span class="p">[]</span><span class="kt">float64</span>
+	<span class="p">}{</span>
+		<span class="p">{</span>
+			<span class="nx">name</span><span class="p">:</span>     <span class="s">&#34;empty_slice&#34;</span><span class="p">,</span>
+			<span class="nx">input</span><span class="p">:</span>    <span class="p">[]</span><span class="kt">float64</span><span class="p">{},</span>
+			<span class="nx">expected</span><span class="p">:</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">{},</span>
+		<span class="p">},</span>
+		<span class="p">{</span>
+			<span class="nx">name</span><span class="p">:</span>     <span class="s">&#34;already_sorted&#34;</span><span class="p">,</span>
+			<span class="nx">input</span><span class="p">:</span>    <span class="p">[]</span><span class="kt">float64</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">},</span>
+			<span class="nx">expected</span><span class="p">:</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">},</span>
+		<span class="p">},</span>
+		<span class="p">{</span>
+			<span class="nx">name</span><span class="p">:</span>     <span class="s">&#34;not_sorted&#34;</span><span class="p">,</span>
+			<span class="nx">input</span><span class="p">:</span>    <span class="p">[]</span><span class="kt">float64</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">},</span>
+			<span class="nx">expected</span><span class="p">:</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">},</span>
+		<span class="p">},</span>
+	<span class="p">}</span>
+
+	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">tt</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">testcases</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="nx">tt</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nx">actual</span> <span class="o">:=</span> <span class="nf">mySort</span><span class="p">(</span><span class="nx">tt</span><span class="p">.</span><span class="nx">input</span><span class="p">)</span>
+			<span class="nf">assertEqualSlices</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">tt</span><span class="p">.</span><span class="nx">expected</span><span class="p">,</span> <span class="nx">actual</span><span class="p">)</span>
+		<span class="p">})</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><p>As you can see, we wrote three named test cases (empty slice in input, input already sorted and input not sorted). The final part of the code is just looping and asserting that for each test case we got the expected value.</p>
+<p>What I think it&rsquo;s really great about table-driven tests is that they allow you to naturally write very modular and concise tests, focusing on test data and expected behaviours. I also find that from a psychological viewpoint, they help you reasoning more in depth about test cases and in general be more thoughtful on what input could break your code.</p>
+<p>When I switch to Python, I always feel like I&rsquo;m missing table-driven tests and I always end up finding Pythonic ways of implementing them.</p>
+<p>Here a couple ideas I came up with.</p>
+<h2 id="python-dicts">Python dicts</h2>
+<p>One simple and yet effective way of implementing table-driven tests in Python is using dicts. Let&rsquo;s see an example, with the same sorting function.</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">unittest</span>
+
+<span class="k">class</span> <span class="nc">TestMySort</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_my_sort</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">testcases</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{</span><span class="s2">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;empty_slice&#34;</span><span class="p">,</span> <span class="s2">&#34;input&#34;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&#34;expected&#34;</span><span class="p">:</span> <span class="p">[],},</span>
+            <span class="p">{</span>
+                <span class="s2">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;already_sorted&#34;</span><span class="p">,</span>
+                <span class="s2">&#34;input&#34;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span>
+                <span class="s2">&#34;expected&#34;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span>
+            <span class="p">},</span>
+            <span class="p">{</span><span class="s2">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;not_sorted&#34;</span><span class="p">,</span> <span class="s2">&#34;input&#34;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="s2">&#34;expected&#34;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">],},</span>
+        <span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">case</span> <span class="ow">in</span> <span class="n">testcases</span><span class="p">:</span>
+            <span class="n">actual</span> <span class="o">=</span> <span class="n">my_sort</span><span class="p">(</span><span class="n">case</span><span class="p">[</span><span class="s2">&#34;input&#34;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertListEqual</span><span class="p">(</span>
+                <span class="n">case</span><span class="p">[</span><span class="s2">&#34;expected&#34;</span><span class="p">],</span>
+                <span class="n">actual</span><span class="p">,</span>
+                <span class="s2">&#34;failed test {} expected {}, actual {}&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">case</span><span class="p">[</span><span class="s2">&#34;name&#34;</span><span class="p">],</span> <span class="n">case</span><span class="p">[</span><span class="s2">&#34;expected&#34;</span><span class="p">],</span> <span class="n">actual</span>
+                <span class="p">),</span>
+            <span class="p">)</span>
+
+</code></pre></div><p>The main advantage of this approach is that it&rsquo;s simple, understandable and it is compatible with every Python version.</p>
+<p>The main problem I see is that there is not much protection around the <code>testcase</code> datastructure. You could make a mistake and the dictionaries could have different unexpected keys or different types. Typing could be enforced, but still the best you can do is defining the test cases type as <code>List[Dict[str, Any]]</code>, which is not very strict.</p>
+<h2 id="data-class">Data Class</h2>
+<p>If you are using Python <code>3.7</code> you can use <a href="https://docs.python.org/3/library/dataclasses.html">data classes</a>. A data class is a class containing mainly data, the advantage is that it comes with already pre-defined methods, such as <strong>init</strong>() and <strong>repr</strong>() making you save time when coding.</p>
+<p>Let&rsquo;s see how can we use them for table-driven tests.</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+
+<span class="k">class</span> <span class="nc">TestMySort</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_my_sort</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nd">@dataclass</span>
+        <span class="k">class</span> <span class="nc">TestCase</span><span class="p">:</span>
+            <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+            <span class="nb">input</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+            <span class="n">expected</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+
+        <span class="n">testcases</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">TestCase</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&#34;empty_slice&#34;</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="p">[],</span> <span class="n">expected</span><span class="o">=</span><span class="p">[]),</span>
+            <span class="n">TestCase</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&#34;already_sorted&#34;</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="n">expected</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">]),</span>
+            <span class="n">TestCase</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&#34;not_sorted&#34;</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="n">expected</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">]),</span>
+        <span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">case</span> <span class="ow">in</span> <span class="n">testcases</span><span class="p">:</span>
+            <span class="n">actual</span> <span class="o">=</span> <span class="n">my_sort</span><span class="p">(</span><span class="n">case</span><span class="o">.</span><span class="n">input</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertListEqual</span><span class="p">(</span>
+                <span class="n">case</span><span class="o">.</span><span class="n">expected</span><span class="p">,</span>
+                <span class="n">actual</span><span class="p">,</span>
+                <span class="s2">&#34;failed test {} expected {}, actual {}&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">case</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">case</span><span class="o">.</span><span class="n">expected</span><span class="p">,</span> <span class="n">actual</span>
+                <span class="p">),</span>
+            <span class="p">)</span>
+</code></pre></div><p>Overall using data classes gives you a cleaner solution compared to dicts, since you can easily enforce typing.</p>
+<hr>
+<p>In this article we quickly had a look at what are table-driven tests in GO and why they are a nice feature. We then explored possible solutions to implement table-driven tests in Python.</p>
+]]></content>
+		</item>
+		
+	</channel>
+</rss>
