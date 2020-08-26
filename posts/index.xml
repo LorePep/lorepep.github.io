@@ -6,8 +6,86 @@
 		<generator>Hugo -- gohugo.io</generator>
 		<language>en-us</language>
 		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-		<lastBuildDate>Sat, 07 Mar 2020 07:13:50 +0000</lastBuildDate>
+		<lastBuildDate>Wed, 26 Aug 2020 08:13:50 +0000</lastBuildDate>
 		<atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>What is __slots__ in Python?</title>
+			<link>/posts/slotpy/</link>
+			<pubDate>Wed, 26 Aug 2020 08:13:50 +0000</pubDate>
+			
+			<guid>/posts/slotpy/</guid>
+			<description>tl;dr Every Python class can have instance attributes that can be dynamically added/removed/modified. This increases memory usage and results in slower attributes access. If you need to optimize, you can avoid dynamic attributes creation by defining __slots__. Python will now instantiate a static amount of memory to only contain the specified attributes.
+Python classes attributes In Python every class can have instance attributes. This attributes by default are stored in a dict.</description>
+			<content type="html"><![CDATA[<h2 id="tldr">tl;dr</h2>
+<p>Every Python class can have instance attributes that can be dynamically added/removed/modified. This increases memory usage and results in slower attributes access. If you need to optimize, you can avoid dynamic attributes creation by defining <code>__slots__</code>. Python will now instantiate a static amount of memory to only contain the specified attributes.</p>
+<h2 id="python-classes-attributes">Python classes attributes</h2>
+<p>In Python every class can have instance attributes. This attributes by default are stored in a dict. This has the advantage of being able to dynamically add attributes to a class, for example you can do:</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">class</span> <span class="nc">Foo</span><span class="p">():</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">f1</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">()</span>
+<span class="n">f1</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="mi">20</span>
+</code></pre></div><p>In this case the attribute <code>b</code> is added dynamically to the class instance <code>f</code>.</p>
+<p>If we inspect the attributes of the object by using <code>dir()</code> we can see <code>__dict__</code>, which is the dictionary containing the attributes of the instance.</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+<span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">}</span>
+</code></pre></div><p>Note that this cannot be done with built-in classes, for example:</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="n">arr</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">arr</span><span class="o">.</span><span class="n">foo</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">num</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">num</span><span class="o">.</span><span class="n">foo</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="n">one_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">])</span>
+<span class="n">one_set</span><span class="o">.</span><span class="n">foo</span> <span class="o">=</span> <span class="mi">11</span>
+</code></pre></div><p>they will all raise an <code>AttributeError</code> exception.</p>
+<h2 id="no-dynamic-attributes">No dynamic attributes</h2>
+<p>If we define <code>__slots__</code> with a list of attributes, we will prevent the dynamic creation of attributes for the class. Let&rsquo;s modify the first class we created:</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">class</span> <span class="nc">Foo</span><span class="p">():</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;a&#34;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">()</span>
+<span class="n">f</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="mi">20</span>
+</code></pre></div><p>Now we get <code>AttributeError: 'Foo' object has no attribute 'b'</code>.</p>
+<p>If we inspect the attributes of the object, we will see that there is no <code>__dict__</code> anymore, but we have <code>__slots__</code> containing the list of attributes, in this case <code>[&quot;a&quot;]</code>.</p>
+<h3 id="inheritance">Inheritance</h3>
+<p>When using inheritance, if the base class has <code>__slots__</code> defined, it will pass it down the inheritance tree, so there will be no need to re-define it for the inherited attributes. Note that Python does not complain, but you will be using more memory than expected.</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">class</span> <span class="nc">Base</span><span class="p">:</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;a&#34;</span><span class="p">,</span> <span class="s2">&#34;b&#34;</span><span class="p">]</span>
+
+<span class="k">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;c&#34;</span><span class="p">]</span>  <span class="c1"># Correct: Foo already has [&#34;a&#34;, &#34;b&#34;] inherited, thus having [&#34;a&#34;, &#34;b&#34;, &#34;c&#34;]</span>
+
+<span class="k">class</span> <span class="nc">Bar</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;a&#34;</span><span class="p">,</span> <span class="s2">&#34;b&#34;</span><span class="p">,</span> <span class="s2">&#34;c&#34;</span><span class="p">]</span>  <span class="c1"># Wrong: no need to re-define [&#34;a&#34;, &#34;b&#34;]</span>
+</code></pre></div><p>By using <code>getsizeof</code> we can see that:</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">&gt;&gt;&gt; sys.getsizeof<span class="o">(</span>Foo<span class="o">())</span>
+<span class="m">72</span>
+&gt;&gt;&gt; sys.getsizeof<span class="o">(</span>Bar<span class="o">())</span>
+<span class="m">88</span>
+</code></pre></div><h2 id="why-to-use-__slots__">Why to use <code>__slots__</code>?</h2>
+<p>There are two main reasons:</p>
+<ol>
+<li>Faster access to attributes</li>
+</ol>
+<p>This is the actual reason why <code>__slots__</code> was introduced. Quoting the <a href="http://python-history.blogspot.com/2010/06/inside-story-on-new-style-classes.html">History of Python</a> blog</p>
+<blockquote>
+<p>Some people mistakenly assume that the intended purpose of <code>__slots__</code> is to increase code safety (by restricting the attribute names). In reality, my ultimate goal was performance.</p>
+</blockquote>
+<ol start="2">
+<li>Less used memory</li>
+</ol>
+<p>In general the default <code>dict</code> uses a lot of memory, because we cannot just allocate a static amount of memory for the class instance. This can take a toll when we create thousands or millions of objects. By using <code>__slots__</code> Python will only allocate space for the specified set of attributes.</p>
+<h2 id="further-reading">Further reading</h2>
+<p><a href="https://docs.python.org/3/reference/datamodel.html#slots">Official Documentation</a></p>
+<p><a href="https://stackoverflow.com/questions/472000/usage-of-slots">https://stackoverflow.com/questions/472000/usage-of-slots</a></p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>Is GO good at Math?</title>

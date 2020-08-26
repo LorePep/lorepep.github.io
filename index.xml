@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Sat, 07 Mar 2020 07:13:50 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 26 Aug 2020 08:13:50 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>What is __slots__ in Python?</title>
+      <link>/posts/slotpy/</link>
+      <pubDate>Wed, 26 Aug 2020 08:13:50 +0000</pubDate>
+      
+      <guid>/posts/slotpy/</guid>
+      <description>tl;dr Every Python class can have instance attributes that can be dynamically added/removed/modified. This increases memory usage and results in slower attributes access. If you need to optimize, you can avoid dynamic attributes creation by defining __slots__. Python will now instantiate a static amount of memory to only contain the specified attributes.
+Python classes attributes In Python every class can have instance attributes. This attributes by default are stored in a dict.</description>
+    </item>
     
     <item>
       <title>Is GO good at Math?</title>
@@ -111,16 +121,6 @@ The idea of the LK estimation is pretty straightforward.</description>
       <description>Today I was having some problems populating a proto repeated message in Python with a nested message definition, and it took me a while to figure out how to do it.
 In reality it is pretty simple. Let&amp;rsquo;s make an example.
 syntax = &amp;#34;proto3&amp;#34;;package test;message Trajectory2d { message Point2d { float x = 1; float y = 2; } repeated Point2d points = 1; }Let&amp;rsquo;s save our test.proto and generate the Python code.</description>
-    </item>
-    
-    <item>
-      <title>Table-driven tests in Python</title>
-      <link>/posts/tabledriventestspy/</link>
-      <pubDate>Sun, 02 Feb 2020 02:13:50 +0000</pubDate>
-      
-      <guid>/posts/tabledriventestspy/</guid>
-      <description>Table-driven tests are an elegant and functional way to unittest your functions in Go. Let&amp;rsquo;s see some ideas on how to introduce this same testing pattern in Python.
-What are table-driven tests One thing I really love about Go is table-driven tests. If you are not familiar with them, table-driven tests are a very elegant way to write unittests for your code. The basic idea is that you write a list of named test cases, defining the input and the expected output for each test case, then you loop over the cases, run your function and check that the actual output is equal to the expected one.</description>
     </item>
     
   </channel>
